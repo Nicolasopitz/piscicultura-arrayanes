@@ -1628,7 +1628,10 @@ function adminTab(tab, el) {
   if (tab==='stats') renderAdminStats();
 }
 
-function renderAdmin() {
+async function renderAdmin() {
+  document.getElementById('admin-team-view').innerHTML =
+    '<div style="text-align:center;padding:28px;color:var(--text-muted);">⏳ Cargando datos del equipo...</div>';
+  await preloadAllProgress();
   const sorted = [...USERS_DB].sort((a,b)=>a.name.localeCompare(b.name));
   document.getElementById('admin-team-view').innerHTML = `
     <div style="margin-bottom:14px;font-size:0.82rem;color:var(--text-muted);">
