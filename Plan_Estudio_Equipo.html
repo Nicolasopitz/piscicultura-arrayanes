@@ -297,6 +297,53 @@
     .quiz-progress-wrap { display: none; }
     .question-card { padding: 18px; }
   }
+
+  /* ── Material de estudio ─────────────────────────── */
+  .material-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    background:var(--card); border-radius:var(--radius); padding:10px 16px;
+    margin-bottom:14px; border-left:4px solid var(--secondary); }
+  .material-bar-label { font-size:0.72rem; font-weight:700; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:.4px; margin-right:4px; }
+  .btn-material { display:inline-flex; align-items:center; gap:5px;
+    background:var(--primary); color:#fff; border:none; border-radius:7px;
+    padding:5px 12px; font-size:0.75rem; font-weight:600; cursor:pointer;
+    text-decoration:none; transition:opacity .15s; }
+  .btn-material:hover { opacity:.85; }
+  .module-card .btn-material { background:transparent; color:var(--primary);
+    border:1.5px solid var(--primary); padding:4px 10px; font-size:0.7rem;
+    margin-top:8px; border-radius:6px; }
+  .module-card .btn-material:hover { background:var(--primary); color:#fff; }
+
+  /* ── Modal detalle trabajador ────────────────────── */
+  .modal-wide { max-width:620px !important; max-height:85vh; overflow-y:auto; }
+  .detail-worker-header { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .detail-avatar { width:52px; height:52px; border-radius:50%; background:var(--primary);
+    color:#fff; font-size:1.3rem; display:flex; align-items:center; justify-content:center;
+    font-weight:800; flex-shrink:0; }
+  .detail-module-table { width:100%; border-collapse:collapse; font-size:0.82rem; margin-bottom:18px; }
+  .detail-module-table th { text-align:left; padding:7px 8px; background:var(--bg);
+    color:var(--text-muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:.4px; }
+  .detail-module-table td { padding:8px 8px; border-bottom:1px solid var(--border); }
+  .detail-module-table tr:last-child td { border-bottom:none; }
+  .pill-done  { background:#e8f5e9; color:#2e7d32; padding:2px 9px; border-radius:10px; font-weight:700; font-size:0.72rem; }
+  .pill-prog  { background:#fff8e1; color:#c07000; padding:2px 9px; border-radius:10px; font-weight:700; font-size:0.72rem; }
+  .pill-none  { background:var(--bg); color:var(--text-muted); padding:2px 9px; border-radius:10px; font-size:0.72rem; }
+  .detail-score-bar-wrap { width:80px; height:7px; background:var(--border); border-radius:4px; display:inline-block; vertical-align:middle; overflow:hidden; }
+  .detail-score-bar-fill { height:100%; background:var(--primary); border-radius:4px; }
+  .detail-badges { display:flex; flex-wrap:wrap; gap:7px; margin-top:4px; }
+  .detail-badge { display:flex; align-items:center; gap:5px; background:var(--bg);
+    border:1px solid var(--border); border-radius:8px; padding:5px 10px; font-size:0.75rem; }
+  .detail-badge.earned { background:#fffde7; border-color:#ffe082; }
+
+  /* ── Gráficos admin stats ────────────────────────── */
+  .stat-chart-bar-wrap { background:var(--bg); border-radius:5px; height:12px; overflow:hidden; flex:1; }
+  .stat-chart-bar-fill { height:100%; background:var(--primary); border-radius:5px; transition:width .4s; }
+  .ranking-row { display:flex; align-items:center; gap:10px; padding:8px 0;
+    border-bottom:1px solid var(--border); }
+  .ranking-row:last-child { border-bottom:none; }
+  .ranking-pos { font-size:1.1rem; width:28px; text-align:center; flex-shrink:0; }
+  .ranking-name { flex:1; font-size:0.85rem; font-weight:600; }
+  .ranking-xp { font-size:0.8rem; color:var(--primary); font-weight:700; }
 </style>
 </head>
 <body>
@@ -753,6 +800,7 @@
         <div class="quiz-bar"><div class="quiz-bar-fill" id="quiz-bar-fill" style="width:10%"></div></div>
       </div>
     </div>
+    <div id="quiz-material-bar" class="material-bar" style="display:none;"></div>
     <div id="quiz-body"></div>
   </div>
 </div>
@@ -768,6 +816,16 @@
     </div>
     <div id="admin-team-view"></div>
     <div id="admin-stats-view" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- Modal detalle trabajador -->
+<div class="modal-overlay" id="modal-worker-detail" onclick="if(event.target===this)closeModal('modal-worker-detail')">
+  <div class="modal-box modal-wide">
+    <div id="modal-worker-detail-content"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="btn-modal cancel" onclick="closeModal('modal-worker-detail')">Cerrar</button>
+    </div>
   </div>
 </div>
 
