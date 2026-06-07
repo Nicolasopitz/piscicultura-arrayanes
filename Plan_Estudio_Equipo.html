@@ -1054,28 +1054,125 @@ let quiz = {};
 let _deleteTarget = null;
 let _cargoTarget  = null;
 
-// ── Claves localStorage estables (no cambiar para preservar avances del personal) ──
-// Formato: la_prog_NOMBRE  /  la_cargo_NOMBRE  /  la_ver (versión del schema)
-const DATA_VERSION = 2; // incrementar solo si el schema cambia radicalmente
+// ── Firebase config & inicialización ─────────────────────
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDHf5liQ7yiyCPqJCtrHiG7-58I2kX3HHY",
+  authDomain: "piscicultura-arrayanes.firebaseapp.com",
+  databaseURL: "https://piscicultura-arrayanes-default-rtdb.firebaseio.com",
+  projectId: "piscicultura-arrayanes",
+  storageBucket: "piscicultura-arrayanes.firebasestorage.app",
+  messagingSenderId: "410704955985",
+  appId: "1:410704955985:web:0046dee62af29ecaa60670"
+};
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.database();
 
-function getKey(name) { return 'la_prog_' + name.trim().toUpperCase(); }
+// ── Claves y caché de progreso ────────────────────────────
+// Formato localStorage legacy: la_prog_NOMBRE  /  la_cargo_NOMBRE
+const DATA_VERSION = 2;
+const progressCache = {}; // caché en memoria: fbKey → objeto de progreso
+
+function getKey(name)  { return 'la_prog_' + name.trim().toUpperCase(); } // clave localStorage (migración)
+function fbKey(name)   { return name.trim().toUpperCase().replace(/\s+/g,'_').replace(/[^A-Z0-9_]/g,''); }
+
+// Lectura síncrona desde caché (requiere preloadUserProgress/preloadAllProgress previo)
 function loadProgress(name) {
+  const k = fbKey(name);
+  if (progressCache[k]) return progressCache[k];
+  // Fallback: localStorage (migración de datos antiguos)
   try {
     const raw = localStorage.getItem(getKey(name));
     if (!raw) return { modules: {}, _v: DATA_VERSION };
     const data = JSON.parse(raw);
-    // Migración: asegurar que exista la clave modules si viene de versión anterior
     if (!data.modules) data.modules = {};
+    progressCache[k] = data;
     return data;
   } catch(e) { return { modules: {}, _v: DATA_VERSION }; }
 }
+
+// Escritura a Firebase + actualiza caché (async fire-and-forget)
 function saveProgress(name, prog) {
   prog._v = DATA_VERSION;
-  localStorage.setItem(getKey(name), JSON.stringify(prog));
+  const k = fbKey(name);
+  progressCache[k] = prog;
+  db.ref('progreso/' + k).set(prog).catch(e => {
+    console.warn('Firebase save error, guardando en localStorage:', e);
+    localStorage.setItem(getKey(name), JSON.stringify(prog));
+  });
 }
+
+// Borrar de Firebase + caché
+function deleteProgressData(name) {
+  const k = fbKey(name);
+  delete progressCache[k];
+  db.ref('progreso/' + k).remove().catch(e => console.warn('Firebase delete error:', e));
+  localStorage.removeItem(getKey(name));
+}
+
+// Precarga el progreso de UN usuario desde Firebase (incluye migración desde localStorage)
+async function preloadUserProgress(name) {
+  const k = fbKey(name);
+  try {
+    const snap = await db.ref('progreso/' + k).get();
+    let data = snap.val();
+    if (!data) {
+      // Migración: revisar localStorage y subir a Firebase
+      try {
+        const raw = localStorage.getItem(getKey(name));
+        if (raw) {
+          data = JSON.parse(raw);
+          if (data) {
+            await db.ref('progreso/' + k).set(data);
+            localStorage.removeItem(getKey(name));
+          }
+        }
+      } catch(e) {}
+    }
+    data = data || { modules: {}, _v: DATA_VERSION };
+    if (!data.modules) data.modules = {};
+    progressCache[k] = data;
+  } catch(e) {
+    console.warn('Firebase preload error para', name, e);
+    progressCache[k] = progressCache[k] || { modules: {}, _v: DATA_VERSION };
+  }
+}
+
+// Precarga el progreso de TODOS los usuarios desde Firebase (para panel admin)
+async function preloadAllProgress() {
+  try {
+    const snap = await db.ref('progreso').get();
+    const all = snap.val() || {};
+    Object.entries(all).forEach(([k, v]) => {
+      if (v && typeof v === 'object') {
+        if (!v.modules) v.modules = {};
+        progressCache[k] = v;
+      }
+    });
+  } catch(e) {
+    console.warn('Firebase preloadAll error:', e);
+  }
+  // Migrar datos de localStorage que no estén en Firebase aún
+  USERS_DB.forEach(u => {
+    const k = fbKey(u.name);
+    if (!progressCache[k]) {
+      try {
+        const raw = localStorage.getItem(getKey(u.name));
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (data) {
+            if (!data.modules) data.modules = {};
+            progressCache[k] = data;
+            db.ref('progreso/' + k).set(data).then(() => localStorage.removeItem(getKey(u.name))).catch(()=>{});
+          }
+        }
+      } catch(e) {}
+      if (!progressCache[k]) progressCache[k] = { modules: {}, _v: DATA_VERSION };
+    }
+  });
+}
+
 function getCargoOverride(name) { return localStorage.getItem('la_cargo_' + name.trim().toUpperCase()); }
 function setCargoOverride(name, cargo) { localStorage.setItem('la_cargo_' + name.trim().toUpperCase(), cargo); }
-function deleteProgressData(name) { localStorage.removeItem(getKey(name)); }
 
 function getUserRecord(name) {
   return USERS_DB.find(u => u.name.toUpperCase() === name.trim().toUpperCase());
@@ -1121,7 +1218,7 @@ function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
-function restoreSession() {
+async function restoreSession() {
   try {
     const saved = localStorage.getItem(SESSION_KEY);
     if (!saved) return false;
@@ -1129,6 +1226,7 @@ function restoreSession() {
     const record = getUserRecord(u.name);
     if (!record) { clearSession(); return false; }
     currentUser = { name: u.name, cargo: u.cargo, admin: u.admin };
+    await preloadUserProgress(u.name);
     currentProgress = loadProgress(u.name);
     afterLogin();
     return true;
@@ -1152,7 +1250,7 @@ function updateBackBtn() {
 
 // POPULATE LOGIN DROPDOWN
 // ══════════════════════════════════════════════════════════
-(function populateDropdown() {
+(async function populateDropdown() {
   const sel = document.getElementById('login-name');
   const sorted = [...USERS_DB].sort((a,b) => a.name.localeCompare(b.name));
   sorted.forEach(u => {
@@ -1162,7 +1260,7 @@ function updateBackBtn() {
     sel.appendChild(opt);
   });
   // Try to restore previous session after populating dropdown
-  if (!restoreSession()) {
+  if (!await restoreSession()) {
     showPageRaw('page-login');
   }
 })();
@@ -1204,6 +1302,7 @@ async function loginUser() {
     cargo: cargoOverride || record.cargo,
     admin: record.admin
   };
+  await preloadUserProgress(record.name);
   currentProgress = loadProgress(record.name);
   showApp();
 }
