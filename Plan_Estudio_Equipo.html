@@ -1825,6 +1825,67 @@ async function renderAdminStats() {
 // ══════════════════════════════════════════════════════════
 // ADMIN ACTIONS
 // ══════════════════════════════════════════════════════════
+function openWorkerDetail(name) {
+  const u = getUserRecord(name);
+  if (!u) return;
+  const prog = loadProgress(name);
+  const lvIdx = getUserLevel(prog);
+  const lv = LEVELS[lvIdx];
+  const xp = getTotalXP(prog);
+  const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
+  const xpPct = Math.round((xp/maxXP)*100);
+  const initials = name.split(/[\s,]+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const cargoDisplay = getCargoOverride(name) || u.cargo;
+
+  const moduleRows = MODULES.map(m => {
+    const mod = prog.modules?.[m.id];
+    const done = mod?.completed;
+    const started = mod && (mod.score > 0 || mod.attempts > 0);
+    const pct = mod?.total ? Math.round((mod.score/mod.total)*100) : 0;
+    const pill = done
+      ? `<span class="pill-done">✓ Aprobado</span>`
+      : (started ? `<span class="pill-prog">En curso</span>` : `<span class="pill-none">Sin iniciar</span>`);
+    const scoreText = done || started ? `${mod.score}/${mod.total||m.questions.length}` : '—';
+    const barWidth = done || started ? pct : 0;
+    return `<tr>
+      <td>${m.icon}</td>
+      <td><strong>${m.title}</strong><br><span style="font-size:0.72rem;color:var(--text-muted);">${m.levelLabel}</span></td>
+      <td>${pill}</td>
+      <td><div style="display:flex;align-items:center;gap:6px;">
+        <span>${scoreText}</span>
+        <div class="detail-score-bar-wrap"><div class="detail-score-bar-fill" style="width:${barWidth}%"></div></div>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  const earnedBadges = BADGES.filter(b => b.cond(prog));
+  const badgeHtml = BADGES.map(b => {
+    const earned = b.cond(prog);
+    return `<div class="detail-badge ${earned?'earned':''}">
+      <span>${b.icon}</span><span style="${earned?'':'color:var(--text-muted);'}">${b.name}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('modal-worker-detail-content').innerHTML = `
+    <div class="detail-worker-header">
+      <div class="detail-avatar" style="${u.admin?'background:var(--secondary)':''}">${u.admin?'⭐':initials}</div>
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;">${name}</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">${cargoDisplay}</div>
+        <div style="font-size:0.82rem;margin-top:2px;">${lv.emoji} ${lv.name} · <strong style="color:var(--primary);">${xp} XP</strong> (${xpPct}%)</div>
+      </div>
+    </div>
+    <h4 style="margin-bottom:10px;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;">Progreso por módulo</h4>
+    <table class="detail-module-table">
+      <thead><tr><th></th><th>Módulo</th><th>Estado</th><th>Puntaje</th></tr></thead>
+      <tbody>${moduleRows}</tbody>
+    </table>
+    <h4 style="margin-bottom:10px;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;">Insignias</h4>
+    <div class="detail-badges">${badgeHtml}</div>`;
+
+  document.getElementById('modal-worker-detail').classList.add('open');
+}
+
 function openEditCargo(name, currentCargo) {
   _cargoTarget = name;
   document.getElementById('modal-cargo-name').value = name;
