@@ -1319,7 +1319,7 @@ async function restoreSession() {
     currentUser = { name: u.name, cargo: u.cargo, admin: u.admin };
     await preloadUserProgress(u.name);
     currentProgress = loadProgress(u.name);
-    afterLogin();
+    showApp();
     return true;
   } catch(e) { clearSession(); return false; }
 }
