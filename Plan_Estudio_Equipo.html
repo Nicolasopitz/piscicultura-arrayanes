@@ -1806,19 +1806,42 @@ async function renderAdminStats() {
         <div style="font-size:0.75rem;color:var(--text-muted);">Completaron todos los módulos</div>
       </div>
     </div>
-    <h3 style="margin-bottom:14px;font-size:0.9rem;">Avance por módulo</h3>
-    <div style="display:flex;flex-direction:column;gap:10px;">
+    <h3 style="margin-bottom:14px;font-size:0.9rem;">📊 Avance por módulo</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
       ${modStats.map(ms=>`
         <div style="background:var(--card);border-radius:10px;padding:15px;box-shadow:var(--shadow);">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
             <span style="font-weight:700;font-size:0.9rem;">${ms.icon} ${ms.title}</span>
-            <span style="font-size:0.78rem;color:var(--text-muted);">${ms.completions}/${USERS_DB.length} aprobados</span>
+            <span style="font-size:0.78rem;color:var(--text-muted);">${ms.completions}/${USERS_DB.length} aprobados · ${ms.pct}%</span>
           </div>
           <div style="background:var(--bg);border-radius:20px;height:9px;overflow:hidden;">
             <div style="height:100%;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:${ms.pct}%;transition:width .6s;"></div>
           </div>
-          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">${ms.pct}% del equipo aprobó · Promedio: ${ms.avgScore.toFixed(1)}/10</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">Promedio: ${ms.avgScore.toFixed(1)}/${MODULES.find(m=>m.id===ms.id)?.questions.length||10} correctas</div>
         </div>`).join('')}
+    </div>
+    <h3 style="margin-bottom:14px;font-size:0.9rem;">🏆 Ranking del equipo</h3>
+    <div style="background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);">
+      ${[...USERS_DB]
+        .map(u => ({ u, xp: getTotalXP(loadProgress(u.name)), prog: loadProgress(u.name) }))
+        .sort((a,b) => b.xp - a.xp)
+        .filter(item => item.xp > 0)
+        .slice(0, 10)
+        .map((item, i) => {
+          const medals = ['🥇','🥈','🥉'];
+          const pos = medals[i] || `${i+1}.`;
+          const mods = Object.values(item.prog.modules||{}).filter(m=>m.completed).length;
+          const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
+          const pct = Math.round((item.xp/maxXP)*100);
+          return `<div class="ranking-row">
+            <span class="ranking-pos">${pos}</span>
+            <span class="ranking-name">${item.u.name}<br><span style="font-size:0.72rem;color:var(--text-muted);font-weight:400;">${mods}/${MODULES.length} módulos</span></span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="stat-chart-bar-wrap" style="width:80px;"><div class="stat-chart-bar-fill" style="width:${pct}%"></div></div>
+              <span class="ranking-xp">${item.xp} XP</span>
+            </div>
+          </div>`;
+        }).join('') || '<div style="color:var(--text-muted);font-size:0.85rem;">Aún no hay actividad registrada.</div>'}
     </div>`;
 }
 
