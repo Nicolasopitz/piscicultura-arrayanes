@@ -1678,7 +1678,10 @@ function renderWorkerCard(u) {
   </div>`;
 }
 
-function renderAdminStats() {
+async function renderAdminStats() {
+  document.getElementById('admin-stats-view').innerHTML =
+    '<div style="text-align:center;padding:28px;color:var(--text-muted);">⏳ Calculando estadísticas...</div>';
+  await preloadAllProgress();
   const modStats = MODULES.map(m => {
     const completions = USERS_DB.filter(u => loadProgress(u.name).modules?.[m.id]?.completed).length;
     const avgScore = USERS_DB.reduce((acc,u)=>acc+(loadProgress(u.name).modules?.[m.id]?.score||0),0) / USERS_DB.length;
