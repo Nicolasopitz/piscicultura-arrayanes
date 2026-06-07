@@ -1772,6 +1772,7 @@ function renderWorkerCard(u) {
       ${MODULES.map(m=>`<span class="mod-pill ${prog.modules?.[m.id]?.completed?'done':''}">${m.icon}</span>`).join('')}
     </div>` : `<div class="not-started">Sin actividad registrada aún</div>`}
     <div class="worker-actions">
+      <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openWorkerDetail('${u.name.replace(/'/g,"\\'")}')">🔍 Ver detalle</button>
       <button class="btn-sm edit" onclick="openEditCargo('${u.name.replace(/'/g,"\\'")}','${displayCargo.replace(/'/g,"\\'")}')">✏️ Editar cargo</button>
       ${hasProgress ? `<button class="btn-sm danger" onclick="openDeleteConfirm('${u.name.replace(/'/g,"\\'")}')">🗑️ Borrar progreso</button>` : ''}
     </div>
