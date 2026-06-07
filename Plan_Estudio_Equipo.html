@@ -291,11 +291,39 @@
   #btn-back-nav { background: var(--border); }
   #btn-back-nav:hover { background: var(--primary-light,#e8f4fd); color: var(--primary); }
 
+  /* ── Mobile bottom nav ──────────────────────────── */
+  #mobile-bottom-nav {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    background: #fff; border-top: 2px solid var(--border);
+    box-shadow: 0 -3px 14px rgba(0,0,0,0.10); z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mob-nav-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 8px 2px 10px; gap: 3px;
+    background: none; border: none; cursor: pointer;
+    font-size: 0.62rem; font-weight: 600; color: var(--text-muted);
+    border-top: 3px solid transparent; transition: color .15s;
+    min-width: 0; white-space: nowrap;
+  }
+  .mob-nav-btn .mob-icon { font-size: 1.35rem; line-height: 1; }
+  .mob-nav-btn.active { color: var(--primary); border-top-color: var(--primary); }
+
   @media(max-width:600px){
     .profile-card { flex-direction: column; text-align: center; }
     .profile-stats { justify-content: center; }
     .quiz-progress-wrap { display: none; }
-    .question-card { padding: 18px; }
+    .question-card { padding: 16px 14px; }
+    .nav-right { display: none; }
+    #mobile-bottom-nav { display: flex; }
+    body { padding-bottom: 68px; }
+    .main-container { padding: 18px 12px; }
+    .question-card .q-text { font-size: 0.95rem; line-height: 1.5; }
+    .option-btn { font-size: 0.88rem; padding: 11px 12px; }
+    .btn-next { font-size: 0.9rem; padding: 13px 28px; width: 100%; }
+    .quiz-nav { justify-content: center; margin-top: 18px; }
+    .feedback-box { font-size: 0.84rem; }
+    .module-card { padding: 14px; }
   }
 
   /* ── Material de estudio ─────────────────────────── */
@@ -417,6 +445,25 @@
     <button class="btn-nav" onclick="logout()">Salir</button>
   </div>
 </nav>
+
+<!-- MOBILE BOTTOM NAV -->
+<div id="mobile-bottom-nav" style="display:none;">
+  <button class="mob-nav-btn" id="mnb-modulos" onclick="showPage('page-dashboard')">
+    <span class="mob-icon">📚</span><span>Módulos</span>
+  </button>
+  <button class="mob-nav-btn" id="mnb-material" onclick="showPage('page-material')">
+    <span class="mob-icon">📖</span><span>Material</span>
+  </button>
+  <button class="mob-nav-btn admin-only" id="mnb-admin" style="display:none;" onclick="showPage('page-admin')">
+    <span class="mob-icon">👥</span><span>Jefatura</span>
+  </button>
+  <button class="mob-nav-btn" id="mnb-quiz" style="display:none;" onclick="goBack()">
+    <span class="mob-icon">←</span><span>Volver</span>
+  </button>
+  <button class="mob-nav-btn" id="mnb-salir" onclick="logout()">
+    <span class="mob-icon">🚪</span><span>Salir</span>
+  </button>
+</div>
 
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
@@ -1417,6 +1464,7 @@ function logout() {
   _prevPage = null;
   currentUser = null; currentProgress = null;
   document.getElementById('main-nav').style.display = 'none';
+  document.getElementById('mobile-bottom-nav').style.display = 'none';
   document.getElementById('login-pass').value = '';
   document.getElementById('login-name').value = '';
   document.getElementById('login-error').style.display = 'none';
@@ -1425,10 +1473,13 @@ function logout() {
 
 function showApp() {
   document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('mobile-bottom-nav').style.display = '';  // CSS handles visibility
   saveSession(currentUser);
   document.getElementById('nav-user').textContent = currentUser.name;
   const adminBtn = document.getElementById('btn-nav-admin');
+  const mnbAdmin = document.getElementById('mnb-admin');
   adminBtn.style.display = currentUser.admin ? 'inline-block' : 'none';
+  if (mnbAdmin) mnbAdmin.style.display = currentUser.admin ? '' : 'none';
   if (currentUser.admin) { renderAdmin(); showPage('page-admin'); }
   else { renderDashboard(); showPage('page-dashboard'); }
 }
@@ -1447,6 +1498,16 @@ function showPage(id) {
   if (id === 'page-dashboard') renderDashboard();
   if (id === 'page-admin') renderAdmin();
   updateBackBtn();
+  updateMobileNav(id);
+}
+function updateMobileNav(id) {
+  const map = { 'page-dashboard':'mnb-modulos', 'page-material':'mnb-material', 'page-admin':'mnb-admin' };
+  document.querySelectorAll('.mob-nav-btn').forEach(b => b.classList.remove('active'));
+  const active = map[id];
+  if (active) { const el = document.getElementById(active); if (el) el.classList.add('active'); }
+  // Show volver button in quiz page
+  const mnbQ = document.getElementById('mnb-quiz');
+  if (mnbQ) mnbQ.style.display = id === 'page-quiz' ? '' : 'none';
 }
 function showPageRaw(id) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1638,6 +1699,23 @@ function selectAnswer(idx) {
   fb.style.display = 'block';
   fb.innerHTML = (correct ? '✅ <strong>¡Correcto!</strong> ' : '❌ <strong>Incorrecto.</strong> ') + q.exp;
   document.getElementById('btn-next').style.display = 'inline-block';
+  // Scroll btn-next into view (important on mobile)
+  setTimeout(() => {
+    const btn = document.getElementById('btn-next');
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 200);
+  // Incremental save — preserva el avance aunque no se llegue a Ver Resultados
+  try {
+    if (currentProgress) {
+      if (!currentProgress.modules) currentProgress.modules = {};
+      if (!currentProgress.modules[quiz.moduleId])
+        currentProgress.modules[quiz.moduleId] = {attempts:0, score:0, completed:false, answers:{}};
+      const _pm = currentProgress.modules[quiz.moduleId];
+      if (!_pm.answers) _pm.answers = {};
+      _pm.answers[qFP(q)] = correct;
+      saveProgress(currentUser.name, currentProgress);
+    }
+  } catch(_e) {}
 }
 
 function nextQuestion() {
