@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Estudio | Piscicultura Los Arrayanes</title>
+<style>
+  :root {
+    --primary: #1a6b8a; --primary-dark: #0f4d65; --secondary: #2ecc8f;
+    --accent: #f0a500; --danger: #e74c3c; --bg: #f0f4f8; --card: #ffffff;
+    --text: #1e2d3d; --text-muted: #6b7c93; --border: #d1dbe8;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08); --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between; height: 64px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; color: #fff; }
+  .nav-logo span { font-size: 1rem; font-weight: 700; }
+  .nav-logo small { display: block; font-size: 0.7rem; opacity: 0.75; }
+  .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  #nav-user { color: #fff; font-size: 0.85rem; opacity: 0.9; }
+  .btn-nav { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: background .2s; }
+  .btn-nav:hover { background: rgba(255,255,255,0.28); }
+  .btn-nav.admin-only { background: rgba(240,165,0,0.25); border-color: rgba(240,165,0,0.5); }
+
+  /* PAGES */
+  .page { display: none !important; }
+  .page.active { display: block !important; }
+  #page-login.active { display: flex !important; }
+
+  /* LOGIN */
+  #page-login { min-height: 100vh; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #0f4d65 0%, #1a6b8a 50%, #1a8a6b 100%); }
+  .login-card { background: #fff; border-radius: 20px; padding: 44px 38px; width: 100%;
+    max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align: center; }
+  .login-card .fish-icon { font-size: 2.8rem; margin-bottom: 6px; }
+  .nav-logo .fish-icon { font-size: 1.6rem; line-height: 1; }
+  .login-card h1 { font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 3px; }
+  .login-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 28px; }
+  .form-group { text-align: left; margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 700;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .form-group select, .form-group input {
+    width: 100%; padding: 11px 14px; border: 2px solid var(--border); border-radius: 10px;
+    font-size: 0.95rem; transition: border-color .2s; outline: none; background: #fff; color: var(--text); }
+  .form-group select:focus, .form-group input:focus { border-color: var(--primary); }
+  .rut-hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+  .btn-primary { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: opacity .2s; margin-top: 6px; }
+  .btn-primary:hover { opacity: 0.9; }
+  .login-error { background: #fdecea; border: 1px solid #f5b8b2; border-radius: 8px;
+    padding: 10px 14px; font-size: 0.83rem; color: #8b1a1a; margin-bottom: 10px; display: none; }
+
+  /* MAIN */
+  .main-container { max-width: 1100px; margin: 0 auto; padding: 26px 18px; }
+
+  /* PROFILE */
+  .profile-card { background: linear-gradient(135deg, var(--primary-dark), var(--primary) 60%, #1a8a6b);
+    border-radius: var(--radius); padding: 26px; color: #fff; margin-bottom: 22px;
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .profile-avatar { width: 68px; height: 68px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; font-size: 1.9rem;
+    border: 3px solid rgba(255,255,255,0.35); flex-shrink: 0; }
+  .profile-info { flex: 1; min-width: 180px; }
+  .profile-info h2 { font-size: 1.2rem; margin-bottom: 2px; }
+  .role-badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 3px 11px;
+    border-radius: 20px; font-size: 0.75rem; margin-bottom: 9px; border: 1px solid rgba(255,255,255,0.3); }
+  .profile-xp-bar-wrap { background: rgba(255,255,255,0.2); border-radius: 20px; height: 9px; overflow: hidden; }
+  .profile-xp-bar { height: 100%; border-radius: 20px; background: var(--secondary); transition: width .8s ease; }
+  .profile-xp-text { font-size: 0.72rem; margin-top: 3px; opacity: 0.85; }
+  .profile-stats { display: flex; gap: 18px; flex-wrap: wrap; }
+  .stat-box { text-align: center; }
+  .stat-box .val { font-size: 1.5rem; font-weight: 700; }
+  .stat-box .lbl { font-size: 0.68rem; opacity: 0.8; }
+
+  /* LEVEL ROAD */
+  .level-road { background: var(--card); border-radius: var(--radius); padding: 18px 22px;
+    margin-bottom: 22px; box-shadow: var(--shadow); }
+  .level-road h3 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 14px; }
+  .road { display: flex; align-items: center; }
+  .road-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .road-step:not(:last-child)::after { content: ''; position: absolute; top: 18px; left: 50%;
+    width: 100%; height: 3px; background: var(--border); z-index: 0; }
+  .road-step.done:not(:last-child)::after { background: var(--secondary); }
+  .road-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    border: 3px solid #fff; z-index: 1; position: relative; transition: all .3s; }
+  .road-step.done .road-dot { background: var(--secondary); }
+  .road-step.current .road-dot { background: var(--accent); box-shadow: 0 0 0 5px rgba(240,165,0,0.2); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 5px rgba(240,165,0,0.2);} 50%{box-shadow:0 0 0 10px rgba(240,165,0,0.08);} }
+  .road-label { font-size: 0.68rem; margin-top: 5px; text-align: center; color: var(--text-muted); font-weight: 600; }
+  .road-step.done .road-label, .road-step.current .road-label { color: var(--text); }
+  .road-pct { font-size: 0.62rem; color: var(--text-muted); margin-top: 1px; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted); margin-bottom: 13px; margin-top: 6px; }
+
+  /* MODULE GRID */
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; margin-bottom: 26px; }
+  .module-card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow);
+    cursor: pointer; transition: transform .15s, box-shadow .15s; border: 2px solid transparent; position: relative; overflow: hidden; }
+  .module-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+  .module-card.locked { opacity: 0.65; cursor: not-allowed; filter: grayscale(0.3); }
+  .module-card.locked:hover { transform: none; box-shadow: var(--shadow); }
+  .module-card.completed { border-color: var(--secondary); }
+  .module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+  .module-card.completed::before { background: var(--secondary); }
+  .module-card.locked::before { background: var(--border); }
+  .lock-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; background: rgba(255,255,255,0.55); border-radius: var(--radius);
+    pointer-events: none; gap: 4px; }
+  .lock-overlay .lock-icon { font-size: 2rem; }
+  .lock-overlay .lock-text { font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .module-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 7px; }
+  .module-icon { font-size: 1.5rem; }
+  .module-badge { font-size: 0.67rem; padding: 2px 8px; border-radius: 20px; background: var(--bg);
+    color: var(--text-muted); border: 1px solid var(--border); white-space: nowrap; }
+  .module-badge.done { background: #e8faf4; color: #1a8a6b; border-color: #a8dfc9; }
+  .module-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+  .module-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 11px; }
+  .module-progress-bar { background: var(--bg); border-radius: 20px; height: 5px; overflow: hidden; }
+  .module-progress-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .6s; }
+  .module-progress-text { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; display: flex; justify-content: space-between; }
+  .level-tag { display: inline-block; font-size: 0.62rem; padding: 2px 7px; border-radius: 4px; margin-top: 5px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .level-tag.n1 { background: #e8f4fd; color: #1a6b8a; }
+  .level-tag.n2 { background: #fff3e0; color: #c07000; }
+  .level-tag.n3 { background: #fce4ec; color: #c0143c; }
+  .level-tag.n4 { background: #e8faf4; color: #0f6b45; }
+
+  /* QUIZ */
+  .quiz-header { background: var(--card); border-radius: var(--radius); padding: 18px 22px;
+    margin-bottom: 18px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px; }
+  .quiz-back { background: none; border: none; cursor: pointer; color: var(--primary); font-weight: 600; font-size: 0.88rem; padding: 6px 0; }
+  .quiz-back:hover { opacity: 0.7; }
+  .quiz-meta { flex: 1; }
+  .quiz-meta h2 { font-size: 1.05rem; margin-bottom: 2px; }
+  .quiz-meta p { font-size: 0.78rem; color: var(--text-muted); }
+  .quiz-progress-wrap { width: 130px; }
+  .quiz-progress-nums { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px; text-align: right; }
+  .quiz-bar { background: var(--bg); border-radius: 20px; height: 7px; overflow: hidden; }
+  .quiz-bar-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .4s; }
+  .question-card { background: var(--card); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); max-width: 720px; margin: 0 auto; }
+  .q-number { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 9px; }
+  .q-text { font-size: 1.05rem; font-weight: 600; line-height: 1.55; margin-bottom: 22px; }
+  .options { display: flex; flex-direction: column; gap: 9px; }
+  .option-btn { padding: 13px 16px; border: 2px solid var(--border); border-radius: 10px;
+    background: #fff; cursor: pointer; text-align: left; font-size: 0.9rem; transition: all .15s; color: var(--text); line-height: 1.4; }
+  .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #f0f7ff; }
+  .option-btn.correct { border-color: var(--secondary); background: #e8faf4; color: #0f6b45; }
+  .option-btn.wrong { border-color: var(--danger); background: #fdecea; color: #8b1a1a; }
+  .option-btn:disabled { cursor: default; }
+  .feedback-box { margin-top: 18px; padding: 13px 16px; border-radius: 10px; font-size: 0.85rem; line-height: 1.55; display: none; }
+  .feedback-box.correct { background: #e8faf4; border: 1px solid #a8dfc9; color: #0f5c37; }
+  .feedback-box.wrong { background: #fdecea; border: 1px solid #f5b8b2; color: #7a1a14; }
+  .quiz-nav { margin-top: 22px; display: flex; justify-content: flex-end; }
+  .btn-next { padding: 11px 26px; background: var(--primary); color: #fff; border: none; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer; display: none; }
+  .btn-next:hover { opacity: 0.88; }
+
+  /* RESULTS */
+  .results-card { background: var(--card); border-radius: var(--radius); padding: 38px; box-shadow: var(--shadow);
+    max-width: 600px; margin: 0 auto; text-align: center; }
+  .results-emoji { font-size: 3.5rem; margin-bottom: 10px; }
+  .results-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
+  .results-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 22px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 6px solid var(--secondary); background: #e8faf4; }
+  .score-circle .score-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+  .score-circle .score-lbl { font-size: 0.68rem; color: var(--text-muted); }
+  .results-answers { text-align: left; margin-bottom: 22px; }
+  .results-answers h4 { font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px; }
+  .answer-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 0.82rem; }
+  .answer-row .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+  .dot.ok { background: var(--secondary); } .dot.bad { background: var(--danger); }
+  .results-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-action { padding: 11px 22px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+  .btn-action.primary { background: var(--primary); color: #fff; border: none; }
+  .btn-action.secondary { background: transparent; border: 2px solid var(--border); color: var(--primary); }
+  .btn-action:hover { opacity: 0.82; }
+
+  /* ADMIN */
+  .admin-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .admin-tab { padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border);
+    background: var(--card); cursor: pointer; font-size: 0.83rem; font-weight: 600; color: var(--text-muted); transition: all .2s; }
+  .admin-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .worker-card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .worker-header { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+  .worker-avatar { width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+  .worker-avatar.admin-av { background: linear-gradient(135deg, #c07000, #f0a500); }
+  .worker-name { font-weight: 700; font-size: 0.9rem; line-height: 1.3; }
+  .worker-role { font-size: 0.72rem; color: var(--text-muted); }
+  .worker-bar-wrap { background: var(--bg); border-radius: 20px; height: 7px; overflow: hidden; margin-bottom: 4px; }
+  .worker-bar-fill { height: 100%; border-radius: 20px; transition: width .6s; }
+  .worker-bar-fill.l1 { background: #1a6b8a; } .worker-bar-fill.l2 { background: #c07000; }
+  .worker-bar-fill.l3 { background: #c0143c; } .worker-bar-fill.l4 { background: #0f6b45; }
+  .worker-stats-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+  .worker-modules { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+  .mod-pill { font-size: 0.62rem; padding: 2px 7px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-muted); }
+  .mod-pill.done { background: #e8faf4; border-color: #a8dfc9; color: #0f6b45; }
+  .worker-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+  .btn-sm { padding: 6px 12px; border-radius: 7px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .2s; }
+  .btn-sm:hover { opacity: 0.8; }
+  .btn-sm.edit { background: #e8f4fd; color: var(--primary); }
+  .btn-sm.danger { background: #fdecea; color: var(--danger); }
+  .btn-sm.success { background: #e8faf4; color: #0f6b45; }
+  .not-started { font-size: 0.72rem; color: var(--text-muted); font-style: italic; margin-top: 4px; margin-bottom: 10px; }
+
+  /* BADGES */
+  .badges-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
+  .badge { background: var(--card); border-radius: 11px; padding: 12px 16px; box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 11px; min-width: 190px; }
+  .badge-icon { font-size: 1.6rem; }
+  .badge-name { font-size: 0.82rem; font-weight: 700; }
+  .badge-desc { font-size: 0.7rem; color: var(--text-muted); }
+  .badge.locked { opacity: 0.38; filter: grayscale(1); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #fff; border-radius: 16px; padding: 28px; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .modal-box h3 { font-size: 1.1rem; margin-bottom: 16px; }
+  .modal-box label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .modal-box input, .modal-box select { width: 100%; padding: 10px 13px; border: 2px solid var(--border); border-radius: 9px; font-size: 0.95rem; outline: none; background: #fff; margin-bottom: 16px; }
+  .modal-box input:focus, .modal-box select:focus { border-color: var(--primary); }
+  .modal-actions { display: flex; gap: 9px; justify-content: flex-end; }
+  .btn-modal { padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+  .btn-modal.primary { background: var(--primary); color: #fff; border: none; }
+  .btn-modal.cancel { background: transparent; border: 2px solid var(--border); color: var(--text-muted); }
+
+  /* CONFIRM */
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; display: none; align-items: center; justify-content: center; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-box { background: #fff; border-radius: 16px; padding: 28px; width: 90%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align: center; }
+  .confirm-box h3 { font-size: 1.05rem; margin-bottom: 10px; }
+  .confirm-box p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 22px; }
+  .confirm-actions { display: flex; gap: 9px; justify-content: center; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--primary-dark); color: #fff;
+    padding: 13px 18px; border-radius: 11px; font-size: 0.85rem; box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    transform: translateY(80px); opacity: 0; transition: all .35s; z-index: 999; max-width: 290px; }
+  #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.success { background: #0f6b45; }
+
+
+  /* MATERIAL DE ESTUDIO */
+  .material-tabs { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .material-tab { padding:8px 16px; border-radius:8px; border:2px solid var(--border);
+    background:var(--card); cursor:pointer; font-size:0.83rem; font-weight:600;
+    color:var(--text-muted); transition:all .2s; }
+  .material-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .material-section { display:none; }
+  .material-section.active { display:block; }
+  .material-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-bottom:26px; }
+  .material-card { background:var(--card); border-radius:var(--radius); padding:18px;
+    box-shadow:var(--shadow); border:2px solid transparent; display:flex; flex-direction:column; gap:10px; }
+  .material-card:hover { border-color:var(--border); }
+  .material-card-header { display:flex; align-items:flex-start; gap:12px; }
+  .material-card-icon { font-size:1.7rem; flex-shrink:0; }
+  .material-card-info { flex:1; }
+  .material-card-title { font-size:0.9rem; font-weight:700; color:var(--text); line-height:1.35; }
+  .material-card-sub { font-size:0.73rem; color:var(--text-muted); margin-top:2px; }
+  .material-card-tag { display:inline-block; font-size:0.62rem; padding:2px 7px; border-radius:4px;
+    font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+  .tag-clase { background:#fff3e0; color:#c07000; }
+  .tag-manual-op { background:#e8f4fd; color:#1a6b8a; }
+  .tag-manual-eq { background:#e8faf4; color:#0f6b45; }
+  .material-actions { display:flex; gap:8px; }
+  .btn-material { display:flex; align-items:center; gap:5px; padding:8px 14px; border-radius:8px;
+    font-size:0.8rem; font-weight:600; cursor:pointer; border:none; transition:opacity .2s; text-decoration:none; }
+  .btn-material:hover { opacity:0.82; }
+  .btn-ver { background:var(--primary); color:#fff; }
+  .btn-dl { background:#e8f4fd; color:var(--primary); }
+  .btn-pptx { background:#fff3e0; color:#c07000; }
+  .material-note { font-size:0.72rem; color:var(--text-muted); font-style:italic; margin-top:2px; }
+
+  @media(max-width:600px){
+    .profile-card { flex-direction: column; text-align: center; }
+    .profile-stats { justify-content: center; }
+    .quiz-progress-wrap { display: none; }
+    .question-card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-cargo">
+  <div class="modal-box">
+    <h3>✏️ Editar Cargo</h3>
+    <label>Nombre</label>
+    <input type="text" id="modal-cargo-name" readonly style="background:#f5f5f5;">
+    <label>Cargo</label>
+    <input type="text" id="modal-cargo-value" placeholder="Ingresa el cargo">
+    <div class="modal-actions">
+      <button class="btn-modal cancel" onclick="closeModal('modal-cargo')">Cancelar</button>
+      <button class="btn-modal primary" onclick="saveCargo()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-delete">
+  <div class="confirm-box">
+    <h3>⚠️ Eliminar Progreso</h3>
+    <p id="confirm-delete-msg">¿Seguro que deseas borrar el progreso de este colaborador? Esta acción no se puede deshacer.</p>
+    <div class="confirm-actions">
+      <button class="btn-modal cancel" onclick="closeModal('confirm-delete')">Cancelar</button>
+      <button class="btn-modal primary" style="background:var(--danger);" onclick="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page active">
+  <div class="login-card">
+    <div class="fish-icon">🐟</div>
+    <h1>Piscicultura Los Arrayanes</h1>
+    <p>Plan de Estudio — Equipo de Producción</p>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-group">
+      <label>Tu nombre</label>
+      <select id="login-name">
+        <option value="">— Selecciona tu nombre —</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Contraseña (RUT)</label>
+      <input type="password" id="login-pass" placeholder="RUT sin puntos ni guión" autocomplete="off">
+      <div class="rut-hint">Ejemplo: si tu RUT es 12.345.678-9 → ingresa <strong>123456789</strong></div>
+    </div>
+    <button class="btn-primary" onclick="loginUser()">Ingresar</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav" style="display:none;">
+  <div class="nav-logo">
+    <div class="fish-icon">🐟</div>
+    <div><span>Los Arrayanes</span><small>Piscicultura · RAS</small></div>
+  </div>
+  <div class="nav-right">
+    <span id="nav-user"></span>
+    <button class="btn-nav" onclick="showPage('page-dashboard')">📚 Módulos</button>
+    <button class="btn-nav" onclick="showPage('page-material')">📖 Material</button>
+    <button class="btn-nav admin-only" id="btn-nav-admin" style="display:none;" onclick="showPage('page-admin')">👥 Jefatura</button>
+    <button class="btn-nav" onclick="logout()">Salir</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page">
+  <div class="main-container">
+    <div class="profile-card">
+      <div class="profile-avatar" id="prof-avatar"></div>
+      <div class="profile-info">
+        <h2 id="prof-name">—</h2>
+        <div class="role-badge" id="prof-level-badge">—</div>
+        <div class="profile-xp-bar-wrap"><div class="profile-xp-bar" id="prof-xp-bar" style="width:0%"></div></div>
+        <div class="profile-xp-text" id="prof-xp-text">0 XP</div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-box"><div class="val" id="stat-mods">0</div><div class="lbl">Módulos<br>completados</div></div>
+        <div class="stat-box"><div class="val" id="stat-correct">0%</div><div class="lbl">Respuestas<br>correctas</div></div>
+      </div>
+    </div>
+    <div class="level-road"><h3>Ruta de Carrera</h3><div class="road" id="level-road"></div></div>
+    <div class="section-title">🏅 Logros</div>
+    <div class="badges-grid" id="badges-grid"></div>
+    <div class="section-title">📚 Módulos de Aprendizaje</div>
+    <div class="module-grid" id="module-grid"></div>
+  </div>
+</div>
+
+
+<!-- MATERIAL DE ESTUDIO -->
+<div id="page-material" class="page">
+  <div class="main-container">
+    <h2 style="margin-bottom:4px;">📖 Material de Estudio</h2>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:20px;">Clases y manuales técnicos — Piscicultura Los Arrayanes · Salmones Austral</p>
+
+    <div class="material-tabs">
+      <button class="material-tab active" onclick="matTab('clases',this)">📚 Clases de Capacitación</button>
+      <button class="material-tab" onclick="matTab('manuales-op',this)">📘 Manuales de Operación</button>
+      <button class="material-tab" onclick="matTab('manuales-eq',this)">🔧 Manuales de Equipos</button>
+    </div>
+
+    <!-- CLASES -->
+    <div class="material-section active" id="mat-clases">
+      <div class="material-grid">
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">💧</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Clase 1 — Calidad de Agua en RAS</div>
+              <div class="material-card-sub">Salmones Austral · Oct 2024 · PDF</div>
+              <span class="material-card-tag tag-clase">Clase</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            FCR biológico, parámetros de calidad de agua, TAN/NH₃, equilibrio pH–temperatura,
+            toxicidad nitrito/nitrato, Ley de Henry y solubilidad de gases.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Clase1_Calidad_de_Agua.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Clase1_Calidad_de_Agua.pdf" download="Clase1_Calidad_de_Agua.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🔬</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Clase 2 — Filtración Mecánica y Biofiltración</div>
+              <div class="material-card-sub">Salmones Austral · PDF + PPTX</div>
+              <span class="material-card-tag tag-clase">Clase</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Sólidos suspendidos, drum filter, DBO/DQO, biofilm, tipos de biofiltro
+            (Trickling/MBBR), Nitrosomonas/Nitrobacter, factores que afectan la nitrificación.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Clase2_Filtracion_y_Biofiltracion.pdf" target="_blank">👁 Ver PDF</a>
+            <a class="btn-material btn-dl" href="materiales/Clase2_Filtracion_y_Biofiltracion.pdf" download="Clase2_Filtracion_y_Biofiltracion.pdf">⬇ PDF</a>
+            <a class="btn-material btn-pptx" href="materiales/Clase2_Filtracion_y_Biofiltracion.pptx" download="Clase2_Filtracion_y_Biofiltracion.pptx">⬇ PPTX</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MANUALES OPERACIÓN -->
+    <div class="material-section" id="mat-manuales-op">
+      <div class="material-grid">
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🌿</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual RAS — Agua Dulce (Freshwater)</div>
+              <div class="material-card-sub">Salmones Austral · Manual Operacional</div>
+              <span class="material-card-tag tag-manual-op">Manual Operación</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Operación del sistema RAS en fase de agua dulce. Tratamiento, parámetros y protocolos generales.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Manual_RAS_Freshwater.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Manual_RAS_Freshwater.pdf" download="Manual_RAS_Freshwater.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">☀️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual RAS — Summer (Verano)</div>
+              <div class="material-card-sub">Salmones Austral · Operación Estacional</div>
+              <span class="material-card-tag tag-manual-op">Manual Operación</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Protocolos de operación de las unidades Billund en temporada de verano. Control de temperatura, O₂ y calidad de agua.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Manual_RAS_Summer.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Manual_RAS_Summer.pdf" download="Manual_RAS_Summer.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">❄️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual RAS — Winter (Invierno)</div>
+              <div class="material-card-sub">Salmones Austral · Operación Estacional</div>
+              <span class="material-card-tag tag-manual-op">Manual Operación</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Protocolos de operación de las unidades Billund en temporada de invierno. Calefacción, calidad de agua y manejo en bajas temperaturas.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Manual_RAS_Winter.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Manual_RAS_Winter.pdf" download="Manual_RAS_Winter.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🐟</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual RAS — Post Smolt</div>
+              <div class="material-card-sub">Salmones Austral · Producción Post Smolt</div>
+              <span class="material-card-tag tag-manual-op">Manual Operación</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Producción y manejo de post smolt. Smoltificación, adaptación, alimentación, bienestar y monitoreo de calidad de agua.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Manual_RAS_PostSmolt.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Manual_RAS_PostSmolt.pdf" download="Manual_RAS_PostSmolt.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🏭</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual — Planta de Lodos</div>
+              <div class="material-card-sub">Salmones Austral · Tratamiento de Efluentes</div>
+              <span class="material-card-tag tag-manual-op">Manual Operación</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Operación de la planta de tratamiento de lodos: separación sólido-líquido, deshidratación, disposición y gestión ambiental.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MANUALES EQUIPOS -->
+    <div class="material-section" id="mat-manuales-eq">
+      <div class="material-grid">
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🥁</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Drum Filter Hydrotech HDF 1200/1600/2000/2400</div>
+              <div class="material-card-sub">Hydrotech · Manual Técnico (EN)</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Manual técnico de los filtros de tambor rotatorio. Instalación, operación, retrolavado y mantenimiento.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">☀️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Sistema UV — Atlantium EP600</div>
+              <div class="material-card-sub">Atlantium · Manual Técnico</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Manual del reactor UV Atlantium (HPR). Principio de operación, lámparas UV-C, dosis y mantenimiento preventivo.
+          </div>
+          <div class="material-actions">
+            <a class="btn-material btn-ver" href="materiales/Manual_UV_Atlantium.pdf" target="_blank">👁 Ver</a>
+            <a class="btn-material btn-dl" href="materiales/Manual_UV_Atlantium.pdf" download="Manual_UV_Atlantium.pdf">⬇ Descargar</a>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">⚙️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Bombas Grundfos NB — Operación</div>
+              <div class="material-card-sub">Grundfos · Manual + Mantenimiento</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Bombas centrífugas monoetapa NB para circuito de recirculación. Manual de operación y guía de mantenimiento preventivo.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">⚙️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Bombas Grundfos CR — Multietapa</div>
+              <div class="material-card-sub">Grundfos · Manual + Mantenimiento</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Bombas centrífugas multietapa CR para presurización. Manual técnico e instrucciones de mantenimiento.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">💧</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Bombas Grundfos AP12 — Sumergibles</div>
+              <div class="material-card-sub">Grundfos · Manual Técnico</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Bombas sumergibles AP12 para fosas de lodos y pozos de bombeo. Instalación, operación y mantención.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🌊</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Caudalímetro Siemens Sitrans</div>
+              <div class="material-card-sub">Siemens · Manual Técnico</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Caudalímetro electromagnético Siemens Sitrans. Principio de la Ley de Faraday, instalación, calibración y alarmas.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">🧪</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Sensor pH — J01 Manta</div>
+              <div class="material-card-sub">Manta · Manual (EN)</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Sensor de pH J01 Manta. Calibración con soluciones buffer pH 4 y pH 7, mantenimiento del electrodo y reemplazo.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">💨</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual BBC — Soplador / Aireador</div>
+              <div class="material-card-sub">BBC · Manual Técnico</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Manual técnico del equipo BBC. Operación, mantenimiento y especificaciones técnicas.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <div class="material-card-header">
+            <div class="material-card-icon">⚗️</div>
+            <div class="material-card-info">
+              <div class="material-card-title">Manual D03 Model 420 — Dosificadora</div>
+              <div class="material-card-sub">D03 · Manual Técnico (EN)</div>
+              <span class="material-card-tag tag-manual-eq">Equipo</span>
+            </div>
+          </div>
+          <div class="material-card-body" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
+            Manual de la bomba dosificadora Model 420. Operación, calibración de caudal y mantenimiento.
+          </div>
+          <div class="material-actions">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;line-height:1.5;">
+              📁 Disponible en el computador del centro.<br>
+              Pide acceso al jefe de producción.
+            </span>
+          </div>
+        </div>
+
+      </div>
+      <p class="material-note">💡 Los manuales de equipos se abren desde su ubicación original en tu computador. Si el archivo no abre, verifica que la carpeta SALMONES AUSTRAL esté disponible en el Desktop.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="main-container">
+    <div class="quiz-header">
+      <button class="quiz-back" onclick="showPage('page-dashboard')">← Volver</button>
+      <div class="quiz-meta"><h2 id="quiz-title">Módulo</h2><p id="quiz-subtitle"></p></div>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-nums" id="quiz-progress-nums">1 / 10</div>
+        <div class="quiz-bar"><div class="quiz-bar-fill" id="quiz-bar-fill" style="width:10%"></div></div>
+      </div>
+    </div>
+    <div id="quiz-body"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="main-container">
+    <h2 style="margin-bottom:6px;">Panel Jefatura</h2>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:18px;">Gestión del equipo — Piscicultura Los Arrayanes</p>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="adminTab('team',this)">👥 Equipo completo</button>
+      <button class="admin-tab" onclick="adminTab('stats',this)">📊 Estadísticas</button>
+    </div>
+    <div id="admin-team-view"></div>
+    <div id="admin-stats-view" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// BASE DE DATOS DE USUARIOS (del archivo Excel)
+// ══════════════════════════════════════════════════════════
+const USERS_DB = [
+  // ── Jefatura ──────────────────────────────────────────────
+  { name: 'CARLOS GONZALEZ',     rutHash: 'be4a2cdf52dd0b9d5d526b45f8b8dc97c6ff40778a2bd98d776251f2fafbb4d4', cargo: 'Jefe de Centro',              admin: true  },
+  { name: 'NICOLAS OPITZ',       rutHash: '5ca42b32cb2ccca2636a1c091bc1f8ae52abec988625f9e17fcea7daac5d7b31', cargo: 'Jefe de Producción',          admin: true  },
+  { name: 'MARCO MANSILLA',      rutHash: '52b985993e1d8a852ee6812f6c0931aded28805ae32632e80281cd6ae2a27fe9', cargo: 'Jefe de Unidad RAS',          admin: true  },
+  // ── Asistentes de Centro ──────────────────────────────────
+  { name: 'SERGIO VARGAS',       rutHash: 'c73e750fb0c74edaa685a3c698cd493b9a2e34fd0c435ff6c0fd2d17a9924ac5', cargo: 'Asistente de Centro',         admin: false },
+  { name: 'YURI SUBIABRE',       rutHash: '5d229f5130c953caad0ff0965b6750ca156786f6aa4b3882dcd8cdfa6329fb5e', cargo: 'Asistente de Centro',         admin: false },
+  { name: 'JUAN PABLO OLIVARES', rutHash: '2ea8b039e766b412b17f2239d0caa15694769752dd59eeec695fc8f6f5805f34', cargo: 'Asistente de Centro',         admin: false },
+  { name: 'LORENZO JARA',        rutHash: '143601f1008b78a81c099e5b0224d914a86ffb698e8c0ff3aeb1de976b7feaa5', cargo: 'Asistente de Centro',         admin: false },
+  { name: 'SEBASTIAN PALMA',     rutHash: 'f35b4deb6703876811ad7e99d1a5a63cd5fdc5b7b77d3f8aa32ff0da68a54755', cargo: 'Asistente de Centro',         admin: false },
+  // ── Asistentes de Centro Training ────────────────────────
+  { name: 'THIARE RODRIGUEZ',    rutHash: '22b50c56c7cf0a418a1ed395f7421207f2f2d5123a8b711e1a164d09c1fceb02', cargo: 'Asistente de Centro Training',admin: false },
+  { name: 'DANIEL BARRIA',       rutHash: '2ebca10140f3c3176dc55d74dd9356d198dba830eba97a5b690a2da54cda476f', cargo: 'Asistente de Centro Training',admin: false },
+  { name: 'DAVID CAVERO',        rutHash: 'c7f178ebb6d5c1e5ce58099528baa6211b50ea49d86608c9e093bb5cb8c1a876', cargo: 'Asistente de Centro Training',admin: false },
+  // ── Asistentes Producción ─────────────────────────────────
+  { name: 'ANGELO VARGAS',       rutHash: '0ac0130e951a5eb4da51f3984d4dda55cd93319f778605fffd03532c70ce92c8', cargo: 'Asistente Producción',        admin: false },
+  { name: 'JERSON MOLINA',       rutHash: 'b815913531fa8116a7eda6d2e80b4f190199e32ee8f7685912e11e8686b786d0', cargo: 'Asistente Producción',        admin: false },
+  { name: 'CARLOS MENESES',      rutHash: '8283faac98163cbab6ffaf7c10bb64c277f2c865402745d98d7d52eec4000a8c', cargo: 'Asistente Producción',        admin: false },
+  { name: 'CAMILA MACAYA',       rutHash: '558dd8cc22016b709b042c590a980da5a06e724cf10f00c1a26421689285fc10', cargo: 'Asistente Producción',        admin: false },
+  { name: 'MAURICIO HUAIQUIL',   rutHash: '669e85b51fa7bf6117f2443fa3c0a80f33e1d9e31145d51a48709ee70be5e123', cargo: 'Asistente Producción',        admin: false },
+  { name: 'DANILO HERNANDEZ',    rutHash: 'bac4b6fc6c0aeb8464644537a0d3fb95166a558a569d0b30c2963cd615193667', cargo: 'Asistente Producción',        admin: false },
+  { name: 'ALEXI ALVAREZ',       rutHash: '69c78419d8106e1ea4d5aaecc529a44bd172e54981e5e263a8f16fec1661186b', cargo: 'Asistente Producción',        admin: false },
+  // ── Operarios RAS ─────────────────────────────────────────
+  { name: 'NICOLAS SANCHEZ',     rutHash: '650ad08969f258d51984acc9df35f25ab4708fc25c16f9ecbfa43957dffa2587', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'EDGARDO CARRILLO',    rutHash: '245f44d406ed9275d5efa767ed6fdb951a4d89e5c07e4bfe1c98da784a643a6a', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'LUIS GARCIA',         rutHash: '0f2e1e6326f0801599e82d8e850b31eb4f76c9aed77b0853d6ff2c7697436922', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'PATRICIA OYARZO',     rutHash: 'd1a3dd27e0d28792db5bc7cbc475ef9b93fd8f134a31928cfb988e78470eae3a', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'ROBERTO PEREZ',       rutHash: 'dae21676fcca15108ad31c734c265b174d3556dc54eb29614622e3a03d8d952e', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'ALLAN RAMIREZ',       rutHash: '1c70399ef7cacedf9e9bfc8b1ab010068736caeed1944186b1215b156ab05ea1', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'FELIPE ABURTO',       rutHash: '2bdd174b2fa502cd31275e4e22fb6ea48af7bff117b047d24188c366c3395d20', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'ANGELO CERDA',        rutHash: '070e5f484d113ddfe134ee171034059590848c03dbe3f1139eee7aad3141dd4d', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'MICHAEL GONZALEZ',    rutHash: 'd4b21d63cc0cffd1972ba99678186827370d95f403862072b87f86fd8585aacb', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'ALFONSO SILVA',       rutHash: '6197e79f32d851bcad7a929a7a43d603236f6fd2a380632c6efd0202ae89c76c', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'YENIFER YEUCUN',      rutHash: 'f7f67fe612a610048cd386ace61adc08531f1998a0d4cd5c8adcb2c914b26ff9', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'ISIDORA CABALLERO',   rutHash: 'f5b8dfab8e257fd219b404b53a848fc6520de7e7fac647d7c9b3bd375f0d7b2f', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'CLAUDIA VARGAS',      rutHash: '4907c71db558eb974fe6803cee04f3d72e88ff367187638974c41f082ef24beb', cargo: 'Operario (a) RAS',            admin: false },
+];
+
+// Normaliza RUT para comparación (solo alfanumérico en mayúsculas)
+function normalizeRut(r) { return r.replace(/[^0-9kK]/g, '').toUpperCase(); }
+
+// ══════════════════════════════════════════════════════════
+// MÓDULOS Y PREGUNTAS
+// ══════════════════════════════════════════════════════════
+const MODULES = [
+  { id:'intro-ras', level:1, icon:'🔄', title:'Sistema RAS — Conceptos Básicos',
+    desc:'Principios de la acuicultura en recirculación, componentes fundamentales y ventajas.', levelTag:'n1', levelLabel:'Nivel 1 · Básico', xp:100,
+    questions:[
+      {q:'¿Qué significa la sigla RAS en acuicultura?',opts:['Red Acuícola de Salmonidos','Recirculating Aquaculture System','Red de Alimentación de Salmones','Ración Alimenticia Salmonídea'],answer:1,exp:'RAS significa Recirculating Aquaculture System. En el sistema se recircula y trata el agua para reutilizarla, minimizando el consumo hídrico.'},
+      {q:'¿Cuál es el porcentaje típico de recirculación del agua en un sistema RAS bien operado?',opts:['50-60%','70-80%','95-99%','30-40%'],answer:2,exp:'En un sistema RAS eficiente se recircula entre el 95 y 99% del agua. Solo se repone el agua evaporada o la que sale con los lodos.'},
+      {q:'¿Cuál es la función principal del biofiltro en un sistema RAS?',opts:['Eliminar sólidos en suspensión','Convertir amonio en nitrato mediante bacterias nitrificantes','Oxigenar el agua','Regular la temperatura'],answer:1,exp:'El biofiltro contiene bacterias nitrificantes que convierten el tóxico amonio (NH₃) primero en nitrito (NO₂⁻) y luego en nitrato (NO₃⁻), mucho menos tóxico.'},
+      {q:'¿Qué gas deben eliminar los desgasificadores en un sistema RAS?',opts:['Oxígeno','Nitrógeno','Dióxido de carbono (CO₂)','Metano'],answer:2,exp:'El CO₂ es subproducto de la respiración. Niveles elevados bajan el pH y causan estrés. Los strippers de CO₂ lo eliminan antes de reoxigenar el agua.'},
+      {q:'En un sistema RAS para salmón Atlántico smolt, ¿cuál es el rango óptimo de temperatura?',opts:['2-5°C','8-14°C','16-20°C','22-26°C'],answer:1,exp:'El salmón Atlántico en fase smolt/post-smolt se desarrolla óptimamente entre 8 y 14°C. Temperaturas fuera de rango afectan el crecimiento, inmunidad y conversión.'},
+      {q:'¿Qué equipo elimina los sólidos en suspensión finos en un RAS?',opts:['Biofiltro de lecho móvil','Filtro de tambor rotatorio (drum filter)','Bomba centrífuga','Ozonizador'],answer:1,exp:'El filtro de tambor (drum filter o HDF) captura sólidos finos (heces, alimento no consumido) mediante una malla autolimpiante. Es el primer paso del tratamiento.'},
+      {q:'¿Para qué se utiliza el sistema UV en una piscicultura RAS?',opts:['Aumentar la temperatura','Desinfectar el agua eliminando patógenos','Eliminar el CO₂','Medir el nivel de oxígeno'],answer:1,exp:'Los sistemas UV (ultravioleta) utilizan radiación UV-C para destruir el ADN de bacterias, virus y parásitos, reduciendo la carga patogénica sin usar químicos.'},
+      {q:'¿Cuál es el nivel óptimo de oxígeno disuelto (OD) para salmón Atlántico en RAS?',opts:['3-5 mg/L','6-8 mg/L','8-12 mg/L','15-20 mg/L'],answer:2,exp:'En RAS se trabaja con O₂ puro, manteniendo 8-12 mg/L o sobre-saturación. Niveles bajo 7 mg/L causan estrés en smolts.'},
+      {q:'¿Qué mide el parámetro TAN en la calidad de agua de un RAS?',opts:['Temperatura del Agua Neta','Nitrógeno amoniacal total','Total de alimento no consumido','Turbidez acuosa neta'],answer:1,exp:'TAN (Total Ammonia Nitrogen) mide la suma de NH₃ (tóxico) y NH₄⁺ (menos tóxico). Se monitorea diariamente en RAS.'},
+      {q:'¿Qué ventaja principal tiene el RAS frente a los sistemas de flujo abierto?',opts:['Mayor consumo de agua','Control total de parámetros ambientales y bioseguridad','Menor costo de inversión inicial','No requiere personal especializado'],answer:1,exp:'El RAS permite controlar temperatura, fotoperiodo, calidad de agua y bioseguridad independientemente de las condiciones externas, logrando producción año redondo.'}
+    ,
+      {q:'¿Qué es el FCR biológico en RAS?',opts:['Kg de agua tratada / Kg de peces','Cantidad neta de alimento para producir 1 Kg de biomasa','Factor de Corrección de la Recirculación','Flujo de agua nueva / flujo recirculante'],answer:1,exp:'El FCR Biológico es la cantidad NETA de alimento empleado para ganar 1 Kg de biomasa. Un FCR bajo reduce la carga al sistema de tratamiento.'},
+      {q:'¿Por qué los sólidos suspendidos (SS) son problemáticos en RAS?',opts:['Solo afectan el color del agua','Estimulan bacterias heterótrofas, consumen O₂, generan CO₂/NH₃ y protegen patógenos del UV','Son beneficiosos para el crecimiento','No afectan al biofiltro'],answer:1,exp:'Los SS de heces, bioflóculos y alimento no consumido deterioran la calidad del agua y reducen la eficiencia de la desinfección UV.'},
+      {q:'¿Cuál es el pH óptimo para salmónidos en RAS?',opts:['4.0–5.0','8.5–9.5','6.5–7.5','10.0–11.0'],answer:2,exp:'El pH óptimo es 6.5–7.5. Sobre 8 aumenta la toxicidad del NH₃; bajo 6.5 cae la actividad nitrificante del biofiltro.'},
+      {q:'¿Cuál es la DBO normal en un sistema RAS bien operado?',opts:['100–500 mg/L','1–20 mg/L','0 mg/L','≥500 mg/L'],answer:1,exp:'La DBO en RAS varía entre 1 y 20 mg/L. Valores más altos indican exceso de materia orgánica que sobrecarga el biofiltro.'},
+      {q:'¿Qué porcentaje de la DBO elimina la filtración mecánica?',opts:['5%','50%','95%','100%'],answer:1,exp:'Un buen drum filter elimina ≈50% de la DBO, reduciendo significativamente la carga orgánica sobre las bacterias nitrificantes del biofiltro.'},
+      {q:'¿Qué contaminantes genera el metabolismo del alimento en RAS?',opts:['Solo CO₂','Amonio (NH₃), CO₂, fecas y alimento no consumido','Solo sólidos suspendidos','Solo nitratos'],answer:1,exp:'El metabolismo proteico genera NH₃ (branquias), CO₂ (respiración), fecas y residuos de alimento. Todo debe ser removido por el sistema de tratamiento.'},
+      {q:'¿Cómo se calcula el porcentaje de recambio de agua en RAS?',opts:['Caudal recirculante × 100 / volumen total','(Ingreso agua fresca / volumen total sistema) × 100','Solo depende del número de peces','Temperatura × caudal / 100'],answer:1,exp:'% recambio = (flujo agua nueva / volumen total sistema) × 100. En RAS moderno es 1–5% diario.'},
+      {q:'¿Por qué reducir el FCR aumenta la capacidad productiva del sistema RAS?',opts:['Solo reduce el costo de alimento','Un FCR bajo reduce SS, NH₃ y DBO, liberando capacidad del sistema de tratamiento hasta en 30%','No tiene relación con el RAS','Solo importa para los informes'],answer:1,exp:'Menos alimento desperdiciado = menos SS, menos NH₃ y menos DBO. Esto libera capacidad de tratamiento y permite mayor densidad de carga.'},
+      {q:'¿Qué es la DQO y cómo se compara con la DBO?',opts:['Son idénticas','DQO mide toda la materia oxidable (biodegradable + no biodegradable); siempre mayor que la DBO (≈ doble)','DQO siempre es menor que la DBO','DQO solo mide nitratos'],answer:1,exp:'La DQO oxida química toda la materia oxidable. La DBO solo mide la porción biodegradable. En efluentes de piscicultura DQO ≈ 2 × DBO.'},
+      {q:'¿Por qué SS altos reducen la eficiencia del UV en RAS?',opts:['No hay relación','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV no funciona en agua dulce','Los SS aumentan la dosis UV'],answer:1,exp:'Los sólidos protegen patógenos de la radiación UV-C. Por eso es crítico mantener SS bajos antes del reactor UV.'}
+    ]},
+  { id:'calidad-agua', level:1, icon:'💧', title:'Calidad de Agua y Parámetros',
+    desc:'Monitoreo de parámetros críticos: oxígeno, pH, amonio, CO₂, temperatura y protocolos.', levelTag:'n1', levelLabel:'Nivel 1 · Básico', xp:100,
+    questions:[
+      {q:'¿Cuál es el rango de pH óptimo para el cultivo de salmón Atlántico?',opts:['5.5-6.5','6.8-7.5','7.5-8.5','8.5-9.5'],answer:1,exp:'El rango óptimo de pH es 6.8-7.5. Sobre 8.0 aumenta la toxicidad del NH₃; bajo 6.5 cae la actividad del biofiltro.'},
+      {q:'¿A qué nivel de CO₂ disuelto comienza a haber riesgo de estrés en salmones?',opts:['> 5 mg/L','> 15 mg/L','> 30 mg/L','> 50 mg/L'],answer:1,exp:'Sobre 15 mg/L de CO₂ comienzan los signos de estrés. Sobre 25-30 mg/L puede haber mortalidad. En RAS se busca mantener bajo 15 mg/L.'},
+      {q:'¿Con qué equipo portátil se mide comúnmente el oxígeno disuelto en terreno?',opts:['Termómetro de mercurio','Oxímetro digital (sonda OD)','Fotómetro UV','Turbidímetro óptico'],answer:1,exp:'El oxímetro digital (como el YSI o HQ) usa una sonda electroquímica o luminiscente para medir el OD en mg/L o % de saturación.'},
+      {q:'¿Qué ocurre con la toxicidad del amonio (NH₃) cuando el pH sube?',opts:['Disminuye porque se ioniza','Aumenta porque más amonio pasa a forma no ionizada (NH₃)','No cambia','El amonio se elimina solo'],answer:1,exp:'A mayor pH el equilibrio NH₄⁺ ↔ NH₃ se desplaza hacia NH₃ (tóxico). A igual TAN, pH 7.5 es más peligroso que pH 7.0.'},
+      {q:'¿Qué es la alcalinidad y por qué es importante en RAS?',opts:['La capacidad de conducir electricidad','La capacidad tampón del agua para resistir cambios de pH; es consumida por la nitrificación','El nivel de sales totales','La concentración de O₂ a saturación'],answer:1,exp:'La alcalinidad (bicarbonatos) actúa como buffer del pH. La nitrificación la consume; si baja de 100 mg/L CaCO₃ el pH cae y el biofiltro falla.'},
+      {q:'Nitrobacter en el biofiltro realiza ¿cuál proceso?',opts:['Convierte NH₃ en NO₂⁻','Convierte NO₂⁻ en NO₃⁻','Convierte NO₃⁻ en N₂','Oxida materia orgánica'],answer:1,exp:'Nitrobacter (y Nitrospira) realizan la segunda etapa: NO₂⁻ → NO₃⁻. Nitrosomonas hace la primera (NH₃ → NO₂⁻).'},
+      {q:'¿Cada cuánto tiempo se deben realizar mediciones de parámetros en un RAS productivo?',opts:['Una vez a la semana','Solo ante mortalidades','Al menos una vez al día (dos veces en puntos críticos)','Una vez al mes'],answer:2,exp:'En RAS se monitorean parámetros al menos 2 veces al día. Sistemas automatizados registran en continuo.'},
+      {q:'¿Qué indica una turbidez alta en los estanques?',opts:['Excelente calidad de agua','Exceso de sólidos, posible problema en drum filter o alta carga','Sobresaturación de oxígeno','Temperatura muy baja'],answer:1,exp:'Turbidez alta indica TSS elevados (heces, alimento, bacterias). Afecta branquias, favorece patógenos y puede colapsar el biofiltro.'},
+      {q:'¿Qué significa saturación de oxígeno del 100%?',opts:['El máximo posible','El agua contiene el O₂ en equilibrio con la atmósfera a esa temperatura y altitud','El O₂ está saturando los tejidos del pez','El sensor mide al máximo de rango'],answer:1,exp:'100% de saturación significa equilibrio con el O₂ atmosférico a esa temperatura y presión. En RAS con O₂ puro se trabaja sobre el 100% (110-130%).'},
+      {q:'¿Qué protocolo se debe seguir si el OD baja de 6 mg/L?',opts:['Apagar los sistemas','Aumentar inyección de O₂, revisar caudal, reducir alimentación e informar al jefe de turno','Agregar sal','Cambiar el pH'],answer:1,exp:'La hipoxia es emergencia: inyectar O₂, aumentar caudal, suspender alimentación, revisar equipos. Siempre documentar y reportar.'}
+    ,
+      {q:'¿Cuál es el nivel tóxico de NH₃ libre para salmónidos?',opts:['>10 mg/L','>1 mg/L','>0.035 mg/L','>0.5 mg/L'],answer:2,exp:'El NH₃ libre es altamente tóxico sobre 0.035 mg/L en salmónidos. A pH y temperatura más altos, mayor fracción del TAN es NH₃ tóxico.'},
+      {q:'¿Qué factores controlan el equilibrio NH₃/NH₄⁺?',opts:['Solo la temperatura','El pH y la temperatura; a mayor pH y temperatura, mayor fracción de NH₃ tóxico','Solo el caudal','La concentración de sal'],answer:1,exp:'El equilibrio NH₄⁺ ↔ NH₃ depende del pH y la temperatura. A pH 7.5 y 14°C la fracción NH₃ es mucho mayor que a pH 7.0 y 10°C.'},
+      {q:'¿Cómo actúa el nitrito (NO₂⁻) sobre la sangre de los peces?',opts:['Daña directamente las escamas','Se une al hierro de la hemoglobina formando metahemoglobina, impidiendo el transporte de O₂','Aumenta el pH de la sangre','Solo afecta el sistema nervioso'],answer:1,exp:'El NO₂⁻ cruza las branquias y oxida el Fe²⁺ de la hemoglobina a Fe³⁺ (metahemoglobina), que no puede unirse al O₂, causando hipoxia tisular.'},
+      {q:'¿Cómo se controla la toxicidad del nitrito en RAS?',opts:['Aumentando el CO₂','Adicionando NaCl; la relación Cl⁻/NO₂⁻N debe ser >100','Bajando el pH','Reduciendo el caudal'],answer:1,exp:'El ion Cl⁻ compite con NO₂⁻ por el transporte branquial. Con Cl⁻/NO₂⁻N >100 se bloquea efectivamente la absorción de nitrito por las branquias.'},
+      {q:'¿Cuál es el rango normal de NO₃⁻ en RAS?',opts:['0–5 mg/L','100–300 mg/L','>1000 mg/L','0.5–1 mg/L'],answer:1,exp:'En RAS se acepta NO₃⁻ hasta 300 mg/L. Sus efectos negativos son principalmente osmóticos a concentraciones muy altas (>500 mg/L).'},
+      {q:'Según la Ley de Henry, ¿qué ocurre con la solubilidad del O₂ al aumentar la temperatura?',opts:['Aumenta la solubilidad','Disminuye; el agua más caliente disuelve menos O₂','No cambia','Se duplica la solubilidad'],answer:1,exp:'La Ley de Henry establece que la solubilidad de los gases disminuye al aumentar la temperatura. Por eso el agua cálida tiene menos O₂ disponible.'},
+      {q:'¿Cuánto reduce la salinidad la solubilidad del O₂ respecto al agua dulce?',opts:['No cambia','5%','≈20%','50%'],answer:2,exp:'El agua de mar (35 ppt) contiene aproximadamente un 20% menos de O₂ disuelto que el agua dulce a igual temperatura y presión.'},
+      {q:'¿Cuál es el nivel mínimo de alcalinidad para no limitar la nitrificación?',opts:['≥1 mmol/L (45 mg CaCO₃/L)','≥500 mg CaCO₃/L','<10 mg CaCO₃/L','La alcalinidad no afecta la nitrificación'],answer:0,exp:'Bajo ≈1 mmol/L (45 mg CaCO₃/L) la nitrificación comienza a limitarse. La biofiltración consume ≈7 g de alcalinidad por gramo de N-amoniaco nitrificado.'},
+      {q:'¿Cuál es el nivel de CO₂ considerado desfavorable en RAS?',opts:['0–5 mg/L','5–10 mg/L','>20 mg/L','CO₂ no afecta a los peces'],answer:2,exp:'Sobre 20 mg/L de CO₂ se considera desfavorable; puede causar hipercapnia y reducir la capacidad de transporte de O₂ en sangre.'},
+      {q:'¿Por qué la alcalinidad cae continuamente en RAS sin aporte externo?',opts:['Por efecto del frío','La nitrificación consume HCO₃⁻ produciendo H⁺; sin reposición el pH cae y el biofiltro falla','Las bombas consumen alcalinidad','El O₂ oxida la alcalinidad'],answer:1,exp:'Cada mol de NH₄⁺ nitrificado consume ≈2 mol de alcalinidad. En RAS productivo se dosifica NaHCO₃ o Ca(OH)₂ diariamente para mantener el buffer de pH.'}
+    ]},
+  { id:'planta-lodos', level:2, icon:'🏭', title:'Planta de Lodos',
+    desc:'Operación y mantenimiento de la planta de tratamiento de lodos. Basado en Manual SA.', levelTag:'n2', levelLabel:'Nivel 2 · Avanzado', xp:150,
+    questions:[
+      {q:'¿Cuál es la función principal de la planta de lodos?',opts:['Producir agua limpia para peces','Tratar y concentrar los efluentes sólidos antes de su disposición final','Almacenar alimento','Generar energía'],answer:1,exp:'La planta de lodos recibe efluentes del drum filter y purgas, los concentra y prepara para disposición o uso como subproducto.'},
+      {q:'¿Qué es el "retorno de agua de proceso" en la planta de lodos?',opts:['El agua del mar','El agua clarificada recuperada del tratamiento de lodos','El agua de limpieza de equipos','El agua de lluvia'],answer:1,exp:'Al separar sólidos del agua se genera agua clarificada (retorno de proceso) que puede recuperarse si cumple parámetros, reduciendo el consumo de agua fresca.'},
+      {q:'¿Qué parámetro determina la eficiencia de deshidratación de los lodos?',opts:['pH del lodo','Porcentaje de materia seca (% MS)','Temperatura del lodo','Color'],answer:1,exp:'El % de MS indica cuánta agua se eliminó. Lodos frescos tienen <5% MS; después de deshidratación se busca >15-20% MS.'},
+      {q:'¿Con qué frecuencia debe registrarse la producción de lodos?',opts:['Solo ante visitas de autoridad','Cada purga o extracción (registro diario mínimo)','Solo al enviar al destino final','Una vez por semana'],answer:1,exp:'Cada purga de drum filter, sedimentador o extracción debe anotarse con fecha, hora, volumen y destino. Exigencia de SERNAPESCA.'},
+      {q:'¿Qué riesgo de seguridad existe en la planta de lodos?',opts:['Solo resbalones','Gases tóxicos (H₂S, CH₄), espacios confinados y exposición a material biológico','Solo ruido de equipos','Sin riesgos especiales'],answer:1,exp:'Los lodos generan H₂S (tóxico) y CH₄ (explosivo). Pozos y estanques son espacios confinados que requieren protocolo específico.'},
+      {q:'¿Qué son los polímeros utilizados en la planta de lodos?',opts:['Vitaminas para peces','Floculantes/coagulantes que aglutinan partículas para mejorar separación sólido-líquido','Desinfectantes','Medicamentos'],answer:1,exp:'Los polímeros (floculantes) como poliacrilamidas catiónicas aglutinan partículas finas, mejorando la eficiencia de decantadores y centrífugas.'},
+      {q:'El drum filter retiene principalmente:',opts:['Bacterias y virus','Sólidos en suspensión gruesos (heces, alimento) > 60-100 µm','Gases disueltos','Compuestos nitrogenados disueltos'],answer:1,exp:'Los drum filters (HDF1200-HDF2400) tienen mallas de 60-100 µm y capturan sólidos gruesos. Son el primer paso en el tratamiento de sólidos.'},
+      {q:'¿Cómo debe gestionarse el lodo según normativa ambiental chilena?',opts:['Descargarlo al río más cercano','Con empresa autorizada o como fertilizante en predios autorizados, con registros y manifiestos','Enterrarlo en el predio','Solo quemarlo in situ'],answer:1,exp:'Según SERNAPESCA y MMA, los lodos son residuos industriales regulados. Deben gestionarse con empresa autorizada o como bioabono con Plan de Manejo aprobado.'},
+      {q:'¿Qué indica un aumento repentino en el caudal de lodos del drum filter?',opts:['Peces creciendo normalmente','Posible sobrealimentación, alimento deficiente, mortalidad alta o rotura de malla','Sistema funcionando perfectamente','Biofiltro mejorando'],answer:1,exp:'Un aumento anormal puede indicar sobrealimentación, alimento de mala calidad, alta mortalidad o rotura de la malla. Requiere diagnóstico inmediato.'},
+      {q:'¿Qué EPP es obligatorio en la planta de lodos?',opts:['Solo guantes de látex','Overol, botas de goma, guantes, mascarilla FFP2/FFP3 y protección ocular','Solo casco','No se requiere EPP especial'],answer:1,exp:'El trabajo con lodos requiere EPP completo por riesgo biológico, químico y físico. En espacios confinados se agrega arnés y detector de gases.'}
+    ,
+      {q:'¿Cuál es el rango de filtración del drum filter en RAS?',opts:['1–10 µm','40–100 µm','500–1000 µm','0.1 µm'],answer:1,exp:'Los drum filters Hydrotech HDF tienen mallas de 40–100 µm que retienen partículas de heces, bioflóculos y alimento no consumido.'},
+      {q:'¿Cómo funciona el retrolavado automático del drum filter?',opts:['Manualmente con escobilla cada día','Cuando el nivel de agua interior sube (malla obstruida), activa boquillas de agua a presión que retiran los sólidos','Con químicos cada semana','Solo cuando el operario lo ordena'],answer:1,exp:'El retrolavado es automático: cuando la malla se obstruye, el nivel interior sube, activando las boquillas de lavado automáticamente.'},
+      {q:'¿Por qué SS altos afectan negativamente la nitrificación en el biofiltro?',opts:['Los SS aumentan el pH','Bacterias heterótrofas crecen sobre el biomedio compitiendo con nitrificantes por O₂ y espacio','Los SS benefician a las bacterias nitrificantes','No existe relación entre SS y nitrificación'],answer:1,exp:'Las bacterias heterótrofas crecen más rápido que las nitrificantes. Con exceso de DBO dominan el biofilm, desplazando a Nitrosomonas y Nitrobacter.'},
+      {q:'¿Por qué se debe evitar fragmentar las partículas sólidas al eliminarlas?',opts:['Para ahorrar energía','Las partículas finas no son capturadas por el drum filter y aumentan la carga sobre el biofiltro y el UV','No hay diferencia en el tamaño de partícula','Solo es estético'],answer:1,exp:'Las partículas finas pasan la malla del drum filter y cargan el biofiltro con DBO. Una remoción eficiente requiere mantener las partículas íntegras.'},
+      {q:'¿Cuáles son los objetivos principales de la remoción de sólidos en RAS?',opts:['Solo mejorar la apariencia','Disminuir turbidez, reducir carga orgánica, mejorar la nitrificación y la eficiencia del UV','Solo reducir costos de alimento','Aumentar el caudal'],answer:1,exp:'La remoción de SS es fundamental para proteger el biofiltro, el UV y la salud branquial de los peces.'},
+      {q:'¿Qué genera la descomposición de materia orgánica (SS) en el sistema?',opts:['Solo CO₂','Bacterias heterótrofas consumen O₂ y producen CO₂ y NH₃, deteriorando la calidad del agua','Solo N₂','Solo beneficios para los peces'],answer:1,exp:'La degradación aeróbica de SS consume O₂ y produce CO₂ y NH₃, aumentando la carga sobre el biofiltro y el sistema de oxigenación.'},
+      {q:'¿Qué nivel de SS se considera desfavorable en salmones?',opts:['<10 mg/L','10–30 mg/L','>80–100 mg/L','Los SS no causan estrés'],answer:2,exp:'Sobre 80–100 mg/L los SS causan daño branquial, reducen la eficiencia del UV y sobrecargan el biofiltro. El objetivo en RAS es <30 mg/L.'},
+      {q:'¿Qué relación hay entre DQO y DBO en piscicultura RAS?',opts:['Son iguales','DQO ≈ doble de la DBO; mide también la fracción no biodegradable','DQO siempre es menor','DQO solo mide nitratos'],answer:1,exp:'La DQO incluye toda la materia oxidable (biodegradable y no biodegradable). En piscicultura DQO ≈ 2 × DBO.'},
+      {q:'¿Qué indica un aumento repentino en la turbidez del efluente del drum filter?',opts:['Operación normal','Posible sobrealimentación, alimento deficiente, alta mortalidad o rotura de malla','El sistema mejoró su eficiencia','Los peces están en excelente estado'],answer:1,exp:'Un aumento brusco de sólidos es una señal de alerta: revisar alimentación, estado de la malla y mortalidad en los estanques.'},
+      {q:'¿Cómo protegen los SS a los patógenos de la radiación UV?',opts:['No los protegen','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV es inefectivo independientemente de los SS','Solo protegen bacterias, no virus'],answer:1,exp:'Los patógenos dentro o adheridos a partículas sólidas no reciben la dosis UV necesaria para inactivarse. Por eso se requiere filtración mecánica previa al UV.'}
+    ]},
+  { id:'unidades-billund', level:2, icon:'🏗️', title:'Unidades Billund — Summer & Winter',
+    desc:'Operación de las unidades tecnológicas Billund para las temporadas de verano e invierno.', levelTag:'n2', levelLabel:'Nivel 2 · Avanzado', xp:150,
+    questions:[
+      {q:'¿Por qué difiere la operación Summer de la Winter en unidades Billund?',opts:['Por preferencias del personal','La temperatura del agua de la fuente cambia estacionalmente, afectando calidad y demandas del sistema','Diferencias en precio del alimento','Las unidades son físicamente distintas'],answer:1,exp:'La temperatura del agua de entrada varía estacionalmente. En verano puede superar el óptimo para salmón; en invierno puede requerir calefacción.'},
+      {q:'¿Qué es un MBBR (Moving Bed Biofilm Reactor)?',opts:['Un estanque circular para peces','Un biofiltro con plásticos flotantes que maximizan la superficie para bacterias nitrificantes','Una bomba de alta presión','Un sistema de alimentación automático'],answer:1,exp:'El MBBR utiliza elementos plásticos (carriers) en suspensión. Los biofilms de bacterias nitrificantes crecen en su superficie, con alta eficiencia por m³.'},
+      {q:'En la unidad Summer, ¿qué parámetro es más crítico en enero-febrero?',opts:['Salinidad','Temperatura del agua (evitar superar 18°C en salmón Atlántico)','Color del agua','Nivel de magnesio'],answer:1,exp:'En verano, sobre 18°C hay estrés térmico, reducción del apetito y mayor susceptibilidad a SRS y otras enfermedades. Monitoreo continuo.'},
+      {q:'¿Qué es el fotoperiodo y por qué se controla en RAS?',opts:['El tipo de comida','Las horas de luz artificial; controla la maduración sexual y smoltificación','La presión del agua','La cantidad de agua renovada por hora'],answer:1,exp:'El fotoperiodo (horas de luz/oscuridad) es una señal clave. En RAS se controla con luz artificial para inducir o retrasar la smoltificación.'},
+      {q:'¿Cómo se calcula la biomasa en un estanque?',opts:['N° peces × Densidad del agua','N° peces × Peso promedio individual','Largo total ÷ N° peces','Kg alimento × Factor de conversión'],answer:1,exp:'Biomasa (kg) = N° peces × Peso promedio individual (kg). Base para calcular tasa de alimentación, densidad y carga del sistema.'},
+      {q:'¿Qué es la tasa de alimentación (%BW/día)?',opts:['% de peces que comen','% del peso corporal total que se administra como alimento por día; varía con temperatura y tamaño','% de alimento desperdiciado','Proporción de proteína en el alimento'],answer:1,exp:'La tasa de alimentación indica cuánto alimento dar respecto a la biomasa. A mayor temperatura y menor peso hay mayor tasa.'},
+      {q:'Al realizar un muestreo biométrico, ¿qué datos mínimos deben registrarse?',opts:['Solo el peso','Fecha, estanque, N° peces muestreados, peso, condición sanitaria y responsable','Solo la longitud','Solo la temperatura'],answer:1,exp:'Un muestreo biométrico requiere: fecha, unidad, estanque, peso, N° peces, peso promedio, factor K, observaciones sanitarias y responsable.'},
+      {q:'¿Qué indica el Factor de Condición K de Fulton?',opts:['Cantidad de O₂ en sangre','El estado de robustez del pez; K bajo indica peces flacos o con problemas','La tasa de crecimiento','El estrés en sangre'],answer:1,exp:'K = (Peso/Longitud³) × 100. K bajo (<1.0 en salmón Atlántico) indica peces delgados: posible enfermedad, subnutrición o mala calidad de agua.'},
+      {q:'¿Cuándo se activa el protocolo de turno de emergencia?',opts:['Solo los fines de semana','Ante falla de equipos críticos, mortalidad masiva, cortes de luz o alerta sanitaria','Solo en época de cosecha','Cuando el jefe está de vacaciones'],answer:1,exp:'El protocolo de emergencia se activa ante eventos críticos: pérdida de oxígeno, falla de bombas principales, corte de energía, mortalidad anormal o alerta de enfermedad.'},
+      {q:'¿Qué es la densidad de carga y cuál es el límite en RAS avanzado?',opts:['Kg alimento/día; máximo 1 kg/m³','Kg peces por m³ de agua; en RAS avanzado se puede superar 80-100 kg/m³ con buena gestión','N° peces por m² de superficie','Nivel de ruido; máximo 60 dB'],answer:1,exp:'Densidad de carga = kg peces / m³. En RAS Billund se puede trabajar a 60-100 kg/m³ con agua de alta calidad. Sobre el límite hay estrés y enfermedades.'}
+    ,
+      {q:'¿Cuál es la superficie específica del biofiltro tipo Trickling en unidades Billund?',opts:['700 m²/m³','200 m²/m³','50 m²/m³','1000 m²/m³'],answer:1,exp:'El biofiltro tipo Trickling tiene ≈200 m²/m³ de superficie específica, menor que el biomedio RK (700 m²/m³).'},
+      {q:'¿Qué bacterias realizan la primera etapa de nitrificación (NH₄⁺ → NO₂⁻)?',opts:['Nitrobacter','Nitrosomonas (AOB — Ammonia Oxidizing Bacteria)','E. coli','Bacterias anaeróbicas'],answer:1,exp:'Las bacterias AOB, principalmente Nitrosomonas, convierten NH₄⁺ en NO₂⁻ en la primera etapa de la nitrificación.'},
+      {q:'¿Cuánto tiempo tarda el biofilm en establecerse en un biofiltro nuevo?',opts:['24 horas','7–10 días de inicio; varias semanas para madurar completamente','Solo 1 hora','Años'],answer:1,exp:'El biofilm requiere tiempo: 7–10 días de inicio, 2 semanas para actividad medible, varias semanas para nitrificación estable.'},
+      {q:'¿Con qué frecuencia deben limpiarse los biofiltros para mantener su eficiencia?',opts:['Nunca, son autolimpiantes','Cada dos semanas por cámara, para renovar el biofilm y retirar bacterias envejecidas','Una vez al año','Diariamente con agua a presión'],answer:1,exp:'La limpieza periódica (≈cada 2 semanas por cámara) elimina el biofilm envejecido, estimulando el crecimiento de nuevo biofilm activo.'},
+      {q:'¿Qué concentración mínima de O₂ debe haber a la entrada del biofiltro?',opts:['>10 mg/L','>4 mg/L — de lo contrario cae la nitrificación','>0.5 mg/L','>20 mg/L'],answer:1,exp:'Bajo 4 mg/L de O₂ en la entrada al biofiltro, la difusión al interior del biofilm es insuficiente para mantener la actividad nitrificante normal.'},
+      {q:'¿Por qué el exceso de espesor del biofilm reduce la nitrificación?',opts:['Siempre mejora con mayor espesor','Genera condiciones anaeróbicas en las capas internas sin O₂','El espesor no importa','Reduce el consumo de O₂'],answer:1,exp:'El O₂ penetra el biofilm solo por difusión. Las capas profundas del biofilm grueso quedan sin O₂, generando zonas anaeróbicas que no nitrificanen.'},
+      {q:'¿Cómo afecta un ayuno por vacunación a los niveles de nitrito?',opts:['Los niveles de nitrito bajan inmediatamente','Las variaciones en alimentación tienen repercusiones en NO₂⁻ ≈3 días después','No hay relación entre ayunos y nitrito','Los niveles siempre mejoran con ayunos'],answer:1,exp:'El biofiltro adapta su actividad al substrato disponible. Cambios bruscos en la alimentación provocan desequilibrios detectables 2–3 días después.'},
+      {q:'¿Qué es el biofilm y cuál es su composición?',opts:['Solo bacterias en suspensión','Comunidad de bacterias fijadas al sustrato, en matriz de exopolisacáridos: 10% bacterias, 90% exopolisacáridos','Solo algas','Solo materia orgánica inerte'],answer:1,exp:'El biofilm es una biopelícula donde las bacterias se adhieren al biomedio rodeadas de exopolisacáridos que las protegen y facilitan la captura de sustratos.'},
+      {q:'¿Qué ocurre con la nitrificación ante cambios bruscos de pH?',opts:['No se ve afectada','Cambios de 0.5–1 unidad de pH en minutos pueden inhibir fuertemente a las bacterias nitrificantes','Mejora la nitrificación','Solo afecta la temperatura'],answer:1,exp:'Las bacterias nitrificantes son muy sensibles a cambios rápidos de pH. Una variación brusca de 0.5–1 pH puede reducir la actividad nitrificante drásticamente.'},
+      {q:'¿Cuál es la superficie específica del biomedio RK en biofiltros MBBR?',opts:['50 m²/m³','200 m²/m³','700 m²/m³','1500 m²/m³'],answer:2,exp:'El biomedio RK (y similares K3, K5) ofrece ≈700 m²/m³ de superficie protegida para el biofilm nitrificante, muy superior al Trickling.'}
+    ]},
+  { id:'postsmolt', level:2, icon:'🐟', title:'Post Smolt — Producción y Cuidado',
+    desc:'Manejo de la fase post smolt: smoltificación, adaptación, alimentación y monitoreo.', levelTag:'n2', levelLabel:'Nivel 2 · Avanzado', xp:150,
+    questions:[
+      {q:'¿Qué es la smoltificación en el salmón Atlántico?',opts:['Una enfermedad','El proceso fisiológico de adaptación de agua dulce a agua salada, con cambios en osmorregulación y comportamiento','Un tipo de alimentación especial','El proceso de cosecha'],answer:1,exp:'La smoltificación es una metamorfosis programada por fotoperiodo y temperatura. El salmón parr se transforma en smolt: pasa a ser eurihalino y cambia a coloración plateada.'},
+      {q:'¿Cuál es un indicador visual de smoltificación correcta?',opts:['Color naranja brillante','Coloración plateada, aletas más oscuras y pérdida de marcas del parr (manchas ovales)','Manchas rojas','Agrandamiento de la cabeza'],answer:1,exp:'Un smolt correcto tiene: coloración plateada (depósito de guanina), marcas del parr desaparecen, aletas se oscurecen y aumenta la actividad natatoria.'},
+      {q:'¿Qué factor desencadena la smoltificación en RAS?',opts:['Temperatura únicamente','El control artificial del fotoperiodo (horas de luz)','El tipo de alimento','El nivel de salinidad'],answer:1,exp:'En RAS se usa luz artificial para controlar el fotoperiodo. La luz continua 24h estimula el crecimiento; el "estímulo" de luz induce la smoltificación.'},
+      {q:'¿Qué es el SGR y cómo se calcula?',opts:['Salud General RAS','Tasa de Crecimiento Específico: SGR(%/día) = [(ln Pf - ln Pi) / días] × 100','Suma General de Recursos','Sistema de Gestión de Riesgos'],answer:1,exp:'El SGR indica el crecimiento diario como % del peso corporal. Se calcula con logaritmos naturales de los pesos inicial y final del período.'},
+      {q:'¿Qué es el FCR (Feed Conversion Ratio)?',opts:['Factor de Crecimiento Real','Kg de alimento dado / kg de biomasa ganada. Indica la eficiencia de conversión','Frecuencia de Control de Rutina','Minerales en el agua'],answer:1,exp:'FCR = kg alimento / kg pez ganado. Un FCR de 1.0-1.2 es excelente en smolts RAS. FCR alto (>1.5) indica sobrealimentación, mala calidad o enfermedad.'},
+      {q:'Si observa peces en la superficie nadando de costado, ¿cuál es la primera acción?',opts:['Ignorarlo','Verificar inmediatamente O₂, temperatura y flujo; activar protocolo de emergencia si es necesario','Agregar más alimento','Cambiar la iluminación'],answer:1,exp:'Comportamiento anormal en superficie es señal de alerta: hipoxia, intoxicación o enfermedad grave. Verificar OD y activar protocolo de emergencia, luego llamar al veterinario.'},
+      {q:'¿Qué es un evento de mortalidad y cómo debe reportarse?',opts:['Menos de 3 peces muertos; no se reporta','Cualquier mortalidad anormal; registrar fecha, estanque, cantidad, causa probable y acción tomada','Solo si hay más de 100 muertos','Solo al final del mes'],answer:1,exp:'Toda mortalidad se registra. Un evento de mortalidad masiva requiere notificación inmediata a SERNAPESCA según Plan Sanitario del centro.'},
+      {q:'¿Por qué es importante retirar los peces muertos rápidamente?',opts:['Por estética','Para evitar propagación de patógenos, deterioro de calidad de agua y que otros peces los ingieran','Para pesarlos y venderlos','El pH del pez muerto baja el O₂'],answer:1,exp:'Los peces muertos se descomponen rápido liberando NH₃ y patógenos. Su ingesta puede transmitir enfermedades como SRS o Furunculosis.'},
+      {q:'¿Qué información debe tener una etiqueta de estanque?',opts:['Solo el número','N° estanque, fecha de ingreso, origen, densidad, peso promedio, N° peces y tratamientos activos','Solo el nombre del operario','Solo la fecha de smoltificación'],answer:1,exp:'Una ficha de estanque debe contener: ID estanque, lote, origen, fecha ingreso, N° peces, peso promedio, biomasa, tratamientos y observaciones.'},
+      {q:'¿Cómo se prepara el agua para el smolt challenge test?',opts:['Agua de mar directamente','Agua de mar a 30-35 ppt; peces expuestos 24h; se evalúa mortalidad y Cl⁻ plasmático','Se agrega sal de cocina','No se realizan pruebas'],answer:1,exp:'El smolt challenge test expone peces 24-48h a agua de mar (30-35 ppt). Si el Cl⁻ plasmático < 130 mmol/L, el pez osmoregula bien y está listo para el mar.'}
+    ,
+      {q:'¿Cuál es la temperatura máxima recomendada de cultivo para salmónidos en RAS?',opts:['5°C','10°C','16°C','25°C'],answer:2,exp:'La temperatura máxima para salmón Atlántico en cultivo intensivo no debería superar los 16°C. Sobre esa temperatura aumenta el estrés y la susceptibilidad a enfermedades.'},
+      {q:'¿Cuál es el nivel de TAN/NH₄⁺ considerado desfavorable?',opts:['<1 mg/L','>2.5 mg/L','>100 mg/L','0 mg/L siempre'],answer:1,exp:'Sobre 2.5 mg/L de TAN aumenta el riesgo, especialmente a pH y temperatura altos. La fracción tóxica NH₃ depende del pH y temperatura.'},
+      {q:'¿Qué indica un aumento de TAN sin causa aparente?',opts:['Operación normal','Posible sobrealimentación, variación de pH, bajo O₂ en el biofiltro o tratamiento reciente','El sistema mejoró su eficiencia','Los peces están sanos'],answer:1,exp:'Un TAN elevado sin cambio en alimentación indica problemas de nitrificación o aumento de carga. Es señal de alerta que requiere diagnóstico.'},
+      {q:'¿Qué efecto tiene el CO₂ elevado (>20 mg/L) sobre los peces?',opts:['Mejora el crecimiento','Causa hipercapnia, reduce el apetito y dificulta el transporte de O₂ en sangre','Solo afecta a los biofiltros','CO₂ no tiene efecto en peces'],answer:1,exp:'CO₂ alto acidifica la sangre. Los peces compensan ajustando el pH sanguíneo, pero se ve afectada la unión O₂–hemoglobina (efecto Bohr).'},
+      {q:'¿Cuándo se considera que los peces están en hipoxia?',opts:['Cuando el O₂ está al 100% de saturación','Cuando el O₂ desciende del 70% de saturación (≈7 mg/L a 12°C)','Cuando el pH sube sobre 8','La hipoxia no ocurre en RAS'],answer:1,exp:'El umbral de hipoxia para salmón Atlántico está ≈70% de saturación. Bajo ese nivel se reduce el consumo de alimento, el crecimiento y la resistencia a enfermedades.'},
+      {q:'¿Qué parámetro indica la eficiencia de conversión del alimento en biomasa?',opts:['TAN','FCR (Factor de Conversión Alimenticia)','SGR','OD (Oxígeno Disuelto)'],answer:1,exp:'El FCR (kg alimento / kg pez ganado) es el indicador clave de eficiencia productiva. En RAS con smolt se espera FCR ≈1.0–1.2.'},
+      {q:'¿Por qué el fósforo es relevante en la gestión de RAS?',opts:['No es relevante','El fósforo del alimento se excreta y está regulado por normativa ambiental (RCA)','El fósforo solo beneficia a las bacterias','Solo importa la concentración de nitratos'],answer:1,exp:'El fósforo es un nutriente eutrofizante limitado en la RCA del centro. Su remoción ocurre principalmente con los lodos generados en el sistema.'},
+      {q:'¿Cómo se calcula el SGR (Tasa de Crecimiento Específico)?',opts:['Peso final / días de cultivo','SGR (%/día) = [(ln Pf − ln Pi) / días] × 100','Peso ganado / alimento consumido','N° peces × temperatura'],answer:1,exp:'El SGR calcula el crecimiento porcentual diario relativo al peso corporal. Un SGR de 1–2%/día es típico en smolt RAS de buena calidad.'},
+      {q:'¿Cuál es el nivel de temperatura que genera estrés térmico significativo en salmónidos?',opts:['>10°C','>17°C','>5°C','La temperatura no afecta a los salmones'],answer:1,exp:'Sobre 17°C los salmónidos sufren estrés térmico: aumenta la susceptibilidad a SRS, se reduce el apetito y cae el FCR. El rango óptimo es 8–16°C.'},
+      {q:'¿Cuál es la concentración normal de O₂ (% saturación) en un sistema RAS operativo?',opts:['20–30%','70–100%','150–200%','10–20%'],answer:1,exp:'En RAS se trabaja con O₂ puro para mantener 70–100% de saturación (≈7–10 mg/L a 14°C), o incluso sobre-saturación controlada (100–120%).'}
+    ]},
+  { id:'tratamiento-agua', level:3, icon:'⚗️', title:'Tratamiento de Agua Avanzado',
+    desc:'Sistemas UV, ozonización, oxígeno, pH y control avanzado de parámetros.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:200,
+    questions:[
+      {q:'¿Cómo funciona el sistema UV Atlantium?',opts:['Mediante calor (>60°C)','Radiación UV-C (254 nm) que daña el ADN de microorganismos impidiendo su replicación','Mediante cloro inyectado','Filtración por membranas de 0.1 µm'],answer:1,exp:'El Atlantium utiliza HPR (Hydraulic Path Reactor) con lámparas UV-C a 254 nm. Destruye el ADN de bacterias y virus sin generar subproductos químicos.'},
+      {q:'¿Qué mide la efectividad del sistema UV?',opts:['Temperatura del agua','Dosis UV en mJ/cm²; se requieren 40-60 mJ/cm² para reducción viral significativa','Color del agua','Caudal de agua'],answer:1,exp:'La dosis UV (mJ/cm²) determina la eficacia. Para reducción de 4-log en virus se requieren ≥40 mJ/cm². La turbidez del agua reduce la penetración UV.'},
+      {q:'¿Qué tipo de bombas Grundfos son más comunes en circulación RAS?',opts:['Bombas de pistón','Centrífugas monoetapa (NB) y multiétapa (CR) para el circuito; sumergibles (AP) para lodos','Bombas de vacío','Bombas peristálticas'],answer:1,exp:'En RAS se usan bombas NB para el circuito principal, CR para presurización, y AP (sumergibles) en fosas de lodos.'},
+      {q:'¿Qué es el sistema de CO₂ stripping?',opts:['Sistema de dosificación de CO₂ para bajar pH','Ventilación forzada que expone el agua a aire para transferir el CO₂ disuelto a la atmósfera','Filtro que absorbe CO₂ con carbón','Sistema de medición con sonda electroquímica'],answer:1,exp:'El stripping crea contacto agua-aire (rellenos, cascadas, ventilación forzada). El CO₂ difunde al aire según la ley de Henry. La eficiencia depende del área de contacto y flujo de aire.'},
+      {q:'¿Para qué se usa el ozono (O₃) en algunos sistemas RAS?',opts:['Como fuente de oxígeno','Para oxidar materia orgánica disuelta, desinfección y mejorar la transparencia del agua','Para calentar el agua','Como anestésico'],answer:1,exp:'El ozono oxida compuestos orgánicos disueltos, mejora la transmitancia UV y desinfecta. Sin embargo, es tóxico sobre 0.01 mg/L; requiere destróyer de O₃ residual.'},
+      {q:'¿Con qué frecuencia se debe calibrar el sensor de pH (J01 Manta)?',opts:['Una vez al año','Solo ante valores anómalos','Al menos semanalmente con soluciones buffer pH 4 y pH 7','Nunca'],answer:2,exp:'Los electrodos de pH derivan por ensuciamiento y envejecimiento. La calibración con buffers garantiza lecturas precisas. Seguir manual J01 del centro.'},
+      {q:'¿Qué principio de medición usa el caudalímetro Siemens Sitrans?',opts:['Presión diferencial','Electromagnético (FEM inducida por corriente de agua conductora)','Ultrasónico Doppler','Flotador (rotámetro)'],answer:1,exp:'El Sitrans es un caudalímetro electromagnético. Funciona según la ley de Faraday: el fluido conductor genera una FEM proporcional a la velocidad de flujo.'},
+      {q:'¿Qué produce la sobre-saturación de nitrógeno (TGP > 103%) en los peces?',opts:['Mejor crecimiento','Gas Bubble Disease: burbujas en tejidos, exoftalmia, enfisema subcutáneo y mortalidad','Mayor eficiencia de alimentación','No tiene efectos negativos'],answer:1,exp:'La sobre-saturación de N₂ causa GBD: burbujas de N₂ se forman en tejidos causando exoftalmia, burbujas en branquias y piel, y mortalidad. TGP debe mantenerse < 103%.'},
+      {q:'¿Cómo se debe actuar ante una falla en la bomba principal de circulación?',opts:['Esperar que se repare sola','Activar bomba de respaldo, verificar OD, reducir alimentación, registrar y contactar mantenimiento y jefatura','Solo registrar y continuar','Apagar todo hasta reparar la bomba'],answer:1,exp:'Toda instalación RAS crítica debe tener redundancia. Ante falla: 1) Activar backup; 2) Verificar OD; 3) Suspender alimentación; 4) Registrar; 5) Notificar cadena de mando.'},
+      {q:'¿Cómo se mantiene la alcalinidad total en un sistema RAS?',opts:['Cambiando toda el agua','Dosificando NaHCO₃ o Ca(OH)₂ consumido por la nitrificación; mantener >100 mg/L CaCO₃','Con calefactores','Con algas en el biofiltro'],answer:1,exp:'La nitrificación consume alcalinidad produciendo H⁺. Se repone con NaHCO₃ (seguro) o Ca(OH)₂. Se busca mantener >100 mg/L CaCO₃ para buffer de pH estable.'}
+    ,
+      {q:'¿Qué bacterias realizan la segunda etapa de nitrificación (NO₂⁻ → NO₃⁻)?',opts:['Nitrosomonas','Nitrobacter y Nitrospira (NOB — Nitrite Oxidizing Bacteria)','Bacterias sulfato-reductoras','Pseudomonas'],answer:1,exp:'Las NOB (principalmente Nitrobacter y Nitrospira) oxidan el NO₂⁻ a NO₃⁻. Son más lentas que las AOB y más sensibles a variaciones del sistema.'},
+      {q:'¿Cuál es el mecanismo del CO₂ stripping?',opts:['Dosificación de CO₂ para bajar el pH','Exposición del agua al aire (cascadas, rellenos) para transferir CO₂ disuelto a la atmósfera según la Ley de Henry','Filtración del CO₂ con carbón activo','Medición con sonda electroquímica'],answer:1,exp:'El stripping genera una gran interfaz agua-aire. La alta concentración de CO₂ en agua hace que difunda hacia la atmósfera (Ley de Henry).'},
+      {q:'¿Cómo llega el O₂ al interior del biofilm?',opts:['Bombeo activo por las bacterias','Difusión simple desde el agua externa; única vía de entrada','Corriente eléctrica','Convección forzada'],answer:1,exp:'El O₂ penetra el biofilm exclusivamente por difusión. Cuanto más grueso sea el biofilm, menor O₂ llega a las capas internas.'},
+      {q:'¿Qué ocurre si el O₂ al ingreso del biofiltro baja de 4 mg/L?',opts:['Mejora la nitrificación','Cae la eficiencia de nitrificación; inyectar O₂ y reducir la carga de alimento','No cambia la eficiencia','Detiene automáticamente el UV'],answer:1,exp:'Bajo 4 mg/L en la entrada al biofiltro, la difusión de O₂ al interior del biofilm es insuficiente para mantener la actividad nitrificante.'},
+      {q:'¿Por qué el ozono residual es peligroso en RAS?',opts:['Es inofensivo','O₃ residual sobre 0.01 mg/L es tóxico para peces y daña las bacterias nitrificantes del biofiltro','Para ahorrar energía','El ozono no se usa en RAS'],answer:1,exp:'El ozono es oxidante potente. Si no se destruye el residual, causa daño oxidativo en branquias y mata las bacterias nitrificantes.'},
+      {q:'¿Cómo afecta el pH >7.5 a la fracción de NH₃ tóxico?',opts:['No cambia la fracción','La fracción de NH₃ libre aumenta significativamente; a igual TAN, es más tóxico a pH 8 que a pH 7','La fracción disminuye','Solo la temperatura importa'],answer:1,exp:'El equilibrio NH₄⁺ ↔ NH₃ se desplaza hacia NH₃ al subir el pH. A pH 8.0 la fracción NH₃ es ≈10 veces mayor que a pH 7.0 a igual temperatura.'},
+      {q:'¿Cuánta alcalinidad se consume al nitrificar 1 g de N-amoniaco?',opts:['1 g CaCO₃','3 g CaCO₃','7.14 g CaCO₃','14 g CaCO₃'],answer:2,exp:'La nitrificación completa de 1 g de N-NH₄⁺ consume ≈7.14 g de alcalinidad como CaCO₃. En RAS productivo se repone diariamente.'},
+      {q:'¿Cuál es la relación Cl⁻/NO₂⁻N para proteger a los peces del nitrito?',opts:['>10','>100','<5','=1'],answer:1,exp:'Manteniendo Cl⁻/NO₂⁻N >100, el ion cloruro bloquea competitivamente la absorción branquial de NO₂⁻, protegiendo a los peces.'},
+      {q:'¿Por qué las NOB (Nitrobacter) se ubican más profundo en el biofilm que las AOB?',opts:['Son más grandes','Las NOB usan NO₂⁻ producido por las AOB en las capas externas y requieren menos O₂','Son menos abundantes','Ninguna de las anteriores'],answer:1,exp:'Las AOB (Nitrosomonas) colonizan las capas externas. Las NOB viven más profundo, aprovechando el NO₂⁻ producido por las AOB.'},
+      {q:'¿Cómo se mantiene la alcalinidad adecuada en RAS?',opts:['Cambiando toda el agua diariamente','Dosificando NaHCO₃ o Ca(OH)₂ según la tasa de nitrificación; mantener >1 mmol/L (45 mg CaCO₃/L)','Con algas en el biofiltro','Con calefactores eléctricos'],answer:1,exp:'La nitrificación consume alcalinidad continuamente. La dosificación de NaHCO₃ o Ca(OH)₂ repone la alcalinidad y estabiliza el pH del sistema.'}
+    ]},
+  { id:'equipos', level:3, icon:'⚙️', title:'Equipos y Mantenimiento',
+    desc:'Operación, mantenimiento preventivo y troubleshooting de bombas, filtros HDF y sensores.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:200,
+    questions:[
+      {q:'¿Qué indica presión diferencial alta en un drum filter Hydrotech?',opts:['Malla limpia y funcionando bien','Malla obstruida; activar ciclo de lavado manual o revisar sistema automático','Caudal de agua muy bajo','pH del agua alto'],answer:1,exp:'Alta ΔP en el drum filter indica obstrucción. Si el lavado automático no soluciona, puede requerir inspección manual, limpieza química o reemplazo de malla.'},
+      {q:'¿Con qué frecuencia se realiza mantenimiento preventivo de bombas Grundfos NB?',opts:['Solo cuando fallan','Según plan del fabricante: sellos mecánicos cada 6-12 meses, rodamientos cada 2 años o según horas','Solo en verano','No requieren mantención'],answer:1,exp:'El manual Grundfos NB establece: verificación semanal de vibraciones/temperatura, cambio de sellos 6-12 meses, rodamientos según horas de operación (15.000-20.000 h).'},
+      {q:'Al arrancar una bomba centrífuga, ¿qué verificación evita la cavitación?',opts:['Que el motor esté frío','Que la bomba esté cebada (llena de agua) y NPSH disponible > NPSH requerido','Que el voltaje sea exactamente 220V','Que gire en sentido antihorario'],answer:1,exp:'La cavitación ocurre cuando la presión de succión cae bajo la presión de vapor, formando burbujas que destruyen el impulsor. La bomba debe estar cebada y el NPSH disponible debe superar el requerido.'},
+      {q:'¿Qué significa la alarma "E-Low" en el caudalímetro Siemens Sitrans?',opts:['Sensor descalibrado','Caudal bajo del umbral mínimo: posible falla de bomba, válvula cerrada u obstrucción','Voltaje de alimentación bajo','Sensor requiere limpieza'],answer:1,exp:'Una alarma de caudal bajo es crítica en RAS: puede significar falla de bomba, válvula cerrada, obstrucción o rotura. Requiere verificación inmediata.'},
+      {q:'¿Qué es un sello mecánico en una bomba y cuándo se cambia?',opts:['El tornillo de cierre de la tapa','Dispositivo que sella el eje giratorio para evitar fugas; se cambia cuando aparecen gotas de agua bajo la bomba','La pintura protectora exterior','El filtro de entrada'],answer:1,exp:'El sello mecánico sella el eje en el punto donde entra al cuerpo hidráulico. Cuando falla, gotea agua. El cambio es preventivo según manual o correctivo ante fuga significativa.'},
+      {q:'Si el sensor de OD da lecturas erráticas, ¿cuál es la primera acción diagnóstica?',opts:['Reemplazar el sensor inmediatamente','Limpiar la membrana, calibrar con agua saturada de aire y comparar con un oxímetro de referencia','Agregar más O₂','Ignorarlo una semana'],answer:1,exp:'Las lecturas erráticas suelen deberse a membrana sucia o electrolito agotado. La limpieza y calibración en dos puntos generalmente soluciona el problema.'},
+      {q:'¿Qué diferencia los modelos HDF1200, HDF1600, HDF2000 y HDF2400?',opts:['Temperatura de operación','El número indica la capacidad de caudal del modelo (litros/segundo o m³/h de diseño)','Potencia de la bomba en HP','Dosis UV en mJ/cm²'],answer:1,exp:'Los HDF (Hydrotech Drum Filter) son drum filters. Los números indican el tamaño/caudal del modelo. Se dimensionan según carga de peces y caudal del sistema.'},
+      {q:'¿Por qué es importante registrar las horas de operación de las lámparas UV?',opts:['Por estética del equipo','Las lámparas pierden intensidad con las horas (8.000-12.000 h); deben cambiarse para garantizar la dosis de desinfección','Para el pago de electricidad','No se desgastan'],answer:1,exp:'Las lámparas UV-C pierden 30-50% de intensidad al final de su vida útil. Si no se reemplazan, la dosis cae sin que el operador lo note visualmente.'},
+      {q:'¿Qué verificación de seguridad es obligatoria antes de mantener tuberías a presión?',opts:['Solo ponerse guantes','LOTO (Lockout/Tagout): aislar, bloquear con candado, purgar y verificar presión cero','Solo informar al compañero','Sin verificación especial'],answer:1,exp:'El procedimiento LOTO es obligatorio: 1) Cerrar válvulas; 2) Candado + etiqueta; 3) Purgar presión; 4) Verificar presión cero con manómetro. Evita accidentes graves.'},
+      {q:'¿Qué información debe contener una Orden de Trabajo (OT)?',opts:['Solo el nombre del técnico','Equipo, descripción del trabajo, fecha, responsable, materiales, tiempo, resultado y firma del supervisor','Solo la fecha','Solo si quedó funcionando o no'],answer:1,exp:'Una OT completa permite trazabilidad y análisis de fallas. Debe incluir: equipo ID, descripción, fecha/hora, técnico, materiales, tiempo, estado final y firma.'}
+    ,
+      {q:'¿Cómo fluye el agua a través del drum filter (filtro rotatorio)?',opts:['Por presión de afuera hacia adentro','Por gravedad hacia el interior del tambor; atraviesa la malla y los sólidos quedan retenidos','Por bombeo de vacío','El filtro usa calor para separar sólidos'],answer:1,exp:'El agua entra por gravedad al interior del tambor, pasa a través de la malla (40–100 µm) hacia el exterior, dejando los sólidos retenidos.'},
+      {q:'¿Qué modelo de biofiltro ofrece mayor superficie por m³?',opts:['Trickling filter (200 m²/m³)','Biomedio RK MBBR (700 m²/m³)','Filtro de arena (50 m²/m³)','Todos tienen igual superficie'],answer:1,exp:'El biomedio RK (MBBR) ofrece ≈700 m²/m³ de superficie protegida para el biofilm nitrificante.'},
+      {q:'¿Cuándo se activa el retrolavado del drum filter Hydrotech?',opts:['Cada hora según temporizador','Cuando el nivel de agua interior sube, indicando obstrucción de la malla','Solo cuando el operario lo ordena','Al inicio de cada turno'],answer:1,exp:'El retrolavado es automático: cuando la malla se obstruye, el nivel interior sube hasta activar las boquillas de lavado.'},
+      {q:'¿Por qué el manejo de peces (ayunos) debe coordinarse con el biofiltro?',opts:['No hay relación','Cambios bruscos en alimentación afectan al biofiltro con repercusiones en NO₂⁻ ≈3 días después','Solo importa el peso de los peces','El biofiltro no necesita substrato'],answer:1,exp:'El biofiltro adapta su biomasa microbiana al NH₄⁺ disponible. Un ayuno reduce el substrato y puede generar acumulación de NO₂⁻ al retomar la alimentación.'},
+      {q:'¿Qué indica una presión diferencial alta en el drum filter?',opts:['El filtro funciona con máxima eficiencia','Malla obstruida; activar ciclo de lavado o revisar el sistema automático','El caudal es muy bajo','El agua está muy fría'],answer:1,exp:'Alta presión diferencial indica acumulación de sólidos. Si el sistema automático no lo resuelve, puede requerir limpieza manual o revisión de las boquillas.'},
+      {q:'¿Cuál es el principio de medición del caudalímetro Siemens Sitrans?',opts:['Presión diferencial','Ley de Faraday: fluido conductor en movimiento induce una FEM proporcional al caudal','Flotador rotámetro','Ultrasonido Doppler'],answer:1,exp:'El Sitrans aplica la Ley de Faraday: al pasar el fluido conductor entre electrodos en un campo magnético, genera una tensión proporcional al caudal.'},
+      {q:'¿Por qué se debe controlar el espesor del biofilm?',opts:['Solo por estética','Un biofilm muy grueso genera zonas anaeróbicas internas que reducen la nitrificación','El espesor no importa','Para que el filtro sea más visible'],answer:1,exp:'Las capas internas del biofilm grueso quedan sin O₂, generando zonas anaeróbicas donde no ocurre nitrificación.'},
+      {q:'¿Cuál es el rango de tamaño de partícula que filtra el Hydrotech HDF?',opts:['1–5 µm','40–100 µm','500–2000 µm','0.01–0.1 µm'],answer:1,exp:'Los HDF (Hydrotech Drum Filter) retienen partículas ≥40–100 µm. Son el primer filtro de sólidos en el tratamiento del agua de RAS.'},
+      {q:'¿Cuál es la verificación de seguridad obligatoria antes de mantener tuberías a presión?',opts:['Solo ponerse guantes','LOTO: aislar, bloquear con candado, purgar presión y verificar presión cero con manómetro','Solo informar al jefe','Abrir la válvula más cercana'],answer:1,exp:'El procedimiento LOTO (Lockout-Tagout) es obligatorio para trabajar con sistemas presurizados. Protege de liberaciones accidentales de energía.'},
+      {q:'¿Cuándo deben cambiarse las lámparas UV para garantizar la desinfección?',opts:['Cada 10 años','Nunca, son de larga vida','Según horas de operación (8.000–12.000 h) o cuando la intensidad cae bajo el umbral mínimo','Solo cuando se ve la luz apagada'],answer:2,exp:'Las lámparas UV-C pierden intensidad con el uso. Cuando la irradiancia cae del mínimo requerido para la dosis objetivo, se deben reemplazar.'}
+    ]},
+  { id:'asistente', level:4, icon:'📋', title:'Gestión y Liderazgo — Asistente de Centro',
+    desc:'Coordinación de turnos, reportes de producción, comunicación con equipo técnico y jefatura.', levelTag:'n4', levelLabel:'Nivel 4 · Asistente de Centro', xp:250,
+    questions:[
+      {q:'¿Cuál es la diferencia principal entre un operario de turno y un asistente de centro?',opts:['El asistente no tiene contacto con peces','El asistente coordina el equipo, reporta a gerencia, toma decisiones operacionales y es responsable del plan productivo del turno','El asistente solo trabaja en oficina','No hay diferencia'],answer:1,exp:'El asistente tiene responsabilidad sobre el equipo de turno, cumplimiento de planes de alimentación, gestión de emergencias, reporte a jefatura y toma de decisiones dentro de su nivel de autorización.'},
+      {q:'¿Qué es un plan de alimentación y quién lo aprueba?',opts:['Un menú para los trabajadores; lo aprueba RR.HH.','El programa diario de cantidad, tipo y horario de alimento; lo establece el médico veterinario o jefe de producción','Un documento de compra; lo aprueba finanzas','Lo decide el operario de alimentación'],answer:1,exp:'El plan de alimentación es aprobado por el médico veterinario y el jefe de producción. El asistente es responsable de que se ejecute y registre correctamente.'},
+      {q:'Si durante su turno ocurre una mortalidad sobre el umbral de alerta, ¿cuál es el protocolo?',opts:['Esperar al jefe','Registrar, retirar los muertos, tomar muestras, notificar a la cadena de mando y reportar a SERNAPESCA si supera el umbral legal','Ignorar si es menos del 1%','Aumentar la alimentación'],answer:1,exp:'Protocolo: 1) Registro detallado; 2) Retiro de muertos; 3) Muestras para diagnóstico; 4) Notificación a veterinario y jefatura; 5) Si supera umbral legal, notificación a SERNAPESCA.'},
+      {q:'¿Qué es el reporte de turno y qué debe incluir?',opts:['Solo mortalidades','Resumen del turno: parámetros de agua, alimentación, mortalidades, anomalías, mantenciones y hechos relevantes; se entrega al turno siguiente','Solo el OD','Solo las horas trabajadas'],answer:1,exp:'El reporte de turno es el documento de traspaso entre turnos. Incluye: parámetros de agua, alimentación por estanque, mortalidades, anomalías, trabajos realizados y pendientes.'},
+      {q:'Para mantener bioseguridad, ¿cuál es el protocolo de ingreso de visitas externas?',opts:['Solo presentar cédula','Registro en bitácora, declaración sanitaria, duchas y cambio de ropa, pediluvios y desinfección de equipos','Ingresan libremente','Solo zapatos de goma'],answer:1,exp:'Los protocolos de bioseguridad incluyen declaración jurada sanitaria, cuarentena si viene de otro centro acuícola, desinfección y seguimiento de rutas internas.'},
+      {q:'¿Qué es el Plan de Producción anual?',opts:['Solo el calendario de cosechas','Proyección de ingresos de peces, crecimientos, alimentación, biomasa, cosechas y metas de FCR/SGR','Solo el presupuesto de alimento','El plan de vacaciones'],answer:1,exp:'El plan de producción integra proyección biológica (crecimiento, biomasa) con recursos (alimento, O₂, agua, personal) y metas productivas. Es el documento rector del centro.'},
+      {q:'¿Cómo se lidera un equipo durante una emergencia (ej. corte de energía)?',opts:['Cada uno hace lo que puede','Con comunicación clara: asignar roles específicos, mantener la calma, coordinar acciones prioritarias, reportar a jefatura y registrar todo','Esperar instrucciones','Solo actuar en los estanques más importantes'],answer:1,exp:'Liderazgo en emergencia: 1) Activar plan de contingencia; 2) Asignar roles claros; 3) Priorizar peces más vulnerables; 4) Comunicar a jefatura; 5) Registrar acciones y tiempos.'},
+      {q:'¿Qué indicadores de bienestar animal deben evaluarse regularmente?',opts:['Solo el peso','Estado de aletas, piel, comportamiento natatario, respuesta al alimento, condición corporal (K) y nivel de estrés','Solo la mortalidad acumulada','Solo si comen o no'],answer:1,exp:'El bienestar animal en salmónidos considera los Cinco Dominios. SERNAPESCA exige protocolos de bienestar y reportes periódicos.'},
+      {q:'¿Qué es el Ciclo PDCA en el contexto de la mejora continua?',opts:['Un ciclo productivo de 4 años','Planificar, Hacer, Verificar, Actuar: metodología de gestión para mejorar procesos de calidad, alimentación y producción','El ciclo de vida del salmón','Un formulario de mantención'],answer:1,exp:'El PDCA (ciclo de Deming) es la base de la mejora continua. En piscicultura: Plan (meta FCR), Do (ejecutar plan), Check (analizar FCR real vs meta), Act (ajustar tasas).'},
+      {q:'¿Cuál es la responsabilidad del asistente en el cumplimiento de normativas ambientales?',opts:['No tiene responsabilidad','Verificar que los operarios cumplen protocolos de residuos, registrar purgas y lodos, asegurar que los efluentes no superen límites de la RCA y reportar desviaciones','Solo llenar formularios mensualmente','Solo ante visitas de SERNAPESCA'],answer:1,exp:'La RCA del centro establece límites de efluentes y manejo de residuos. El asistente es el responsable operacional de que se cumplan durante su turno, con registros auditables por la autoridad.'}
+    ,
+      {q:'¿Por qué reducir el FCR es clave para el jefe de producción?',opts:['Solo impacta el costo de alimento','FCR bajo reduce la carga al sistema de tratamiento, mejora la economía y aumenta la capacidad productiva del RAS','El FCR no importa en producción','Solo importa para informes de gerencia'],answer:1,exp:'Un FCR bajo es señal de eficiencia integral: peces sanos, alimentación adecuada, calidad de agua óptima. Además libera capacidad de tratamiento.'},
+      {q:'¿Qué parámetros de calidad de agua debe monitorear el asistente de centro?',opts:['Solo la temperatura','O₂, temperatura, TAN, NO₂, NO₃, pH, alcalinidad, CO₂, SS y TGP','Solo el pH','Solo oxígeno y temperatura'],answer:1,exp:'El asistente debe conocer e interpretar todos los parámetros de calidad de agua definidos en el protocolo del centro para tomar decisiones informadas.'},
+      {q:'¿Qué debe hacer el asistente cuando el TAN aumenta sin razón aparente?',opts:['Ignorarlo y esperar','Investigar causas (sobrealimentación, pH, O₂ en biofiltro, tratamientos) y escalar según protocolo','Aumentar la alimentación','Apagar las bombas del biofiltro'],answer:1,exp:'Un TAN elevado sin causa obvia requiere diagnóstico: revisar alimentación, O₂ en biofiltro, pH, y si hubo tratamientos. Escalar a jefatura si no se identifica la causa.'},
+      {q:'¿Por qué coordinar los ayunos de peces con el equipo de operaciones?',opts:['Solo por registro administrativo','Los cambios en alimentación afectan el biofiltro y pueden generar picos de NO₂⁻ ≈3 días después','Los ayunos no afectan la calidad del agua','Solo para planificación de cosecha'],answer:1,exp:'El asistente debe comunicar ayunos programados al equipo de operaciones para anticipar posibles picos de NO₂⁻ y preparar medidas preventivas.'},
+      {q:'¿Qué información debe registrar ante alta mortalidad con posible causa en calidad de agua?',opts:['Solo la cantidad de muertos','Fecha, estanque, cantidad, parámetros (O₂, NH₃, NO₂, pH, T°), causa probable y acción tomada','Solo el nombre del operario','Solo si supera el 10% de mortalidad'],answer:1,exp:'Un registro completo permite análisis causal y es requerido por SERNAPESCA. La trazabilidad es fundamental para la gestión sanitaria del centro.'},
+      {q:'¿Cuál es el nivel de O₂ que requiere acción inmediata?',opts:['<95% saturación','<70% saturación (≈7 mg/L a 12°C)','<50% saturación','<20% saturación'],answer:1,exp:'Bajo el 70% de saturación los peces entran en estrés hipóxico. La acción inmediata incluye inyección de O₂, aumento de caudal y suspensión de alimentación.'},
+      {q:'¿Qué papel juega la alcalinidad en el informe de turno?',opts:['No se registra','Es parámetro clave: su descenso indica actividad nitrificante y puede limitar el biofiltro si baja demasiado','Solo se registra mensualmente','Solo importa en sistemas de agua de mar'],answer:1,exp:'La alcalinidad es un indicador indirecto de la actividad del biofiltro. Su caída requiere dosificación correctiva inmediata para evitar desestabilización del pH.'},
+      {q:'¿Cómo impacta el aumento de SS en la eficiencia del sistema UV?',opts:['Mejora la eficiencia UV','Las partículas SS absorben la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV no se ve afectado por SS','Aumenta la dosis UV sin efecto en peces'],answer:1,exp:'Los SS altos reducen la transmitancia UV. El asistente debe garantizar que el drum filter funcione correctamente para proteger la eficiencia de desinfección.'},
+      {q:'¿Por qué el asistente de centro debe conocer los principios de biofiltración?',opts:['No es parte de sus funciones','Para interpretar variaciones de TAN y NO₂, coordinar manejos y tomar decisiones informadas','Solo el médico veterinario debe saberlo','Solo para explicar a visitas externas'],answer:1,exp:'El asistente toma decisiones operativas diarias que afectan directamente al biofiltro. Entender la biofiltración permite prevenir problemas y gestionar contingencias.'},
+      {q:'¿Qué porcentaje de reutilización del agua es típico en un RAS moderno?',opts:['50%','75%','Superior al 95–99%','100% sin ingreso de agua fresca'],answer:2,exp:'En RAS moderno el agua se reutiliza en más del 95–99%. Solo se repone el agua de purga de lodos y la evaporada, minimizando el impacto ambiental.'}
+    ]}
+];
+
+const LEVELS = [
+  { name: 'Operario Básico',      minMods: 0, emoji: '👷' },
+  { name: 'Operario Avanzado',    minMods: 2, emoji: '🔧' },
+  { name: 'Operario Especializado', minMods: 4, emoji: '⭐' },
+  { name: 'Asistente de Centro',  minMods: 6, emoji: '🏆' }
+];
+
+const BADGES = [
+  { id:'first',   name:'Primer Paso',       desc:'Completa tu primer módulo',            icon:'🎯', cond: u => Object.values(u.modules||{}).some(m=>m.completed) },
+  { id:'water',   name:'Guardián del Agua', desc:'Completa el módulo de Calidad de Agua',icon:'💧', cond: u => u.modules?.['calidad-agua']?.completed },
+  { id:'ras',     name:'Experto RAS',       desc:'Completa el módulo de Sistema RAS',    icon:'🔄', cond: u => u.modules?.['intro-ras']?.completed },
+  { id:'perfect', name:'Perfeccionista',    desc:'Obtén 10/10 en cualquier módulo',      icon:'💯', cond: u => Object.values(u.modules||{}).some(m=>m.score>0 && m.score===(m.total||10)) },
+  { id:'half',    name:'Mitad del Camino',  desc:'Completa 4 módulos',                  icon:'🌊', cond: u => Object.values(u.modules||{}).filter(m=>m.completed).length >= 4 },
+  { id:'champion',name:'Asistente de Centro',desc:'Completa todos los módulos',         icon:'🏆', cond: u => Object.values(u.modules||{}).filter(m=>m.completed).length >= MODULES.length }
+];
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+let currentUser  = null;   // { name, cargo, admin }
+// Set all logo images once DOM is ready
+let currentProgress = null; // progress object from localStorage
+let quiz = {};
+let _deleteTarget = null;
+let _cargoTarget  = null;
+
+// ── Claves localStorage estables (no cambiar para preservar avances del personal) ──
+// Formato: la_prog_NOMBRE  /  la_cargo_NOMBRE  /  la_ver (versión del schema)
+const DATA_VERSION = 2; // incrementar solo si el schema cambia radicalmente
+
+function getKey(name) { return 'la_prog_' + name.trim().toUpperCase(); }
+function loadProgress(name) {
+  try {
+    const raw = localStorage.getItem(getKey(name));
+    if (!raw) return { modules: {}, _v: DATA_VERSION };
+    const data = JSON.parse(raw);
+    // Migración: asegurar que exista la clave modules si viene de versión anterior
+    if (!data.modules) data.modules = {};
+    return data;
+  } catch(e) { return { modules: {}, _v: DATA_VERSION }; }
+}
+function saveProgress(name, prog) {
+  prog._v = DATA_VERSION;
+  localStorage.setItem(getKey(name), JSON.stringify(prog));
+}
+function getCargoOverride(name) { return localStorage.getItem('la_cargo_' + name.trim().toUpperCase()); }
+function setCargoOverride(name, cargo) { localStorage.setItem('la_cargo_' + name.trim().toUpperCase(), cargo); }
+function deleteProgressData(name) { localStorage.removeItem(getKey(name)); }
+
+function getUserRecord(name) {
+  return USERS_DB.find(u => u.name.toUpperCase() === name.trim().toUpperCase());
+}
+
+function getUserLevel(prog) {
+  const completed = Object.values(prog.modules||{}).filter(m=>m.completed).length;
+  let lv = 0;
+  for (let i = LEVELS.length-1; i >= 0; i--) {
+    if (completed >= LEVELS[i].minMods) { lv = i; break; }
+  }
+  return lv;
+}
+
+function getTotalXP(prog) {
+  return Object.keys(prog.modules||{}).reduce((acc,k) => {
+    const m = MODULES.find(x=>x.id===k);
+    if (!m || !prog.modules[k].completed) return acc;
+    return acc + Math.round(m.xp * (prog.modules[k].score/(prog.modules[k].total||m.questions.length)));
+  }, 0);
+}
+
+// ══════════════════════════════════════════════════════════
+// POPULATE LOGIN DROPDOWN
+// ══════════════════════════════════════════════════════════
+(function populateDropdown() {
+  const sel = document.getElementById('login-name');
+  const sorted = [...USERS_DB].sort((a,b) => a.name.localeCompare(b.name));
+  sorted.forEach(u => {
+    const opt = document.createElement('option');
+    opt.value = u.name;
+    opt.textContent = u.name;
+    sel.appendChild(opt);
+  });
+})();
+
+// ══════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════
+// ── RUT auth: compara SHA-256 — los RUTs nunca se almacenan en texto plano ──
+async function checkRut(inputRaw, storedHash) {
+  const normalized = inputRaw.replace(/[^0-9kK]/gi,'').toUpperCase();
+  const enc = new TextEncoder();
+  const buf = await crypto.subtle.digest('SHA-256', enc.encode(normalized));
+  const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  return hash === storedHash;
+}
+
+async function loginUser() {
+  const selectedName = document.getElementById('login-name').value;
+  const passRaw      = document.getElementById('login-pass').value;
+  const errEl        = document.getElementById('login-error');
+  errEl.style.display = 'none';
+
+  if (!selectedName) { showError('Por favor selecciona tu nombre.'); return; }
+  if (!passRaw)      { showError('Ingresa tu RUT como contraseña.'); return; }
+
+  const record = getUserRecord(selectedName);
+  if (!record) { showError('Usuario no encontrado. Contacta a tu jefatura.'); return; }
+
+  const ok = await checkRut(passRaw, record.rutHash);
+  if (!ok) {
+    showError('RUT incorrecto. Recuerda ingresarlo sin puntos ni guión.');
+    document.getElementById('login-pass').value = '';
+    return;
+  }
+
+  const cargoOverride = getCargoOverride(record.name);
+  currentUser = {
+    name:  record.name,
+    cargo: cargoOverride || record.cargo,
+    admin: record.admin
+  };
+  currentProgress = loadProgress(record.name);
+  showApp();
+}
+
+function showError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+function logout() {
+  currentUser = null; currentProgress = null;
+  document.getElementById('main-nav').style.display = 'none';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-name').value = '';
+  document.getElementById('login-error').style.display = 'none';
+  showPageRaw('page-login');
+}
+
+function showApp() {
+  document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('nav-user').textContent = currentUser.name;
+  const adminBtn = document.getElementById('btn-nav-admin');
+  adminBtn.style.display = currentUser.admin ? 'inline-block' : 'none';
+  if (currentUser.admin) { renderAdmin(); showPage('page-admin'); }
+  else { renderDashboard(); showPage('page-dashboard'); }
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+function showPage(id) {
+  showPageRaw(id);
+  if (id === 'page-dashboard') renderDashboard();
+  if (id === 'page-admin') renderAdmin();
+}
+function showPageRaw(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════
+function renderDashboard() {
+  const prog = currentProgress;
+  const lvIdx = getUserLevel(prog);
+  const lv = LEVELS[lvIdx];
+  const completedMods = Object.values(prog.modules||{}).filter(m=>m.completed).length;
+  const xp = getTotalXP(prog);
+  const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
+  const xpPct = Math.round((xp/maxXP)*100);
+  const allAns = Object.values(prog.modules||{}).reduce((a,m)=>a+(m.total||0),0);
+  const allCor = Object.values(prog.modules||{}).reduce((a,m)=>a+(m.score||0),0);
+  const corPct = allAns > 0 ? Math.round((allCor/allAns)*100) : 0;
+
+  document.getElementById('prof-avatar').textContent = lv.emoji;
+  document.getElementById('prof-avatar').setAttribute('title', lv.name);
+  document.getElementById('prof-name').textContent = currentUser.name;
+  document.getElementById('prof-level-badge').textContent = `${lv.emoji} ${lv.name} · ${currentUser.cargo}`;
+  document.getElementById('prof-xp-bar').style.width = xpPct+'%';
+  document.getElementById('prof-xp-text').textContent = `${xp} XP — ${xpPct}% del plan completado`;
+  document.getElementById('stat-mods').textContent = `${completedMods}/${MODULES.length}`;
+  document.getElementById('stat-correct').textContent = corPct+'%';
+
+  // Level road
+  document.getElementById('level-road').innerHTML = LEVELS.map((l,i) => {
+    const cls = i < lvIdx ? 'done' : (i === lvIdx ? 'current' : '');
+    const icon = i < lvIdx ? '✓' : (i === lvIdx ? l.emoji : '○');
+    return `<div class="road-step ${cls}">
+      <div class="road-dot">${icon}</div>
+      <div class="road-label">${l.name}</div>
+      <div class="road-pct">${l.minMods} módulos</div>
+    </div>`;
+  }).join('');
+
+  // Badges
+  document.getElementById('badges-grid').innerHTML = BADGES.map(b => {
+    const earned = b.cond(prog);
+    return `<div class="badge ${earned?'':'locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div><div class="badge-name">${b.name}</div><div class="badge-desc">${b.desc}</div></div>
+    </div>`;
+  }).join('');
+
+  // Modules — bloqueo secuencial: cada módulo requiere que el anterior esté completado
+  document.getElementById('module-grid').innerHTML = MODULES.map((m, idx) => {
+    const uMod = prog.modules?.[m.id];
+    const isDone = uMod?.completed;
+    // Módulo 0 siempre libre; el resto requiere que el anterior esté completado
+    const prevDone = idx === 0 ? true : !!prog.modules?.[MODULES[idx-1].id]?.completed;
+    const isLocked = !prevDone && !isDone;
+    const pct = uMod ? Math.round((uMod.score/(uMod.total||m.questions.length))*100) : 0;
+    const storedAns = uMod ? (uMod.answers || {}) : {};
+    const pendingQs = m.questions.filter(q => !(qFP(q) in storedAns)).length;
+    const pendingBadge = (isDone && pendingQs > 0)
+      ? ` <span style="background:#fff3e0;color:#c07000;border-radius:4px;padding:1px 5px;font-size:0.62rem;font-weight:700;">+${pendingQs} nueva${pendingQs>1?'s':''}</span>` : '';
+    const badgeText = isDone
+      ? `✓ ${uMod.score}/${uMod.total||m.questions.length}${pendingBadge}`
+      : (isLocked ? '🔒 Bloqueado' : 'Disponible');
+    const badgeCls  = isDone ? 'done' : '';
+    const lockOverlay = isLocked ? `<div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-text">Completa el módulo anterior</div></div>` : '';
+    return `<div class="module-card ${isDone?'completed':''} ${isLocked?'locked':''}"
+      onclick="${isLocked ? `toast('Debes completar «${MODULES[idx-1].title}» primero','')` : `startQuiz('${m.id}')`}">
+      <div class="module-header">
+        <div class="module-icon">${m.icon}</div>
+        <span class="module-badge ${badgeCls}">${badgeText}</span>
+      </div>
+      <div class="module-title">${m.title}</div>
+      <div class="module-desc">${m.desc}</div>
+      <div class="module-progress-bar"><div class="module-progress-fill" style="width:${pct}%"></div></div>
+      <div class="module-progress-text"><span>${m.levelLabel}</span><span>${pct}%</span></div>
+      <span class="level-tag ${m.levelTag}">Nivel ${m.level}</span>
+      ${lockOverlay}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════════════════════
+
+// ── Question fingerprint (identifies a question across versions) ──
+function qFP(q) {
+  return q.q.trim().replace(/\s+/g,' ').slice(0,50);
+}
+
+// ── Deterministic LCG shuffle (seed 0-9 gives 10 distinct orders) ──
+function seededShuffle(arr, seed) {
+  const a = arr.slice();
+  let s = (seed * 1234567 + 89101112) >>> 0;
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    const j = s % (i + 1);
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function startQuiz(moduleId, forceAll) {
+  const m = MODULES.find(x=>x.id===moduleId);
+  if (!m) return;
+
+  if (!currentProgress.modules) currentProgress.modules = {};
+  if (!currentProgress.modules[moduleId])
+    currentProgress.modules[moduleId] = {attempts:0, score:0, completed:false};
+  const pm = currentProgress.modules[moduleId];
+  const storedAnswers = pm.answers || {};
+  const cycle = (pm.shuffleCycle || 0) % 10;
+  const seed  = cycle * 7 + 3;
+
+  // Tag each question with its original index
+  const tagged = m.questions.map((q, i) => Object.assign({}, q, {_oi: i}));
+
+  let pool;
+  if (forceAll) {
+    pool = seededShuffle(tagged, seed);
+  } else {
+    const pending = tagged.filter(q => !(qFP(q) in storedAnswers));
+    pool = pending.length > 0 ? seededShuffle(pending, seed) : seededShuffle(tagged, seed);
+  }
+
+  // Advance cycle and persist
+  pm.shuffleCycle = cycle + 1;
+  saveProgress(currentUser.name, currentProgress);
+
+  quiz = { moduleId, qIndex:0, answers:[], answered:false, questions: pool };
+  document.getElementById('quiz-title').textContent = m.title;
+  document.getElementById('quiz-subtitle').textContent = m.desc;
+
+  // Subtitle: indicate pending vs all
+  const pendingCount = tagged.filter(q => !(qFP(q) in storedAnswers)).length;
+  let subtitle = m.desc;
+  if (!forceAll && pendingCount > 0 && pendingCount < m.questions.length) {
+    subtitle += ` — ${pendingCount} pregunta${pendingCount>1?'s':''} nueva${pendingCount>1?'s':''} pendiente${pendingCount>1?'s':''}`;
+  }
+  document.getElementById('quiz-subtitle').textContent = subtitle;
+
+  showPageRaw('page-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quiz.questions[quiz.qIndex];
+  const total = quiz.questions.length;
+  const pct = Math.round(((quiz.qIndex+1)/total)*100);
+  document.getElementById('quiz-progress-nums').textContent = `${quiz.qIndex+1} / ${total}`;
+  document.getElementById('quiz-bar-fill').style.width = pct+'%';
+  quiz.answered = false;
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="question-card">
+      <div class="q-number">Pregunta ${quiz.qIndex+1} de ${total}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${q.opts.map((o,i)=>`<button class="option-btn" onclick="selectAnswer(${i})">${o}</button>`).join('')}</div>
+      <div class="feedback-box" id="feedback"></div>
+      <div class="quiz-nav"><button class="btn-next" id="btn-next" onclick="nextQuestion()">
+        ${quiz.qIndex===total-1?'Ver Resultados →':'Siguiente →'}</button></div>
+    </div>`;
+}
+
+function selectAnswer(idx) {
+  if (quiz.answered) return;
+  quiz.answered = true;
+  const q = quiz.questions[quiz.qIndex];
+  const correct = idx === q.answer;
+  quiz.answers.push({ selected:idx, correct });
+  document.querySelectorAll('.option-btn').forEach((btn,i) => {
+    btn.disabled = true;
+    if (i===q.answer) btn.classList.add('correct');
+    else if (i===idx && !correct) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback-box ' + (correct?'correct':'wrong');
+  fb.style.display = 'block';
+  fb.innerHTML = (correct ? '✅ <strong>¡Correcto!</strong> ' : '❌ <strong>Incorrecto.</strong> ') + q.exp;
+  document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  quiz.qIndex++;
+  if (quiz.qIndex >= quiz.questions.length) { showResults(); return; }
+  renderQuestion();
+}
+
+function showResults() {
+  const m = MODULES.find(x=>x.id===quiz.moduleId);
+
+  if (!currentProgress.modules) currentProgress.modules = {};
+  if (!currentProgress.modules[quiz.moduleId])
+    currentProgress.modules[quiz.moduleId] = {attempts:0, score:0, completed:false};
+  const pm = currentProgress.modules[quiz.moduleId];
+
+  // ── Merge per-question fingerprint answers ──────────────────
+  if (!pm.answers) pm.answers = {};
+  quiz.questions.forEach((q, i) => {
+    pm.answers[qFP(q)] = quiz.answers[i] ? quiz.answers[i].correct : false;
+  });
+
+  // ── Recalculate global score across ALL module questions ─────
+  let totalCorrect = 0, totalAnswered = 0;
+  m.questions.forEach(q => {
+    const fp = qFP(q);
+    if (fp in pm.answers) {
+      totalAnswered++;
+      if (pm.answers[fp]) totalCorrect++;
+    }
+  });
+  const totalQs = m.questions.length;
+  const globalPct = Math.round((totalCorrect / totalQs) * 100);
+  const passed    = totalCorrect >= Math.ceil(totalQs * 0.7);
+
+  pm.attempts = (pm.attempts || 0) + 1;
+  pm.score    = totalCorrect;
+  pm.total    = totalQs;
+  if (passed) pm.completed = true;
+  saveProgress(currentUser.name, currentProgress);
+
+  // ── UI scores: this session ─────────────────────────────────
+  const sessionScore = quiz.answers.filter(a=>a.correct).length;
+  const sessionTotal = quiz.questions.length;
+
+  const emoji    = globalPct>=90?'🌟':globalPct>=70?'🎉':'💪';
+  const title    = globalPct>=90?'¡Excelente!':globalPct>=70?'¡Módulo aprobado!':'Sigue practicando';
+  const passLine = passed
+    ? `Resultado acumulado: ${totalCorrect}/${totalQs} (${globalPct}%) ¡Módulo aprobado!`
+    : `Necesitas ${Math.ceil(totalQs*0.7)}/${totalQs} (70%) para aprobar. Llevas ${totalCorrect}/${totalAnswered} respondidas correctas.`;
+
+  // Pending questions after this session
+  const pendingLeft = m.questions.filter(q => !(qFP(q) in pm.answers)).length;
+  const pendingNote = pendingLeft > 0
+    ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">📋 Aún tienes <strong>${pendingLeft}</strong> pregunta${pendingLeft>1?'s':''} pendiente${pendingLeft>1?'s':''} de responder.</p>`
+    : '';
+
+  const mid = quiz.moduleId;
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="results-card">
+      <div class="results-emoji">${emoji}</div>
+      <div class="results-title">${title}</div>
+      <div class="results-subtitle">${passLine}</div>
+      ${pendingNote}
+      <div class="score-circle">
+        <div class="score-num">${sessionScore}/${sessionTotal}</div>
+        <div class="score-lbl">esta sesión</div>
+      </div>
+      <div class="results-answers">
+        <h4>Resumen — esta sesión</h4>
+        ${quiz.answers.map((a,i)=>{
+          const q = quiz.questions[i];
+          return `<div class="answer-row">
+            <div class="dot ${a.correct?'ok':'bad'}"></div>
+            <span>P${i+1}: ${a.correct ? 'Correcta ✓' : 'Incorrecta — Correcta: "' + q.opts[q.answer] + '"'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="results-actions">
+        ${pendingLeft>0
+          ? `<button class="btn-action primary" onclick="startQuiz('${mid}')">📋 Responder pendientes</button>`
+          : ''}
+        <button class="btn-action ${pendingLeft>0?'secondary':'primary'}" onclick="startQuiz('${mid}',true)">🔄 Repasar todo</button>
+        <button class="btn-action secondary" onclick="showPage('page-dashboard')">← Volver al inicio</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════════════════
+function adminTab(tab, el) {
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('admin-team-view').style.display  = tab==='team'  ? 'block' : 'none';
+  document.getElementById('admin-stats-view').style.display = tab==='stats' ? 'block' : 'none';
+  if (tab==='stats') renderAdminStats();
+}
+
+function renderAdmin() {
+  const sorted = [...USERS_DB].sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById('admin-team-view').innerHTML = `
+    <div style="margin-bottom:14px;font-size:0.82rem;color:var(--text-muted);">
+      ${USERS_DB.length} colaboradores registrados
+    </div>
+    <div class="admin-grid">${sorted.map(u => renderWorkerCard(u)).join('')}</div>`;
+}
+
+function renderWorkerCard(u) {
+  const prog = loadProgress(u.name);
+  const lvIdx = getUserLevel(prog);
+  const lv = LEVELS[lvIdx];
+  const xp = getTotalXP(prog);
+  const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
+  const xpPct = Math.round((xp/maxXP)*100);
+  const completed = MODULES.filter(m=>prog.modules?.[m.id]?.completed);
+  const hasProgress = Object.keys(prog.modules||{}).length > 0;
+  const initials = u.name.split(/[\s,]+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const cargoOverride = getCargoOverride(u.name);
+  const displayCargo = cargoOverride || u.cargo;
+
+  return `<div class="worker-card" id="wcard-${btoa(u.name).replace(/=/g,'')}">
+    <div class="worker-header">
+      <div class="worker-avatar ${u.admin?'admin-av':''}">${u.admin?'⭐':initials}</div>
+      <div>
+        <div class="worker-name">${u.name}</div>
+        <div class="worker-role">${lv.emoji} ${lv.name} ${u.admin?'· <strong style="color:var(--accent)">Jefatura</strong>':''}</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">${displayCargo}</div>
+      </div>
+    </div>
+    ${hasProgress ? `
+    <div class="worker-bar-wrap"><div class="worker-bar-fill l${lvIdx+1}" style="width:${xpPct}%"></div></div>
+    <div class="worker-stats-row">
+      <span>${xp} XP · ${xpPct}% completado</span>
+      <span>${completed.length}/${MODULES.length} módulos</span>
+    </div>
+    <div class="worker-modules">
+      ${MODULES.map(m=>`<span class="mod-pill ${prog.modules?.[m.id]?.completed?'done':''}">${m.icon}</span>`).join('')}
+    </div>` : `<div class="not-started">Sin actividad registrada aún</div>`}
+    <div class="worker-actions">
+      <button class="btn-sm edit" onclick="openEditCargo('${u.name.replace(/'/g,"\\'")}','${displayCargo.replace(/'/g,"\\'")}')">✏️ Editar cargo</button>
+      ${hasProgress ? `<button class="btn-sm danger" onclick="openDeleteConfirm('${u.name.replace(/'/g,"\\'")}')">🗑️ Borrar progreso</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderAdminStats() {
+  const modStats = MODULES.map(m => {
+    const completions = USERS_DB.filter(u => loadProgress(u.name).modules?.[m.id]?.completed).length;
+    const avgScore = USERS_DB.reduce((acc,u)=>acc+(loadProgress(u.name).modules?.[m.id]?.score||0),0) / USERS_DB.length;
+    return { ...m, completions, avgScore, pct: Math.round((completions/USERS_DB.length)*100) };
+  });
+
+  const totalStarted = USERS_DB.filter(u => Object.keys(loadProgress(u.name).modules||{}).length > 0).length;
+
+  document.getElementById('admin-stats-view').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px;">
+      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
+        <div style="font-size:2rem;font-weight:800;color:var(--primary);">${totalStarted}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">Han iniciado el plan</div>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
+        <div style="font-size:2rem;font-weight:800;color:var(--secondary);">${USERS_DB.length - totalStarted}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">Sin actividad aún</div>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
+        <div style="font-size:2rem;font-weight:800;color:var(--accent);">${USERS_DB.filter(u=>loadProgress(u.name).modules&&Object.values(loadProgress(u.name).modules).filter(m=>m.completed).length>=MODULES.length).length}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">Completaron todos los módulos</div>
+      </div>
+    </div>
+    <h3 style="margin-bottom:14px;font-size:0.9rem;">Avance por módulo</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      ${modStats.map(ms=>`
+        <div style="background:var(--card);border-radius:10px;padding:15px;box-shadow:var(--shadow);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+            <span style="font-weight:700;font-size:0.9rem;">${ms.icon} ${ms.title}</span>
+            <span style="font-size:0.78rem;color:var(--text-muted);">${ms.completions}/${USERS_DB.length} aprobados</span>
+          </div>
+          <div style="background:var(--bg);border-radius:20px;height:9px;overflow:hidden;">
+            <div style="height:100%;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:${ms.pct}%;transition:width .6s;"></div>
+          </div>
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">${ms.pct}% del equipo aprobó · Promedio: ${ms.avgScore.toFixed(1)}/10</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// ADMIN ACTIONS
+// ══════════════════════════════════════════════════════════
+function openEditCargo(name, currentCargo) {
+  _cargoTarget = name;
+  document.getElementById('modal-cargo-name').value = name;
+  document.getElementById('modal-cargo-value').value = currentCargo;
+  document.getElementById('modal-cargo').classList.add('open');
+}
+function saveCargo() {
+  const newCargo = document.getElementById('modal-cargo-value').value.trim();
+  if (!newCargo) { toast('Ingresa un cargo válido',''); return; }
+  setCargoOverride(_cargoTarget, newCargo);
+  closeModal('modal-cargo');
+  toast(`Cargo actualizado para ${_cargoTarget}`,'success');
+  // Update current user if editing self
+  if (currentUser && currentUser.name === _cargoTarget) currentUser.cargo = newCargo;
+  renderAdmin();
+}
+function openDeleteConfirm(name) {
+  _deleteTarget = name;
+  document.getElementById('confirm-delete-msg').textContent =
+    `¿Seguro que deseas borrar el progreso de ${name}? Esta acción no se puede deshacer.`;
+  document.getElementById('confirm-delete').classList.add('open');
+}
+function confirmDelete() {
+  if (!_deleteTarget) return;
+  deleteProgressData(_deleteTarget);
+  if (currentUser && currentUser.name === _deleteTarget) currentProgress = { modules: {} };
+  closeModal('confirm-delete');
+  toast(`Progreso de ${_deleteTarget} eliminado`,'');
+  renderAdmin();
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ══════════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════════
+
+function matTab(id, el) {
+  document.querySelectorAll('.material-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.material-section').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mat-' + id).classList.add('active');
+}
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = type === 'success' ? 'show success' : 'show';
+  setTimeout(() => t.className = '', 3000);
+}
+
+// Enter key on password
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') loginUser(); });
+// Close modals on overlay click
+document.getElementById('modal-cargo').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('modal-cargo'); });
+document.getElementById('confirm-delete').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('confirm-delete'); });
+</script>
+</body>
+</html>
