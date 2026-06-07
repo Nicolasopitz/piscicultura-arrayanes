@@ -287,6 +287,10 @@
   .btn-pptx { background:#fff3e0; color:#c07000; }
   .material-note { font-size:0.72rem; color:var(--text-muted); font-style:italic; margin-top:2px; }
 
+
+  #btn-back-nav { background: var(--border); }
+  #btn-back-nav:hover { background: var(--primary-light,#e8f4fd); color: var(--primary); }
+
   @media(max-width:600px){
     .profile-card { flex-direction: column; text-align: center; }
     .profile-stats { justify-content: center; }
@@ -340,7 +344,11 @@
     </div>
     <div class="form-group">
       <label>Contraseña (RUT)</label>
-      <input type="password" id="login-pass" placeholder="RUT sin puntos ni guión" autocomplete="off">
+      <div style="position:relative;">
+        <input type="password" id="login-pass" placeholder="RUT sin puntos ni guión" autocomplete="off" style="padding-right:42px;width:100%;box-sizing:border-box;">
+        <button type="button" id="btn-eye" onclick="togglePass()" tabindex="-1"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;padding:2px;line-height:1;color:var(--text-muted);opacity:0.6;" title="Mostrar/ocultar">👁</button>
+      </div>
       <div class="rut-hint">Ejemplo: si tu RUT es 12.345.678-9 → ingresa <strong>123456789</strong></div>
     </div>
     <button class="btn-primary" onclick="loginUser()">Ingresar</button>
@@ -358,6 +366,7 @@
     <button class="btn-nav" onclick="showPage('page-dashboard')">📚 Módulos</button>
     <button class="btn-nav" onclick="showPage('page-material')">📖 Material</button>
     <button class="btn-nav admin-only" id="btn-nav-admin" style="display:none;" onclick="showPage('page-admin')">👥 Jefatura</button>
+    <button class="btn-nav" id="btn-back-nav" style="display:none;" onclick="goBack()">← Volver</button>
     <button class="btn-nav" onclick="logout()">Salir</button>
   </div>
 </nav>
@@ -772,6 +781,7 @@ const USERS_DB = [
   { name: 'NICOLAS OPITZ',       rutHash: '5ca42b32cb2ccca2636a1c091bc1f8ae52abec988625f9e17fcea7daac5d7b31', cargo: 'Jefe de Producción',          admin: true  },
   { name: 'MARCO MANSILLA',      rutHash: '52b985993e1d8a852ee6812f6c0931aded28805ae32632e80281cd6ae2a27fe9', cargo: 'Jefe de Unidad RAS',          admin: true  },
   // ── Asistentes de Centro ──────────────────────────────────
+  { name: 'GALVARINO HINOSTROZA', rutHash: '158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab', cargo: 'Subgerente de agua dulce',    admin: false },
   { name: 'SERGIO VARGAS',       rutHash: 'c73e750fb0c74edaa685a3c698cd493b9a2e34fd0c435ff6c0fd2d17a9924ac5', cargo: 'Asistente de Centro',         admin: false },
   { name: 'YURI SUBIABRE',       rutHash: '5d229f5130c953caad0ff0965b6750ca156786f6aa4b3882dcd8cdfa6329fb5e', cargo: 'Asistente de Centro',         admin: false },
   { name: 'JUAN PABLO OLIVARES', rutHash: '2ea8b039e766b412b17f2239d0caa15694769752dd59eeec695fc8f6f5805f34', cargo: 'Asistente de Centro',         admin: false },
@@ -1085,6 +1095,57 @@ function getTotalXP(prog) {
 }
 
 // ══════════════════════════════════════════════════════════
+
+// ── Toggle password visibility ────────────────────────────────
+function togglePass() {
+  const inp = document.getElementById('login-pass');
+  const btn = document.getElementById('btn-eye');
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.title = show ? 'Ocultar' : 'Mostrar';
+}
+
+// ── Session persistence ───────────────────────────────────────
+const SESSION_KEY = 'la_active_session';
+
+function saveSession(user) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ name: user.name, cargo: user.cargo, admin: user.admin }));
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+function restoreSession() {
+  try {
+    const saved = localStorage.getItem(SESSION_KEY);
+    if (!saved) return false;
+    const u = JSON.parse(saved);
+    const record = getUserRecord(u.name);
+    if (!record) { clearSession(); return false; }
+    currentUser = { name: u.name, cargo: u.cargo, admin: u.admin };
+    currentProgress = loadProgress(u.name);
+    afterLogin();
+    return true;
+  } catch(e) { clearSession(); return false; }
+}
+
+// ── Back navigation ───────────────────────────────────────────
+let _prevPage = null;
+
+function goBack() {
+  if (_prevPage) showPage(_prevPage);
+}
+
+function updateBackBtn() {
+  const activePage = document.querySelector('.page.active');
+  const id = activePage ? activePage.id : '';
+  const backBtn = document.getElementById('btn-back-nav');
+  const hideOn = ['page-login', 'page-dashboard'];
+  if (backBtn) backBtn.style.display = (!hideOn.includes(id) && _prevPage) ? 'inline-block' : 'none';
+}
+
 // POPULATE LOGIN DROPDOWN
 // ══════════════════════════════════════════════════════════
 (function populateDropdown() {
@@ -1096,6 +1157,10 @@ function getTotalXP(prog) {
     opt.textContent = u.name;
     sel.appendChild(opt);
   });
+  // Try to restore previous session after populating dropdown
+  if (!restoreSession()) {
+    showPageRaw('page-login');
+  }
 })();
 
 // ══════════════════════════════════════════════════════════
@@ -1145,6 +1210,8 @@ function showError(msg) {
 }
 
 function logout() {
+  clearSession();
+  _prevPage = null;
   currentUser = null; currentProgress = null;
   document.getElementById('main-nav').style.display = 'none';
   document.getElementById('login-pass').value = '';
@@ -1155,6 +1222,7 @@ function logout() {
 
 function showApp() {
   document.getElementById('main-nav').style.display = 'flex';
+  saveSession(currentUser);
   document.getElementById('nav-user').textContent = currentUser.name;
   const adminBtn = document.getElementById('btn-nav-admin');
   adminBtn.style.display = currentUser.admin ? 'inline-block' : 'none';
@@ -1166,9 +1234,16 @@ function showApp() {
 // NAVIGATION
 // ══════════════════════════════════════════════════════════
 function showPage(id) {
+  const cur = document.querySelector('.page.active');
+  const curId = cur ? cur.id : null;
+  if (curId && curId !== id && curId !== 'page-login') {
+    _prevPage = curId;
+  }
+  if (id === 'page-dashboard' || id === 'page-login') _prevPage = null;
   showPageRaw(id);
   if (id === 'page-dashboard') renderDashboard();
   if (id === 'page-admin') renderAdmin();
+  updateBackBtn();
 }
 function showPageRaw(id) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
