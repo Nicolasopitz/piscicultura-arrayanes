@@ -1086,6 +1086,39 @@ const MODULES = [
     ]}
 ];
 
+// ── Material de estudio por módulo ────────────────────────
+const MODULE_MATERIALS = {
+  'intro-ras': [
+    { label: '📘 Manual RAS — Freshwater',  file: 'materiales/Manual_RAS_Freshwater.pdf' },
+    { label: '📘 Manual RAS — Post Smolt',  file: 'materiales/Manual_RAS_PostSmolt.pdf' }
+  ],
+  'calidad-agua': [
+    { label: '📄 Clase 1 — Calidad de Agua', file: 'materiales/Clase1_Calidad_de_Agua.pdf' }
+  ],
+  'planta-lodos': [
+    { label: '📄 Manual Planta de Lodos', file: 'materiales/Manual de operación planta de lodos SA.pdf' }
+  ],
+  'unidades-billund': [
+    { label: '📘 Manual RAS — Summer', file: 'materiales/Manual_RAS_Summer.pdf' },
+    { label: '📘 Manual RAS — Winter', file: 'materiales/Manual_RAS_Winter.pdf' }
+  ],
+  'postsmolt': [
+    { label: '📘 Manual RAS — Post Smolt', file: 'materiales/Manual_RAS_PostSmolt.pdf' }
+  ],
+  'tratamiento-agua': [
+    { label: '📄 Clase 2 — Filtración y Biofiltración', file: 'materiales/Clase2_Filtracion_y_Biofiltracion.pdf' }
+  ],
+  'equipos': [
+    { label: '📄 Manual UV Atlantium',   file: 'materiales/Manual_UV_Atlantium.pdf' },
+    { label: '📄 Manual Drum Filter HDF', file: 'materiales/Manual_HDF1200-HDF1600-HDF2000-HDF2400_EN.pdf' }
+  ],
+  'asistente': [
+    { label: '📘 Manual RAS — Post Smolt', file: 'materiales/Manual_RAS_PostSmolt.pdf' },
+    { label: '📘 Manual RAS — Summer',     file: 'materiales/Manual_RAS_Summer.pdf' },
+    { label: '📘 Manual RAS — Winter',     file: 'materiales/Manual_RAS_Winter.pdf' }
+  ]
+};
+
 const LEVELS = [
   { name: 'Operario Básico',      minMods: 0, emoji: '👷' },
   { name: 'Operario Avanzado',    minMods: 2, emoji: '🔧' },
@@ -1483,6 +1516,7 @@ function renderDashboard() {
       <div class="module-desc">${m.desc}</div>
       <div class="module-progress-bar"><div class="module-progress-fill" style="width:${pct}%"></div></div>
       <div class="module-progress-text"><span>${m.levelLabel}</span><span>${pct}%</span></div>
+      ${!isLocked && MODULE_MATERIALS[m.id] ? `<div onclick="event.stopPropagation()" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">${MODULE_MATERIALS[m.id].map(mat=>`<a class="btn-material" href="${mat.file}" target="_blank" rel="noopener">${mat.label}</a>`).join('')}</div>` : ''}
       <span class="level-tag ${m.levelTag}">Nivel ${m.level}</span>
       ${lockOverlay}
     </div>`;
@@ -1540,6 +1574,14 @@ function startQuiz(moduleId, forceAll) {
   quiz = { moduleId, qIndex:0, answers:[], answered:false, questions: pool };
   document.getElementById('quiz-title').textContent = m.title;
   document.getElementById('quiz-subtitle').textContent = m.desc;
+  // Material bar
+  const matBar = document.getElementById('quiz-material-bar');
+  const mats = MODULE_MATERIALS[moduleId];
+  if (mats && mats.length) {
+    matBar.innerHTML = `<span class="material-bar-label">📚 Material:</span>`
+      + mats.map(mat => `<a class="btn-material" href="${mat.file}" target="_blank" rel="noopener">${mat.label}</a>`).join('');
+    matBar.style.display = 'flex';
+  } else { matBar.style.display = 'none'; }
 
   // Subtitle: indicate pending vs all
   const pendingCount = tagged.filter(q => !(qFP(q) in storedAnswers)).length;
