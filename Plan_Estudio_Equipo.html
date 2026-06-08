@@ -1648,9 +1648,26 @@ function startQuiz(moduleId, forceAll) {
     pool = pending.length > 0 ? seededShuffle(pending, seed) : seededShuffle(tagged, seed);
   }
 
-  // Advance cycle and persist
+  // Avanzar ciclo y persistir
   pm.shuffleCycle = cycle + 1;
   saveProgress(currentUser.name, currentProgress);
+
+  // Barajar opciones de cada pregunta para distribuir posición de respuesta correcta
+  pool = pool.map(function(q, qi) {
+    const correctText = q.opts[q.answer];
+    // seed único por pregunta: ciclo + índice en pool
+    let s = (seed * 31 + qi * 17 + 5) >>> 0;
+    const shuffled = q.opts.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+      const j = s % (i + 1);
+      const t = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = t;
+    }
+    return Object.assign({}, q, {
+      opts: shuffled,
+      answer: shuffled.indexOf(correctText)
+    });
+  });
 
   quiz = { moduleId, qIndex:0, answers:[], answered:false, questions: pool };
   document.getElementById('quiz-title').textContent = m.title;
