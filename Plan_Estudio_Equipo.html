@@ -1574,8 +1574,8 @@ function renderDashboard() {
   document.getElementById('module-grid').innerHTML = MODULES.map((m, idx) => {
     const uMod = prog.modules?.[m.id];
     const isDone = uMod?.completed;
-    // Módulo 0 siempre libre; el resto requiere que el anterior esté completado
-    const prevDone = idx === 0 ? true : !!prog.modules?.[MODULES[idx-1].id]?.completed;
+    // Admins tienen todos los módulos desbloqueados; el resto sigue secuencia
+    const prevDone = idx === 0 ? true : !!(currentUser?.admin) || !!prog.modules?.[MODULES[idx-1].id]?.completed;
     const isLocked = !prevDone && !isDone;
     const pct = uMod ? Math.round((uMod.score/(uMod.total||m.questions.length))*100) : 0;
     const storedAns = uMod ? (uMod.answers || {}) : {};
