@@ -1753,43 +1753,51 @@ function nextQuestion() {
 }
 
 function showResults() {
-  // Scroll al top PRIMERO para que los resultados sean visibles en móvil
-  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(_) { window.scrollTo(0, 0); }
+  // Scroll al top inmediatamente
+  window.scrollTo(0, 0);
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+
   const qb = document.getElementById('quiz-body');
-  if (qb) qb.scrollTop = 0;
-  const pq = document.getElementById('page-quiz');
-  if (pq) pq.scrollTop = 0;
+  if (!qb) return;
 
-  // Mostrar indicador de carga mientras se procesa
-  if (qb) qb.innerHTML = '<div style="padding:40px;text-align:center;font-size:1.2rem;">⏳ Calculando resultados…</div>';
+  // Guardar moduleId antes de cualquier procesamiento
+  const moduleId = quiz.moduleId;
+  const questions = quiz.questions ? quiz.questions.slice() : [];
+  const answers   = quiz.answers   ? quiz.answers.slice()   : [];
 
-  setTimeout(() => {
-  try {
-  const m = MODULES.find(x=>x.id===quiz.moduleId);
+  if (!moduleId || !questions.length || answers.length !== questions.length) {
+    qb.innerHTML = '<div style="padding:24px;text-align:center">⚠️ Estado del quiz inválido. Vuelve al inicio.<br><br>'
+      + '<button onclick="showPage(\'page-dashboard\')" class="btn-action secondary">← Volver</button></div>';
+    return;
+  }
 
+  const m = MODULES.find(x => x.id === moduleId);
+  if (!m) {
+    qb.innerHTML = '<div style="padding:24px;text-align:center">⚠️ Módulo no encontrado: '+moduleId+'<br><br>'
+      + '<button onclick="showPage(\'page-dashboard\')" class="btn-action secondary">← Volver</button></div>';
+    return;
+  }
+
+  // ── Merge respuestas de esta sesión en el progreso ───────────
   if (!currentProgress.modules) currentProgress.modules = {};
-  if (!currentProgress.modules[quiz.moduleId])
-    currentProgress.modules[quiz.moduleId] = {attempts:0, score:0, completed:false};
-  const pm = currentProgress.modules[quiz.moduleId];
-
-  // ── Merge per-question fingerprint answers ──────────────────
+  if (!currentProgress.modules[moduleId])
+    currentProgress.modules[moduleId] = {attempts:0, score:0, completed:false};
+  const pm = currentProgress.modules[moduleId];
   if (!pm.answers) pm.answers = {};
-  quiz.questions.forEach((q, i) => {
-    pm.answers[qFP(q)] = quiz.answers[i] ? quiz.answers[i].correct : false;
+  questions.forEach(function(q, i) {
+    pm.answers[qFP(q)] = answers[i] ? answers[i].correct : false;
   });
 
-  // ── Recalculate global score across ALL module questions ─────
-  let totalCorrect = 0, totalAnswered = 0;
-  m.questions.forEach(q => {
-    const fp = qFP(q);
-    if (fp in pm.answers) {
-      totalAnswered++;
-      if (pm.answers[fp]) totalCorrect++;
-    }
+  // ── Puntaje global acumulado ─────────────────────────────────
+  var totalCorrect = 0, totalAnswered = 0;
+  m.questions.forEach(function(q) {
+    var fp = qFP(q);
+    if (fp in pm.answers) { totalAnswered++; if (pm.answers[fp]) totalCorrect++; }
   });
-  const totalQs = m.questions.length;
-  const globalPct = Math.round((totalCorrect / totalQs) * 100);
-  const passed    = totalCorrect >= Math.ceil(totalQs * 0.7);
+  var totalQs   = m.questions.length;
+  var globalPct = Math.round((totalCorrect / totalQs) * 100);
+  var passed    = totalCorrect >= Math.ceil(totalQs * 0.7);
 
   pm.attempts = (pm.attempts || 0) + 1;
   pm.score    = totalCorrect;
@@ -1797,82 +1805,76 @@ function showResults() {
   if (passed) pm.completed = true;
   saveProgress(currentUser.name, currentProgress);
 
-  // ── UI scores: this session ─────────────────────────────────
-  const sessionScore = quiz.answers.filter(a=>a.correct).length;
-  const sessionTotal = quiz.questions.length;
-
-  const emoji    = globalPct>=90?'🌟':globalPct>=70?'🎉':'💪';
-  const title    = globalPct>=90?'¡Excelente!':globalPct>=70?'¡Módulo aprobado!':'Sigue practicando';
-  const passLine = passed
-    ? 'Resultado acumulado: '+totalCorrect+'/'+totalQs+' ('+globalPct+'%) ¡Módulo aprobado!'
-    : 'Obtuviste '+totalCorrect+'/'+totalQs+' ('+globalPct+'%). Necesitas el 70% para aprobar.';
-
-  // Si no pasó → borrar respuestas guardadas para que próximo intento sea con las 20 preguntas
+  // Si no pasó → limpiar para que el próximo intento tenga las 20 preguntas
   if (!passed) {
     pm.answers = {};
     saveProgress(currentUser.name, currentProgress);
   }
 
-  // Construir HTML del resumen SIN backticks anidados
-  const answersHTML = quiz.answers.map(function(a, i) {
-    const q = quiz.questions[i];
-    const userOpt = q.opts[a.selected] || '—';
-    const correctOpt = q.opts[q.answer];
+  // ── HTML de resultados ───────────────────────────────────────
+  var sessionScore = answers.filter(function(a){return a.correct;}).length;
+  var sessionTotal = questions.length;
+
+  var emoji = globalPct>=90?'🌟':globalPct>=70?'🎉':'💪';
+  var title = globalPct>=90?'¡Excelente!':globalPct>=70?'¡Módulo aprobado!':'Sigue practicando';
+  var passLine = passed
+    ? 'Resultado: '+totalCorrect+'/'+totalQs+' ('+globalPct+'%) — ¡Aprobado!'
+    : 'Obtuviste '+totalCorrect+'/'+totalQs+' ('+globalPct+'%). Necesitas el 70% para aprobar.';
+
+  var answersHTML = '';
+  for (var i = 0; i < answers.length; i++) {
+    var a = answers[i];
+    var q = questions[i];
+    var userOpt    = (q.opts && a.selected !== undefined) ? (q.opts[a.selected] || '—') : '—';
+    var correctOpt = q.opts ? q.opts[q.answer] : '—';
     if (a.correct) {
-      return '<div class="answer-row ok">'
+      answersHTML += '<div class="answer-row ok">'
         + '<div class="ar-header"><span class="ar-num">P'+(i+1)+'</span><span class="ar-icon">✅</span></div>'
-        + '<div class="ar-question">'+q.q+'</div>'
-        + '<div class="ar-opts"><div class="ar-opt user-ok">✓ '+userOpt+'</div></div>'
+        + '<div class="ar-question">'+escH(q.q)+'</div>'
+        + '<div class="ar-opts"><div class="ar-opt user-ok">✓ '+escH(userOpt)+'</div></div>'
         + '</div>';
     } else {
-      return '<div class="answer-row bad">'
+      answersHTML += '<div class="answer-row bad">'
         + '<div class="ar-header"><span class="ar-num">P'+(i+1)+'</span><span class="ar-icon">❌</span></div>'
-        + '<div class="ar-question">'+q.q+'</div>'
+        + '<div class="ar-question">'+escH(q.q)+'</div>'
         + '<div class="ar-opts">'
-        + '<div class="ar-opt user-bad">✗ Tu respuesta: '+userOpt+'</div>'
-        + '<div class="ar-opt correct-ans">✓ Correcta: '+correctOpt+'</div>'
-        + '</div>'
-        + '</div>';
+        + '<div class="ar-opt user-bad">✗ Tu respuesta: '+escH(userOpt)+'</div>'
+        + '<div class="ar-opt correct-ans">✓ Correcta: '+escH(correctOpt)+'</div>'
+        + '</div></div>';
     }
-  }).join('');
-
-  const mid = quiz.moduleId;
-  // Botones según resultado
-  const btnIntentar = !passed
-    ? '<button class="btn-action primary" onclick="startQuiz(\''+mid+'\')">🔄 Intentar de nuevo (20 preguntas)</button>'
-    : '';
-  const btnRepaso = passed
-    ? '<button class="btn-action secondary" onclick="startQuiz(\''+mid+'\',true)">🔄 Repasar todo</button>'
-    : '';
-  const btnVolver = '<button class="btn-action '+(passed?'primary':'secondary')+'" onclick="showPage(\'page-dashboard\')">← Volver al inicio</button>';
-
-  document.getElementById('quiz-body').innerHTML = `
-    <div class="results-card">
-      <div class="results-emoji">${emoji}</div>
-      <div class="results-title">${title}</div>
-      <div class="results-subtitle">${passLine}</div>
-      <div class="score-circle">
-        <div class="score-num">${sessionScore}/${sessionTotal}</div>
-        <div class="score-lbl">esta sesión</div>
-      </div>
-      <div class="results-answers">
-        <h4>Resumen — esta sesión (${sessionScore} correctas / ${sessionTotal})</h4>
-        ${answersHTML}
-      </div>
-      <div class="results-actions">
-        ${btnIntentar}
-        ${btnRepaso}
-        ${btnVolver}
-      </div>
-    </div>`;
-  // Scroll nuevamente al top luego de renderizar (por si el layout corrió)
-  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, 0); }
-  } catch(e) {
-    console.error('showResults error:', e);
-    document.getElementById('quiz-body').innerHTML =
-      '<div style="padding:24px;text-align:center;color:var(--danger)">⚠️ Error al mostrar resultados. Tu progreso fue guardado.<br><br><button onclick="showPage(\'page-dashboard\')" class="btn-action secondary">← Volver al inicio</button></div>';
   }
-  }, 80);
+
+  var btnIntentar = !passed
+    ? '<button class="btn-action primary" onclick="startQuiz(\''+moduleId+'\')">🔄 Intentar de nuevo ('+totalQs+' preguntas)</button>'
+    : '';
+  var btnRepaso = passed
+    ? '<button class="btn-action secondary" onclick="startQuiz(\''+moduleId+'\',true)">🔄 Repasar todo</button>'
+    : '';
+  var btnVolver = '<button class="btn-action '+(passed?'primary':'secondary')+'" onclick="showPage(\'page-dashboard\')">← Volver al inicio</button>';
+
+  qb.innerHTML = '<div class="results-card">'
+    + '<div class="results-emoji">'+emoji+'</div>'
+    + '<div class="results-title">'+title+'</div>'
+    + '<div class="results-subtitle">'+passLine+'</div>'
+    + '<div class="score-circle">'
+    + '<div class="score-num">'+sessionScore+'/'+sessionTotal+'</div>'
+    + '<div class="score-lbl">esta sesión</div>'
+    + '</div>'
+    + '<div class="results-answers">'
+    + '<h4>Resumen — esta sesión ('+sessionScore+' correctas / '+sessionTotal+')</h4>'
+    + answersHTML
+    + '</div>'
+    + '<div class="results-actions">'+btnIntentar+btnRepaso+btnVolver+'</div>'
+    + '</div>';
+
+  // Scroll al top después de render
+  window.scrollTo(0, 0);
+  document.body.scrollTop = 0;
+}
+
+// Escapa HTML para evitar XSS en preguntas/opciones
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ══════════════════════════════════════════════════════════
