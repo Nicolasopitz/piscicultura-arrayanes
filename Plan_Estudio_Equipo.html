@@ -1787,14 +1787,14 @@ function showResults() {
   const emoji    = globalPct>=90?'🌟':globalPct>=70?'🎉':'💪';
   const title    = globalPct>=90?'¡Excelente!':globalPct>=70?'¡Módulo aprobado!':'Sigue practicando';
   const passLine = passed
-    ? `Resultado acumulado: ${totalCorrect}/${totalQs} (${globalPct}%) ¡Módulo aprobado!`
-    : `Necesitas ${Math.ceil(totalQs*0.7)}/${totalQs} (70%) para aprobar. Llevas ${totalCorrect}/${totalAnswered} respondidas correctas.`;
+    ? 'Resultado acumulado: '+totalCorrect+'/'+totalQs+' ('+globalPct+'%) ¡Módulo aprobado!'
+    : 'Obtuviste '+totalCorrect+'/'+totalQs+' ('+globalPct+'%). Necesitas el 70% para aprobar.';
 
-  // Pending questions after this session
-  const pendingLeft = m.questions.filter(q => !(qFP(q) in pm.answers)).length;
-  const pendingNote = pendingLeft > 0
-    ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">📋 Aún tienes <strong>${pendingLeft}</strong> pregunta${pendingLeft>1?'s':''} pendiente${pendingLeft>1?'s':''} de responder.</p>`
-    : '';
+  // Si no pasó → borrar respuestas guardadas para que próximo intento sea con las 20 preguntas
+  if (!passed) {
+    pm.answers = {};
+    saveProgress(currentUser.name, currentProgress);
+  }
 
   // Construir HTML del resumen SIN backticks anidados
   const answersHTML = quiz.answers.map(function(a, i) {
@@ -1820,18 +1820,20 @@ function showResults() {
   }).join('');
 
   const mid = quiz.moduleId;
-  const btnPending = pendingLeft > 0
-    ? '<button class="btn-action primary" onclick="startQuiz(\''+mid+'\')">📋 Responder pendientes ('+pendingLeft+')</button>'
+  // Botones según resultado
+  const btnIntentar = !passed
+    ? '<button class="btn-action primary" onclick="startQuiz(\''+mid+'\')">🔄 Intentar de nuevo (20 preguntas)</button>'
     : '';
-  const btnRepaso = '<button class="btn-action '+(pendingLeft>0?'secondary':'primary')+'" onclick="startQuiz(\''+mid+'\',true)">🔄 Repasar todo</button>';
-  const btnVolver = '<button class="btn-action secondary" onclick="showPage(\'page-dashboard\')">← Volver al inicio</button>';
+  const btnRepaso = passed
+    ? '<button class="btn-action secondary" onclick="startQuiz(\''+mid+'\',true)">🔄 Repasar todo</button>'
+    : '';
+  const btnVolver = '<button class="btn-action '+(passed?'primary':'secondary')+'" onclick="showPage(\'page-dashboard\')">← Volver al inicio</button>';
 
   document.getElementById('quiz-body').innerHTML = `
     <div class="results-card">
       <div class="results-emoji">${emoji}</div>
       <div class="results-title">${title}</div>
       <div class="results-subtitle">${passLine}</div>
-      ${pendingNote}
       <div class="score-circle">
         <div class="score-num">${sessionScore}/${sessionTotal}</div>
         <div class="score-lbl">esta sesión</div>
@@ -1841,7 +1843,7 @@ function showResults() {
         ${answersHTML}
       </div>
       <div class="results-actions">
-        ${btnPending}
+        ${btnIntentar}
         ${btnRepaso}
         ${btnVolver}
       </div>
