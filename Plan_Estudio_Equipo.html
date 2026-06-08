@@ -178,9 +178,20 @@
   .score-circle .score-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
   .score-circle .score-lbl { font-size: 0.68rem; color: var(--text-muted); }
   .results-answers { text-align: left; margin-bottom: 22px; }
-  .results-answers h4 { font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px; }
-  .answer-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 0.82rem; }
-  .answer-row .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+  .results-answers h4 { font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .answer-row { padding: 11px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid transparent; }
+  .answer-row.ok { background: #edfaf4; border-color: #b2e8cf; }
+  .answer-row.bad { background: #fff3f3; border-color: #f5c0c0; }
+  .answer-row .ar-header { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .answer-row .ar-num { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .answer-row .ar-icon { font-size: 1rem; line-height: 1; }
+  .answer-row .ar-question { font-size: 0.83rem; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 7px; }
+  .answer-row .ar-opts { display: flex; flex-direction: column; gap: 4px; }
+  .answer-row .ar-opt { font-size: 0.79rem; padding: 4px 9px; border-radius: 5px; display: flex; align-items: center; gap: 5px; line-height: 1.35; }
+  .answer-row .ar-opt.user-ok { background: var(--secondary); color: #fff; font-weight: 600; }
+  .answer-row .ar-opt.user-bad { background: var(--danger); color: #fff; font-weight: 600; }
+  .answer-row .ar-opt.correct-ans { background: var(--secondary); color: #fff; font-weight: 600; }
+  .answer-row .ar-opt.neutral { color: var(--text-muted); }
   .dot.ok { background: var(--secondary); } .dot.bad { background: var(--danger); }
   .results-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .btn-action { padding: 11px 22px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
@@ -1797,13 +1808,29 @@ function showResults() {
         <div class="score-lbl">esta sesión</div>
       </div>
       <div class="results-answers">
-        <h4>Resumen — esta sesión</h4>
+        <h4>Resumen — esta sesión (${sessionScore} correctas / ${sessionTotal})</h4>
         ${quiz.answers.map((a,i)=>{
           const q = quiz.questions[i];
-          return `<div class="answer-row">
-            <div class="dot ${a.correct?'ok':'bad'}"></div>
-            <span>P${i+1}: ${a.correct ? 'Correcta ✓' : 'Incorrecta — Correcta: "' + q.opts[q.answer] + '"'}</span>
-          </div>`;
+          const userOpt = q.opts[a.selected] || '—';
+          const correctOpt = q.opts[q.answer];
+          if (a.correct) {
+            return `<div class="answer-row ok">
+              <div class="ar-header"><span class="ar-num">P${i+1}</span><span class="ar-icon">✅</span></div>
+              <div class="ar-question">${q.q}</div>
+              <div class="ar-opts">
+                <div class="ar-opt user-ok">✓ ${userOpt}</div>
+              </div>
+            </div>`;
+          } else {
+            return `<div class="answer-row bad">
+              <div class="ar-header"><span class="ar-num">P${i+1}</span><span class="ar-icon">❌</span></div>
+              <div class="ar-question">${q.q}</div>
+              <div class="ar-opts">
+                <div class="ar-opt user-bad">✗ Tu respuesta: ${userOpt}</div>
+                <div class="ar-opt correct-ans">✓ Correcta: ${correctOpt}</div>
+              </div>
+            </div>`;
+          }
         }).join('')}
       </div>
       <div class="results-actions">
