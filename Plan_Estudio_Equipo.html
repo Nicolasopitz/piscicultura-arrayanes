@@ -1786,6 +1786,12 @@ function showResults() {
     currentProgress.modules[moduleId] = {attempts:0, score:0, completed:false};
   const pm = currentProgress.modules[moduleId];
   if (!pm.answers) pm.answers = {};
+  // Sanitizar claves existentes con chars prohibidos por Firebase (migración)
+  var _cleanAnswers = {};
+  Object.keys(pm.answers).forEach(function(k) {
+    _cleanAnswers[k.replace(/[.#$\/\[\]]/g,'_')] = pm.answers[k];
+  });
+  pm.answers = _cleanAnswers;
   questions.forEach(function(q, i) {
     pm.answers[qFP(q)] = answers[i] ? answers[i].correct : false;
   });
