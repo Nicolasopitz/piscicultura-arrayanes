@@ -1609,8 +1609,9 @@ function renderDashboard() {
 // ══════════════════════════════════════════════════════════
 
 // ── Question fingerprint (identifies a question across versions) ──
+// Firebase prohíbe . # $ / [ ] en claves → se reemplazan por _
 function qFP(q) {
-  return q.q.trim().replace(/\s+/g,' ').slice(0,50);
+  return q.q.trim().replace(/\s+/g,' ').slice(0,50).replace(/[.#$\/\[\]]/g,'_');
 }
 
 // ── Deterministic LCG shuffle (seed 0-9 gives 10 distinct orders) ──
