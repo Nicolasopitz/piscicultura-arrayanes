@@ -1820,6 +1820,12 @@ function showResults() {
   }).join('');
 
   const mid = quiz.moduleId;
+  const btnPending = pendingLeft > 0
+    ? '<button class="btn-action primary" onclick="startQuiz(\''+mid+'\')">📋 Responder pendientes ('+pendingLeft+')</button>'
+    : '';
+  const btnRepaso = '<button class="btn-action '+(pendingLeft>0?'secondary':'primary')+'" onclick="startQuiz(\''+mid+'\',true)">🔄 Repasar todo</button>';
+  const btnVolver = '<button class="btn-action secondary" onclick="showPage(\'page-dashboard\')">← Volver al inicio</button>';
+
   document.getElementById('quiz-body').innerHTML = `
     <div class="results-card">
       <div class="results-emoji">${emoji}</div>
@@ -1835,11 +1841,9 @@ function showResults() {
         ${answersHTML}
       </div>
       <div class="results-actions">
-        ${pendingLeft>0
-          ? `<button class="btn-action primary" onclick="startQuiz('${mid}')">📋 Responder pendientes</button>`
-          : ''}
-        <button class="btn-action ${pendingLeft>0?'secondary':'primary'}" onclick="startQuiz('${mid}',true)">🔄 Repasar todo</button>
-        <button class="btn-action secondary" onclick="showPage('page-dashboard')">← Volver al inicio</button>
+        ${btnPending}
+        ${btnRepaso}
+        ${btnVolver}
       </div>
     </div>`;
   // Scroll nuevamente al top luego de renderizar (por si el layout corrió)
