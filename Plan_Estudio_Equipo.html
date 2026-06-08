@@ -1796,6 +1796,29 @@ function showResults() {
     ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">📋 Aún tienes <strong>${pendingLeft}</strong> pregunta${pendingLeft>1?'s':''} pendiente${pendingLeft>1?'s':''} de responder.</p>`
     : '';
 
+  // Construir HTML del resumen SIN backticks anidados
+  const answersHTML = quiz.answers.map(function(a, i) {
+    const q = quiz.questions[i];
+    const userOpt = q.opts[a.selected] || '—';
+    const correctOpt = q.opts[q.answer];
+    if (a.correct) {
+      return '<div class="answer-row ok">'
+        + '<div class="ar-header"><span class="ar-num">P'+(i+1)+'</span><span class="ar-icon">✅</span></div>'
+        + '<div class="ar-question">'+q.q+'</div>'
+        + '<div class="ar-opts"><div class="ar-opt user-ok">✓ '+userOpt+'</div></div>'
+        + '</div>';
+    } else {
+      return '<div class="answer-row bad">'
+        + '<div class="ar-header"><span class="ar-num">P'+(i+1)+'</span><span class="ar-icon">❌</span></div>'
+        + '<div class="ar-question">'+q.q+'</div>'
+        + '<div class="ar-opts">'
+        + '<div class="ar-opt user-bad">✗ Tu respuesta: '+userOpt+'</div>'
+        + '<div class="ar-opt correct-ans">✓ Correcta: '+correctOpt+'</div>'
+        + '</div>'
+        + '</div>';
+    }
+  }).join('');
+
   const mid = quiz.moduleId;
   document.getElementById('quiz-body').innerHTML = `
     <div class="results-card">
@@ -1809,29 +1832,7 @@ function showResults() {
       </div>
       <div class="results-answers">
         <h4>Resumen — esta sesión (${sessionScore} correctas / ${sessionTotal})</h4>
-        ${quiz.answers.map((a,i)=>{
-          const q = quiz.questions[i];
-          const userOpt = q.opts[a.selected] || '—';
-          const correctOpt = q.opts[q.answer];
-          if (a.correct) {
-            return `<div class="answer-row ok">
-              <div class="ar-header"><span class="ar-num">P${i+1}</span><span class="ar-icon">✅</span></div>
-              <div class="ar-question">${q.q}</div>
-              <div class="ar-opts">
-                <div class="ar-opt user-ok">✓ ${userOpt}</div>
-              </div>
-            </div>`;
-          } else {
-            return `<div class="answer-row bad">
-              <div class="ar-header"><span class="ar-num">P${i+1}</span><span class="ar-icon">❌</span></div>
-              <div class="ar-question">${q.q}</div>
-              <div class="ar-opts">
-                <div class="ar-opt user-bad">✗ Tu respuesta: ${userOpt}</div>
-                <div class="ar-opt correct-ans">✓ Correcta: ${correctOpt}</div>
-              </div>
-            </div>`;
-          }
-        }).join('')}
+        ${answersHTML}
       </div>
       <div class="results-actions">
         ${pendingLeft>0
