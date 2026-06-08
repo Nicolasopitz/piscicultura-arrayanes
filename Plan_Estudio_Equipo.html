@@ -1725,6 +1725,18 @@ function nextQuestion() {
 }
 
 function showResults() {
+  // Scroll al top PRIMERO para que los resultados sean visibles en móvil
+  try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(_) { window.scrollTo(0, 0); }
+  const qb = document.getElementById('quiz-body');
+  if (qb) qb.scrollTop = 0;
+  const pq = document.getElementById('page-quiz');
+  if (pq) pq.scrollTop = 0;
+
+  // Mostrar indicador de carga mientras se procesa
+  if (qb) qb.innerHTML = '<div style="padding:40px;text-align:center;font-size:1.2rem;">⏳ Calculando resultados…</div>';
+
+  setTimeout(() => {
+  try {
   const m = MODULES.find(x=>x.id===quiz.moduleId);
 
   if (!currentProgress.modules) currentProgress.modules = {};
@@ -1802,6 +1814,14 @@ function showResults() {
         <button class="btn-action secondary" onclick="showPage('page-dashboard')">← Volver al inicio</button>
       </div>
     </div>`;
+  // Scroll nuevamente al top luego de renderizar (por si el layout corrió)
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, 0); }
+  } catch(e) {
+    console.error('showResults error:', e);
+    document.getElementById('quiz-body').innerHTML =
+      '<div style="padding:24px;text-align:center;color:var(--danger)">⚠️ Error al mostrar resultados. Tu progreso fue guardado.<br><br><button onclick="showPage(\'page-dashboard\')" class="btn-action secondary">← Volver al inicio</button></div>';
+  }
+  }, 80);
 }
 
 // ══════════════════════════════════════════════════════════
