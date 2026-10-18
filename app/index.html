@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piscicultura Los Arrayanes</title>
+<meta name="description" content="Registro de datos de producción RAS de Piscicultura Los Arrayanes.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0E5A6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Los Arrayanes">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: banda de marca arriba, módulos en grilla de 2 columnas (1 en teléfono), instalación y ayuda al final. */
+:root{
+  --bg:#E9EFF2; --surface:#FFFFFF; --sunk:#F3F6F8; --ink:#11222C; --muted:#566873; --line:#D2DCE2;
+  --water:#0E5A6B; --water-ink:#FFFFFF; --salmon:#E4704F; --salmon-soft:#FBE3DA; --ok:#2E7D4F;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0C151A; --surface:#14212A; --sunk:#101B22; --ink:#E4EDF1; --muted:#8EA1AB; --line:#25363F;
+  --water:#3FA7BC; --water-ink:#06161C; --salmon:#F08B6C; --salmon-soft:#3A221B; --ok:#5BC08A; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent;min-height:100vh}
+.band{background:#0E5A6B;color:#fff;padding-top:max(18px,env(safe-area-inset-top,0px));padding-bottom:22px;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.band-in{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.band img{width:56px;height:56px;border-radius:14px;flex:none}
+.band h1{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;margin:0;text-wrap:balance}
+.band p{margin:4px 0 0;font-size:13px;opacity:.85}
+main{max-width:960px;margin:0 auto;display:grid;gap:18px;padding-block:18px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.who{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.who label{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.who input{flex:1;min-width:180px;height:42px;border:1px solid var(--line);border-radius:9px;background:var(--sunk);padding:0 12px;font:inherit;color:inherit}
+.who .today{font-family:var(--mono);font-size:13px;color:var(--muted)}
+h2{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.mods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mod{display:grid;grid-template-columns:52px 1fr;gap:4px 14px;align-items:start;text-decoration:none;color:inherit;background:var(--surface);
+  border:1px solid var(--line);border-radius:14px;padding:16px;min-height:118px;position:relative}
+.mod svg{grid-row:span 2;width:52px;height:52px}
+.mod h3{margin:0;font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05}
+.mod p{margin:0;font-size:13.5px;color:var(--muted)}
+.mod .st{grid-column:2;font-family:var(--mono);font-size:12.5px;color:var(--water);margin-top:6px}
+a.mod{border-color:var(--water);box-shadow:0 1px 0 var(--line)}
+a.mod:active{transform:translateY(1px)}
+a.mod::after{content:"›";position:absolute;right:16px;top:12px;font-size:30px;color:var(--water);font-family:var(--display)}
+.mod.soon{opacity:.62}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:2px 8px;margin-top:6px;grid-column:2;justify-self:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
+.card ol{margin:0;padding-left:20px;display:grid;gap:4px}
+.card p{margin:0}
+.btn{height:46px;border-radius:10px;border:none;background:var(--water);color:var(--water-ink);font-weight:600;padding:0 18px;font:inherit;font-weight:600;cursor:pointer;justify-self:start}
+.note{font-size:12.5px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+footer{font-size:12px;color:var(--muted);text-align:center}
+:focus-visible{outline:3px solid var(--salmon);outline-offset:2px}
+@media (max-width:640px){.mods,.cols{grid-template-columns:1fr}.band h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="band"><div class="band-in">
+  <img src="apple-touch-icon.png" alt="">
+  <div><h1>Piscicultura Los Arrayanes</h1><p>Salmones Austral · RAS Llaguepe, Cochamó</p></div>
+</div></div>
+
+<main>
+  <div class="who">
+    <label for="op">Digitado por</label>
+    <input id="op" type="text" placeholder="Tu nombre" autocomplete="name">
+    <span class="today" id="today"></span>
+  </div>
+
+  <h2>Registros</h2>
+  <div class="mods">
+    <a class="mod" href="muestreo.html">
+      <svg viewBox="0 0 52 52" aria-hidden="true"><rect width="52" height="52" rx="12" fill="var(--salmon-soft)"/><ellipse cx="24" cy="26" rx="13" ry="7.5" fill="var(--salmon)"/><path d="M36 26l9-7v14z" fill="var(--salmon)"/><circle cx="17" cy="24.5" r="1.6" fill="var(--ink)"/></svg>
+      <h3>Muestreo biométrico</h3>
+      <p>Peso, talla, factor K y condición de opérculo, branquias y cataratas por estanque.</p>
+      <span class="st" id="mStatus">—</span>
+    </a>
+    <div class="mod soon">
+      <svg viewBox="0 0 52 52" aria-hidden="true"><rect width="52" height="52" rx="12" fill="var(--sunk)"/><path d="M26 11c6 9 10 14 10 20a10 10 0 0 1-20 0c0-6 4-11 10-20z" fill="var(--water)"/></svg>
+      <h3>Calidad de agua</h3>
+      <p>O₂, temperatura, pH, CO₂, NH₄ y NO₂ por unidad.</p>
+      <span class="pill">Próximamente</span>
+    </div>
+    <div class="mod soon">
+      <svg viewBox="0 0 52 52" aria-hidden="true"><rect width="52" height="52" rx="12" fill="var(--sunk)"/><g fill="var(--water)"><circle cx="19" cy="20" r="4"/><circle cx="31" cy="18" r="4"/><circle cx="26" cy="29" r="4"/><circle cx="17" cy="33" r="4"/><circle cx="35" cy="31" r="4"/></g></svg>
+      <h3>Alimentación</h3>
+      <p>Kilos entregados por estanque y día frente a la proyección.</p>
+      <span class="pill">Próximamente</span>
+    </div>
+    <div class="mod soon">
+      <svg viewBox="0 0 52 52" aria-hidden="true"><rect width="52" height="52" rx="12" fill="var(--sunk)"/><path d="M14 36h24M18 36V22M26 36V16M34 36V27" stroke="var(--water)" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
+      <h3>Mortalidad</h3>
+      <p>Registro diario por estanque y causa.</p>
+      <span class="pill">Próximamente</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cómo enviar los datos</h2>
+    <ol>
+      <li>Digita el muestreo en la tablet o el celular. Todo queda guardado en el equipo, aunque no haya señal.</li>
+      <li>Al terminar, toca <b>Enviar planilla</b> al final del muestreo y elige WhatsApp o correo.</li>
+      <li>El jefe de producción recibe el .xlsx de la planilla de muestreo quincenal, listo para abrir.</li>
+    </ol>
+  </div>
+
+  <div class="card" id="install">
+    <h2>Instalar la app</h2>
+    <button class="btn" id="installBtn" type="button" hidden>Instalar en este equipo</button>
+    <div class="cols">
+      <div><p><b>Android</b> (Chrome)</p><p class="note">Menú ⋮ → <b>Instalar app</b> o <b>Agregar a pantalla principal</b>.</p></div>
+      <div><p><b>iPhone / iPad</b> (Safari)</p><p class="note">Botón Compartir → <b>Agregar a inicio</b>.</p></div>
+    </div>
+    <p class="note">Queda con su ícono, se abre a pantalla completa y funciona sin internet. Cada equipo guarda sus propios datos.</p>
+  </div>
+
+  <footer>Piscicultura Los Arrayanes · versión 1 · <span id="sw">preparando uso sin internet…</span></footer>
+</main>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const d=new Date();$("today").textContent=d.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  try{$("op").value=localStorage.getItem("arrayanes-operador")||""}catch(e){}
+  $("op").addEventListener("input",e=>{try{localStorage.setItem("arrayanes-operador",e.target.value.trim())}catch(err){}});
+  try{
+    const S=JSON.parse(localStorage.getItem("muestreo-arrayanes-v1")||"null");
+    const t=S&&S.tanks?Object.entries(S.tanks).filter(([k,v])=>v.fish&&v.fish.length):[];
+    const n=t.reduce((a,[k,v])=>a+v.fish.length,0);
+    $("mStatus").textContent=t.length?t.length+" estanque"+(t.length>1?"s":"")+" · "+n+" peces guardados":"Sin datos guardados";
+  }catch(e){$("mStatus").textContent="Sin datos guardados"}
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  if(standalone)$("install").hidden=true;
+  let deferred=null;
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;$("installBtn").hidden=false});
+  $("installBtn").onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$("installBtn").hidden=true};
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js").then(()=>navigator.serviceWorker.ready).then(()=>$("sw").textContent="lista para usar sin internet").catch(()=>$("sw").textContent="sin modo offline en este navegador");
+  }else $("sw").textContent="sin modo offline en este navegador";
+})();
+</script>
+</body>
+</html>

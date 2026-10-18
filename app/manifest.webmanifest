@@ -1,0 +1,17 @@
+{
+  "name": "Piscicultura Los Arrayanes",
+  "short_name": "Los Arrayanes",
+  "description": "Registro de datos de producción RAS: muestreo biométrico, calidad de agua, alimentación y mortalidad.",
+  "lang": "es-CL",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E9EFF2",
+  "theme_color": "#0E5A6B",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
