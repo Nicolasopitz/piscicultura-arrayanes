@@ -374,6 +374,51 @@
     border:1px solid var(--border); border-radius:8px; padding:5px 10px; font-size:0.75rem; }
   .detail-badge.earned { background:#fffde7; border-color:#ffe082; }
 
+  /* ── Gestión de usuarios ─────────────────────────── */
+  .manage-section { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .manage-section h4 { margin:0 0 14px; font-size:0.95rem; color:var(--text); }
+  .manage-form { display:grid; gap:10px; }
+  .manage-form .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .manage-form input, .manage-form select { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px;
+    font-size:0.85rem; color:var(--text); background:var(--bg); box-sizing:border-box; }
+  .manage-form input:focus, .manage-form select:focus { border-color:var(--primary); outline:none; }
+  .manage-form label { font-size:0.78rem; color:var(--text-muted); font-weight:600; margin-bottom:3px; display:block; }
+  .manage-form .check-row { display:flex; align-items:center; gap:8px; font-size:0.84rem; }
+  .manage-user-list { display:flex; flex-direction:column; gap:8px; }
+  .manage-user-row { display:flex; align-items:center; gap:10px; padding:9px 12px; background:var(--bg);
+    border-radius:8px; border:1px solid var(--border); }
+  .manage-user-row .mur-name { flex:1; font-size:0.85rem; font-weight:600; }
+  .manage-user-row .mur-cargo { font-size:0.76rem; color:var(--text-muted); flex:1; }
+  .manage-user-row .mur-badge { font-size:0.68rem; padding:2px 7px; border-radius:10px; background:#fff3e0; color:#c07000; font-weight:700; }
+  .manage-user-row .btn-del { background:#fef2f2; color:var(--danger); border:1.5px solid #fca5a5;
+    padding:5px 11px; border-radius:7px; font-size:0.76rem; cursor:pointer; font-weight:700; white-space:nowrap; }
+  .manage-user-row .btn-del:hover { background:var(--danger); color:#fff; }
+  @media(max-width:600px){ .manage-form .form-row { grid-template-columns:1fr; } }
+
+  /* ── Gestión de personal ─────────────────────────── */
+  .user-mgmt-section { background:var(--card); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .user-mgmt-section h4 { margin:0 0 16px; font-size:0.95rem; }
+  .umg-form { display:grid; gap:10px; }
+  .umg-form .umg-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .umg-form label { font-size:0.76rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:3px; }
+  .umg-form input { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px;
+    font-size:0.85rem; color:var(--text); background:var(--bg); box-sizing:border-box; }
+  .umg-form input:focus { border-color:var(--primary); outline:none; }
+  .umg-form .umg-check { display:flex; align-items:center; gap:7px; font-size:0.84rem; padding-top:22px; }
+  .user-list { display:flex; flex-direction:column; gap:7px; }
+  .user-row { display:flex; align-items:center; gap:10px; padding:9px 13px;
+    background:var(--bg); border-radius:8px; border:1px solid var(--border); }
+  .user-row .ur-name { flex:1; font-size:0.85rem; font-weight:700; }
+  .user-row .ur-cargo { flex:1; font-size:0.76rem; color:var(--text-muted); }
+  .user-row .ur-badge { font-size:0.68rem; padding:2px 7px; border-radius:10px;
+    background:#fff3e0; color:#c07000; font-weight:700; white-space:nowrap; }
+  .user-row .ur-new { font-size:0.68rem; padding:2px 7px; border-radius:10px;
+    background:#e8f5e9; color:#2e7d32; font-weight:700; white-space:nowrap; }
+  .user-row .btn-del-u { background:#fef2f2; color:var(--danger); border:1.5px solid #fca5a5;
+    padding:5px 12px; border-radius:7px; font-size:0.76rem; cursor:pointer; font-weight:700; }
+  .user-row .btn-del-u:hover { background:var(--danger); color:#fff; }
+  @media(max-width:600px){ .umg-form .umg-row { grid-template-columns:1fr; } }
+
   /* ── Gráficos admin stats ────────────────────────── */
   .stat-chart-bar-wrap { background:var(--bg); border-radius:5px; height:12px; overflow:hidden; flex:1; }
   .stat-chart-bar-fill { height:100%; background:var(--primary); border-radius:5px; transition:width .4s; }
@@ -389,31 +434,6 @@
 
 <div id="toast"></div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-cargo">
-  <div class="modal-box">
-    <h3>✏️ Editar Cargo</h3>
-    <label>Nombre</label>
-    <input type="text" id="modal-cargo-name" readonly style="background:#f5f5f5;">
-    <label>Cargo</label>
-    <input type="text" id="modal-cargo-value" placeholder="Ingresa el cargo">
-    <div class="modal-actions">
-      <button class="btn-modal cancel" onclick="closeModal('modal-cargo')">Cancelar</button>
-      <button class="btn-modal primary" onclick="saveCargo()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<div class="confirm-overlay" id="confirm-delete">
-  <div class="confirm-box">
-    <h3>⚠️ Eliminar Progreso</h3>
-    <p id="confirm-delete-msg">¿Seguro que deseas borrar el progreso de este colaborador? Esta acción no se puede deshacer.</p>
-    <div class="confirm-actions">
-      <button class="btn-modal cancel" onclick="closeModal('confirm-delete')">Cancelar</button>
-      <button class="btn-modal primary" style="background:var(--danger);" onclick="confirmDelete()">Eliminar</button>
-    </div>
-  </div>
-</div>
 
 <!-- LOGIN -->
 <div id="page-login" class="page active">
@@ -451,7 +471,7 @@
     <span id="nav-user"></span>
     <button class="btn-nav" onclick="showPage('page-dashboard')">📚 Módulos</button>
     <button class="btn-nav" onclick="showPage('page-material')">📖 Material</button>
-    <button class="btn-nav admin-only" id="btn-nav-admin" style="display:none;" onclick="showPage('page-admin')">👥 Jefatura</button>
+    <button class="btn-nav" id="btn-nav-admin" style="display:none;" onclick="showPage('page-admin')">👥 Equipo</button>
     <button class="btn-nav" id="btn-back-nav" style="display:none;" onclick="goBack()">← Volver</button>
     <button class="btn-nav" onclick="logout()">Salir</button>
   </div>
@@ -465,8 +485,8 @@
   <button class="mob-nav-btn" id="mnb-material" onclick="showPage('page-material')">
     <span class="mob-icon">📖</span><span>Material</span>
   </button>
-  <button class="mob-nav-btn admin-only" id="mnb-admin" style="display:none;" onclick="showPage('page-admin')">
-    <span class="mob-icon">👥</span><span>Jefatura</span>
+  <button class="mob-nav-btn" id="mnb-admin" style="display:none;" onclick="showPage('page-admin')">
+    <span class="mob-icon">👥</span><span>Equipo</span>
   </button>
   <button class="mob-nav-btn" id="mnb-quiz" style="display:none;" onclick="goBack()">
     <span class="mob-icon">←</span><span>Volver</span>
@@ -847,6 +867,15 @@
   </div>
 </div>
 
+<!-- ADMIN: GESTIÓN DE PERSONAL -->
+<div id="page-admin" class="page">
+  <div class="main-container">
+    <h2 style="margin-bottom:4px;">👥 Gestión de Personal</h2>
+    <p style="color:var(--text-muted);font-size:0.84rem;margin-bottom:22px;">Agrega o elimina usuarios del plan de estudio</p>
+    <div id="admin-content"></div>
+  </div>
+</div>
+
 <!-- QUIZ -->
 <div id="page-quiz" class="page">
   <div class="main-container">
@@ -863,39 +892,12 @@
   </div>
 </div>
 
-<!-- ADMIN -->
-<div id="page-admin" class="page">
-  <div class="main-container">
-    <h2 style="margin-bottom:6px;">Panel Jefatura</h2>
-    <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:18px;">Gestión del equipo — Piscicultura Los Arrayanes</p>
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="adminTab('team',this)">👥 Equipo completo</button>
-      <button class="admin-tab" onclick="adminTab('stats',this)">📊 Estadísticas</button>
-    </div>
-    <div id="admin-team-view"></div>
-    <div id="admin-stats-view" style="display:none;"></div>
-  </div>
-</div>
-
-<!-- Modal detalle trabajador -->
-<div class="modal-overlay" id="modal-worker-detail" onclick="if(event.target===this)closeModal('modal-worker-detail')">
-  <div class="modal-box modal-wide">
-    <div id="modal-worker-detail-content"></div>
-    <div class="modal-actions" style="margin-top:16px;">
-      <button class="btn-modal cancel" onclick="closeModal('modal-worker-detail')">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase SDK (compat) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
 // ══════════════════════════════════════════════════════════
 // BASE DE DATOS DE USUARIOS (del archivo Excel)
 // ══════════════════════════════════════════════════════════
-const USERS_DB = [
+let USERS_DB = [
   // ── Jefatura ──────────────────────────────────────────────
   { name: 'CARLOS GONZALEZ',     rutHash: 'be4a2cdf52dd0b9d5d526b45f8b8dc97c6ff40778a2bd98d776251f2fafbb4d4', cargo: 'Jefe de Centro',              admin: true  },
   { name: 'NICOLAS OPITZ',       rutHash: '5ca42b32cb2ccca2636a1c091bc1f8ae52abec988625f9e17fcea7daac5d7b31', cargo: 'Jefe de Producción',          admin: true  },
@@ -965,7 +967,17 @@ const MODULES = [
       {q:'¿Cuánto reduce la salinidad la solubilidad del O₂ respecto al agua dulce?',opts:['No cambia','5%','≈20%','50%'],answer:2,exp:'El agua de mar (35 ppt) contiene aproximadamente un 20% menos de O₂ disuelto que el agua dulce a igual temperatura y presión.'},
       {q:'¿Cuál es el nivel mínimo de alcalinidad para no limitar la nitrificación?',opts:['≥1 mmol/L (45 mg CaCO₃/L)','≥500 mg CaCO₃/L','<10 mg CaCO₃/L','La alcalinidad no afecta la nitrificación'],answer:0,exp:'Bajo ≈1 mmol/L (45 mg CaCO₃/L) la nitrificación comienza a limitarse. La biofiltración consume ≈7 g de alcalinidad por gramo de N-amoniaco nitrificado.'},
       {q:'¿Cuál es el nivel de CO₂ considerado desfavorable en RAS?',opts:['0–5 mg/L','5–10 mg/L','>20 mg/L','CO₂ no afecta a los peces'],answer:2,exp:'Sobre 20 mg/L de CO₂ se considera desfavorable; puede causar hipercapnia y reducir la capacidad de transporte de O₂ en sangre.'},
-      {q:'¿Por qué la alcalinidad cae continuamente en RAS sin aporte externo?',opts:['Por efecto del frío','La nitrificación consume HCO₃⁻ produciendo H⁺; sin reposición el pH cae y el biofiltro falla','Las bombas consumen alcalinidad','El O₂ oxida la alcalinidad'],answer:1,exp:'Cada mol de NH₄⁺ nitrificado consume ≈2 mol de alcalinidad. En RAS productivo se dosifica NaHCO₃ o Ca(OH)₂ diariamente para mantener el buffer de pH.'}
+      {q:'¿Por qué la alcalinidad cae continuamente en RAS sin aporte externo?',opts:['Por efecto del frío','La nitrificación consume HCO₃⁻ produciendo H⁺; sin reposición el pH cae y el biofiltro falla','Las bombas consumen alcalinidad','El O₂ oxida la alcalinidad'],answer:1,exp:'Cada mol de NH₄⁺ nitrificado consume ≈2 mol de alcalinidad. En RAS productivo se dosifica NaHCO₃ o Ca(OH)₂ diariamente para mantener el buffer de pH.'},
+      {q:'¿Qué es la Presión de Gases Totales (TGP) y cuál es su nivel crítico?',opts:['TGP > 110% es nivel crítico — riesgo de enfermedad de la burbuja de gas','TGP < 50% es normal de operación','TGP mide la concentración de CO₂ exclusivamente','TGP solo aplica a agua de mar'],answer:0,exp:'El TGP mide la presión total de gases disueltos. Sobre el 110% puede ocurrir la enfermedad de la burbuja de gas (gas bubble disease), que es mortal para los peces.'},
+      {q:'¿Cuál es el nivel de TGP normal (recomendado) en un sistema RAS operativo?',opts:['50-80%','200-300%','Inferior al 102%','150-160%'],answer:2,exp:'El TGP normal es inferior al 102%. El rango de alerta es 102-110% y el crítico es >110%. La sobresaturación de gases ocurre principalmente cuando la temperatura aumenta o hay fallas en el sistema.'},
+      {q:'¿Cuál es el nivel mínimo de dureza recomendado en el agua del sistema RAS?',opts:['< 10 mg/L CaCO₃','> 50 mg/L CaCO₃','> 500 mg/L CaCO₃','La dureza no importa en RAS'],answer:1,exp:'La dureza recomendada es >50 mg/L CaCO₃. El nivel de alerta es <50 mg/L. El calcio y el magnesio son importantes para la osmorregulación y la fisiología ósea de los salmones.'},
+      {q:'¿Cuál es el nivel de TSS (sólidos en suspensión) considerado crítico en RAS?',opts:['< 2 mg/L','> 10 mg/L es alerta, > 30 mg/L es crítico para los peces','TSS nunca importa en RAS','Solo importa si es >1000 mg/L'],answer:1,exp:'El TSS en alerta es 6–10 mg/L y el valor crítico >10 mg/L. SS altos dañan las branquias, aumentan la carga bacteriana y reducen la eficiencia del UV.'},
+      {q:'¿Qué indica un TOC (carbono orgánico total) alto en el sistema RAS?',opts:['Que la biofiltración es muy eficiente','Alta carga orgánica que aumenta la actividad bacteriana heterótrofa y el consumo de O₂','TOC alto no tiene efectos negativos','Solo indica buena calidad de alimento'],answer:1,exp:'Un TOC alto (>5 mg/L) indica exceso de materia orgánica disuelta. Favorece el crecimiento de bacterias heterótrofas que compiten con nitrificantes y consumen O₂.'},
+      {q:'¿Cómo afecta el aumento de temperatura al equilibrio del amonio tóxico (NH₃)?',opts:['No tiene efecto','La fracción de NH₃ tóxico aumenta con la temperatura, haciéndolo más peligroso a igual TAN','La temperatura solo afecta al O₂ disuelto','El NH₃ desaparece a temperaturas altas'],answer:1,exp:'A mayor temperatura, el equilibrio NH₄⁺/NH₃ se desplaza hacia NH₃. Por eso en verano (temperatura alta + pH alto) el riesgo de toxicidad por amonio aumenta significativamente.'},
+      {q:'¿Para qué se dosifica bicarbonato de sodio (NaHCO₃) en el sistema RAS?',opts:['Para reducir el O₂ disuelto','Para colorear el agua y facilitar la vigilancia','Para aumentar la salinidad','Para reponer la alcalinidad consumida por la nitrificación y estabilizar el pH'],answer:3,exp:'La nitrificación consume alcalinidad continuamente. Se dosifica NaHCO₃ o Ca(OH)₂ para reponer la alcalinidad y mantener el pH en el rango óptimo de 6.8–7.8.'},
+      {q:'¿Qué es la salinidad del agua y cómo se mide en RAS?',opts:['Concentración de O₂; se mide con oxímetro','Concentración de sales disueltas (g/L); se mide con refractómetro o sensor de conductividad','Presión del agua; se mide con manómetro','Turbidez del agua; se mide con turbidímetro'],answer:1,exp:'La salinidad (g/L) mide las sales totales disueltas. En RAS se usa agua dulce o mezcla. Se mide con refractómetro o sensor de conductividad. La salinidad afecta la osmorregulación y el O₂ disuelto.'},
+      {q:'¿Por qué el N₂ disuelto puede ser problemático si supera el 103% de saturación?',opts:['El N₂ es beneficioso y nunca causa problemas','El exceso de N₂ puede causar embolia gaseosa (gas bubble disease) en los peces','El N₂ solo afecta al biofiltro','El N₂ bajo acelera el crecimiento'],answer:1,exp:'El N₂ disuelto en exceso (>103% saturación) puede causar embolia gaseosa: burbujas que bloquean los vasos sanguíneos. Ocurre en entradas de agua con alto N₂ o faltas de desgasificación.'},
+      {q:'¿Con qué instrumento se mide la turbidez del agua en RAS?',opts:['Oxímetro digital','Termómetro','Turbidímetro (nefelómetro) que mide en unidades NTU','Refractómetro de salinidad'],answer:2,exp:'La turbidez se mide con un turbidímetro o nefelómetro en unidades NTU. El rango normal es <6 NTU. Alta turbidez indica exceso de sólidos en suspensión.'}
     ]},
   { id:'intro-ras', level:1, icon:'🔄', title:'Aspectos Básicos de la Recirculación',
     desc:'Principios del sistema RAS, componentes fundamentales, flujo de agua y ventajas de la recirculación.', levelTag:'n1', levelLabel:'Nivel 1 · Básico', xp:100,
@@ -990,7 +1002,17 @@ const MODULES = [
       {q:'¿Cómo se calcula el porcentaje de recambio de agua en RAS?',opts:['Caudal recirculante × 100 / volumen total','(Ingreso agua fresca / volumen total sistema) × 100','Solo depende del número de peces','Temperatura × caudal / 100'],answer:1,exp:'% recambio = (flujo agua nueva / volumen total sistema) × 100. En RAS moderno es 1–5% diario.'},
       {q:'¿Por qué reducir el FCR aumenta la capacidad productiva del sistema RAS?',opts:['Solo reduce el costo de alimento','Un FCR bajo reduce SS, NH₃ y DBO, liberando capacidad del sistema de tratamiento hasta en 30%','No tiene relación con el RAS','Solo importa para los informes'],answer:1,exp:'Menos alimento desperdiciado = menos SS, menos NH₃ y menos DBO. Esto libera capacidad de tratamiento y permite mayor densidad de carga.'},
       {q:'¿Qué es la DQO y cómo se compara con la DBO?',opts:['Son idénticas','DQO mide toda la materia oxidable (biodegradable + no biodegradable); siempre mayor que la DBO (≈ doble)','DQO siempre es menor que la DBO','DQO solo mide nitratos'],answer:1,exp:'La DQO oxida química toda la materia oxidable. La DBO solo mide la porción biodegradable. En efluentes de piscicultura DQO ≈ 2 × DBO.'},
-      {q:'¿Por qué SS altos reducen la eficiencia del UV en RAS?',opts:['No hay relación','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV no funciona en agua dulce','Los SS aumentan la dosis UV'],answer:1,exp:'Los sólidos protegen patógenos de la radiación UV-C. Por eso es crítico mantener SS bajos antes del reactor UV.'}
+      {q:'¿Por qué SS altos reducen la eficiencia del UV en RAS?',opts:['No hay relación','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV no funciona en agua dulce','Los SS aumentan la dosis UV'],answer:1,exp:'Los sólidos protegen patógenos de la radiación UV-C. Por eso es crítico mantener SS bajos antes del reactor UV.'},
+      {q:'¿Cuál es el orden correcto del flujo de agua en un sistema RAS Billund?',opts:['UV → Biofiltro → FTR → Desgasificador → Estanque','Estanque → FTR → Biofiltro → Desgasificador → UV → Oxigenación → Estanque','Bomba → Estanque → UV → FTR → Biofiltro','Desgasificador → Biofiltro → FTR → Estanque → UV'],answer:1,exp:'El flujo es: Estanques → Reservorio → FTR (filtración mecánica) → Reservorio 1 → Biofiltros (nitrificación) → Desgasificador (CO₂) → Reservorio 2 → Bombas → UV → Oxigenación → Estanques.'},
+      {q:'¿Cuál es la función principal del biofiltro en un sistema RAS?',opts:['Eliminar sólidos gruesos del agua','Oxidar el amonio tóxico (NH₃/NH₄⁺) a nitritos y nitratos mediante bacterias nitrificantes','Enfriar el agua en verano','Inyectar oxígeno al agua'],answer:1,exp:'El biofiltro alberga bacterias nitrificantes que convierten el amonio (NH₄⁺/NH₃) tóxico en nitritos (NO₂⁻) y luego en nitratos (NO₃⁻), menos tóxicos para los peces.'},
+      {q:'¿Qué es el estanque de cabecera en un sistema RAS?',opts:['El estanque donde viven los peces','Un depósito elevado que acumula agua ya tratada antes de distribuirla a los estanques de cultivo por gravedad','Un estanque de emergencia para traslado de peces','El reservorio antes del drum filter'],answer:1,exp:'El estanque de cabecera recibe el agua tratada desde las bombas de cabecera. Su posición elevada permite distribuir el agua a los estanques por gravedad controlada.'},
+      {q:'¿Cuánto porcentaje de agua nueva (recambio) requiere típicamente un sistema RAS moderno?',opts:['50-70% diario','Solo un 1-5% diario, reutilizando el 95-99%','100% diario de agua nueva','30% diario de agua nueva'],answer:1,exp:'El RAS reutiliza >95-99% del agua. Solo se repone el 1-5% perdido en purgas de lodos y evaporación. Esto es una ventaja clave frente a sistemas abiertos.'},
+      {q:'¿Cuál es el objetivo de la desgasificación en RAS?',opts:['Agregar O₂ al agua','Eliminar el CO₂ acumulado por la respiración de los peces para evitar hipercapnia','Eliminar bacterias del agua','Aumentar la temperatura del agua'],answer:1,exp:'La respiración de los peces produce CO₂. El desgasificador elimina el CO₂ por intercambio gaseoso (contacto con aire a contraflujo), previniendo la acidificación y la hipercapnia.'},
+      {q:'¿Cuál es el propósito de los conos de oxigenación en RAS?',opts:['Enfriar el agua antes de los estanques','Saturar el agua con O₂ puro a presión para aumentar la transferencia de oxígeno al agua','Eliminar el CO₂ del sistema','Medir la presión del sistema'],answer:1,exp:'Los conos de oxigenación mezclan el agua con O₂ puro a alta presión. La burbuja de O₂ atrapada en la parte superior del cono se disuelve eficientemente en el agua.'},
+      {q:'¿Por qué el RAS permite producción independiente de las condiciones climáticas externas?',opts:['Porque está bajo techo','Porque controla temperatura, fotoperiodo, calidad de agua y bioseguridad de forma independiente al exterior','Porque usa agua de pozo siempre fría','Porque no requiere energía externa'],answer:1,exp:'El RAS controla completamente su entorno: temperatura del agua con intercambiadores, fotoperiodo con luz artificial, calidad de agua con tratamiento continuo, bioseguridad con instalaciones cerradas.'},
+      {q:'¿Cuál es la diferencia entre recambio y recirculación en RAS?',opts:['Son lo mismo','El recambio es el agua nueva que entra al sistema; la recirculación es el agua del sistema que se reutiliza tras tratamiento','El recambio es el agua que se bota','La recirculación solo aplica al biofiltro'],answer:1,exp:'Recambio = agua fresca nueva que ingresa (1-5%/día). Recirculación = el agua del sistema que se trata y reutiliza (95-99%). Ambos son esenciales para el balance del sistema.'},
+      {q:'¿Qué es el Pre-Sump en el sistema Post Smolt?',opts:['El estanque de cabecera','Un reservorio previo a los filtros FTR que recibe el agua de los estanques de cultivo','Un biofiltro adicional','El estanque de emergencia'],answer:1,exp:'El Pre-Sump es un reservorio que recibe el agua desde los estanques antes de pasar a los FTR. Permite acumular el agua antes del proceso de filtración mecánica.'},
+      {q:'¿Qué información proporciona el HMI (Human Machine Interface) al operador?',opts:['Solo la temperatura del agua','Solo alarmas de emergencia','Visualización en tiempo real de todos los parámetros, estados de equipos, alarmas y configuración del sistema','Solo el consumo eléctrico de los equipos'],answer:2,exp:'El HMI muestra en tiempo real: concentración de O₂, niveles de estanques, estado de bombas y válvulas, alarmas activas y permite configurar parámetros del sistema. Es la interfaz central del operador.'}
     ]},
   { id:'filtracion-mecanica', level:2, icon:'🔬', title:'Filtración Mecánica y Biofiltración',
     desc:'Drum filters HDF, biofiltros MBBR y Trickling, biofilm nitrificante y separación de sólidos.', levelTag:'n2', levelLabel:'Nivel 2 · Avanzado', xp:150,
@@ -1015,7 +1037,17 @@ const MODULES = [
       {q:'¿Cuánto tiempo tarda el biofilm en establecerse en un biofiltro nuevo?',opts:['24 horas','7–10 días de inicio; varias semanas para nitrificación estable','Solo 1 hora','Varios años'],answer:1,exp:'El biofilm requiere tiempo: 7–10 días de inicio visible, 2 semanas para actividad medible, y varias semanas hasta nitrificación completa y estable.'},
       {q:'¿Qué son los polímeros floculantes usados en la gestión de sólidos?',opts:['Vitaminas para peces','Floculantes/coagulantes que aglutinan partículas finas mejorando la separación sólido-líquido','Desinfectantes del agua de recirculación','Antibióticos de uso preventivo'],answer:1,exp:'Los polímeros (como poliacrilamidas catiónicas) aglutinan partículas finas en flóculos más grandes, mejorando la eficiencia de decantadores y centrífugas en la planta de riles.'},
       {q:'¿Cuál es el objetivo principal de la filtración mecánica en RAS?',opts:['Eliminar directamente bacterias del agua','Remover sólidos en suspensión para proteger el biofiltro, mantener la eficiencia UV y mejorar la calidad del agua','Solo mejorar la apariencia del agua','Reducir la temperatura del sistema'],answer:1,exp:'La filtración mecánica es el primer paso del tratamiento en RAS. Al remover SS protege el biofiltro, maximiza la eficiencia UV y cuida la salud branquial de los peces.'},
-      {q:'¿Cómo afecta un cambio brusco de alimentación al biofiltro?',opts:['No tiene ningún efecto','Las variaciones de substrato (NH₄⁺) tienen repercusiones detectables en el NO₂⁻ ≈2–3 días después','El biofiltro reacciona en segundos','Solo afecta si el ayuno dura más de un mes'],answer:1,exp:'El biofiltro adapta su biomasa microbiana al substrato disponible. Cambios bruscos en alimentación provocan desequilibrios detectables 2–3 días después en los niveles de NO₂⁻.'}
+      {q:'¿Cómo afecta un cambio brusco de alimentación al biofiltro?',opts:['No tiene ningún efecto','Las variaciones de substrato (NH₄⁺) tienen repercusiones detectables en el NO₂⁻ ≈2–3 días después','El biofiltro reacciona en segundos','Solo afecta si el ayuno dura más de un mes'],answer:1,exp:'El biofiltro adapta su biomasa microbiana al substrato disponible. Cambios bruscos en alimentación provocan desequilibrios detectables 2–3 días después en los niveles de NO₂⁻.'},
+      {q:'¿Qué son las AOB (Ammonia Oxidizing Bacteria) y cuál es su función?',opts:['Bacterias que producen alimento para los peces','Bacterias nitrificantes (principalmente Nitrosomonas) que convierten NH₃/NH₄⁺ en NO₂⁻ en la primera etapa de la nitrificación','Bacterias que eliminan nitratos','Bacterias heterótrofas que degradan materia orgánica'],answer:1,exp:'Las AOB (principalmente Nitrosomonas) realizan la primera etapa de la nitrificación: NH₄⁺ → NO₂⁻. Requieren O₂ y son sensibles a cambios de pH, temperatura y sustancias tóxicas.'},
+      {q:'¿Qué son las NOB (Nitrite Oxidizing Bacteria) y cuál es su función?',opts:['Bacterias anaeróbicas que consumen nitratos','Bacterias nitrificantes (principalmente Nitrobacter/Nitrospira) que convierten NO₂⁻ en NO₃⁻ en la segunda etapa','Bacterias que fijan el nitrógeno del aire','Bacterias patógenas del salmón'],answer:1,exp:'Las NOB (Nitrobacter, Nitrospira) realizan la segunda etapa: NO₂⁻ → NO₃⁻. Viven más profundo en el biofilm que las AOB, aprovechando el NO₂⁻ producido por estas.'},
+      {q:'¿Qué tipo de biofiltro usa biomedio en suspensión (carriers plásticos)?',opts:['Biofiltro Trickling','MBBR (Moving Bed Biofilm Reactor)','Biofiltro de arena','Biofiltro de grava'],answer:1,exp:'El MBBR usa elementos plásticos (carriers) en suspensión constante. Las bacterias nitrificantes colonizan su superficie. Ofrece alta área de biofilm por unidad de volumen.'},
+      {q:'¿Por qué el O₂ es limitante para la nitrificación en el biofiltro?',opts:['El O₂ no es necesario para la nitrificación','La nitrificación es un proceso aeróbico que consume O₂; bajo 4 mg/L la difusión al biofilm es insuficiente','El O₂ daña las bacterias nitrificantes','Solo el pH es limitante'],answer:1,exp:'La nitrificación es estrictamente aeróbica. Las bacterias nitrificantes del biofilm necesitan O₂ que llega por difusión. Bajo 4 mg/L la nitrificación cae significativamente.'},
+      {q:'¿Cuál es la diferencia entre biofiltro Trickling y MBBR?',opts:['Son tecnológicamente idénticos','Trickling tiene biomedio fijo con agua pasando sobre él; MBBR tiene biomedio en suspensión en el agua','Trickling solo funciona con agua de mar','MBBR no usa bacterias'],answer:1,exp:'Trickling: agua llueve sobre biomedio fijo (200 m²/m³). MBBR: biomedio plástico flota y se agita en agua (700 m²/m³). El MBBR tiene mayor superficie específica y es más eficiente por volumen.'},
+      {q:'¿Qué indica un aumento súbito del NO₂⁻ en el sistema RAS?',opts:['Que el sistema está funcionando perfectamente','Posible desequilibrio del biofiltro: sobrecarga de NH₄⁺, bajo O₂, cambio brusco de pH o efecto de tratamiento','Que los peces crecen rápidamente','Que hay exceso de agua fresca'],answer:1,exp:'Un pico de NO₂⁻ indica que las NOB no están convirtiendo el NO₂⁻ producido por las AOB, generando acumulación tóxica. Requiere diagnóstico urgente.'},
+      {q:'¿Cuál es el pH óptimo para la actividad de las bacterias nitrificantes?',opts:['4.0–5.5','6.5–7.5','8.5–9.0','10.0–11.0'],answer:1,exp:'Las bacterias nitrificantes son más activas entre pH 6.5–7.5. Fuera de este rango (especialmente bajo 6.0 o sobre 8.0) su actividad disminuye drásticamente.'},
+      {q:'¿Por qué se debe mantener la temperatura del biofiltro estable?',opts:['La temperatura no afecta a las bacterias','Las bacterias nitrificantes son sensibles a cambios bruscos de temperatura; caídas abruptas reducen la nitrificación','La temperatura solo afecta a los peces, no al biofiltro','Temperaturas altas siempre mejoran la nitrificación'],answer:1,exp:'Las bacterias nitrificantes tienen una temperatura óptima (12-20°C). Los cambios bruscos reducen su actividad. La temperatura del biofiltro debe seguir la del sistema de cultivo.'},
+      {q:'¿Cuántos días mínimos tarda la maduración completa de un biofiltro nuevo en RAS?',opts:['1-2 días','5-7 días','4-8 semanas','1-2 años'],answer:2,exp:'La maduración completa de un biofiltro toma 4-8 semanas: 7-10 días para biofilm visible, 2-3 semanas para actividad nitrificante medible y 4-8 semanas para nitrificación estable y completa.'},
+      {q:'¿Cuál es el compuesto que se usa para simular la carga de amonio durante la maduración del biofiltro?',opts:['Nitrato de sodio (NaNO₃)','Bicarbonato de sodio (NaHCO₃)','Cloruro de amonio (NH₄Cl)','Hipoclorito de sodio (NaOCl)'],answer:2,exp:'El cloruro de amonio (NH₄Cl) aporta NH₄⁺ al sistema simulando la excreción de los peces. Se usa junto a alimento molido para suministrar el substrato necesario a las bacterias nitrificantes.'}
     ]},
   { id:'tratamiento-agua', level:2, icon:'⚗️', title:'Tratamiento de Agua',
     desc:'Sistemas UV, desgasificación de CO₂, ozonización, control de pH y alcalinidad.', levelTag:'n2', levelLabel:'Nivel 2 · Avanzado', xp:200,
@@ -1040,7 +1072,17 @@ const MODULES = [
       {q:'¿Cuánta alcalinidad se consume al nitrificar 1 g de N-amoniaco?',opts:['1 g CaCO₃','3 g CaCO₃','7.14 g CaCO₃','14 g CaCO₃'],answer:2,exp:'La nitrificación completa de 1 g de N-NH₄⁺ consume ≈7.14 g de alcalinidad como CaCO₃. En RAS productivo se repone diariamente.'},
       {q:'¿Cuál es la relación Cl⁻/NO₂⁻N para proteger a los peces del nitrito?',opts:['>10','>100','<5','=1'],answer:1,exp:'Manteniendo Cl⁻/NO₂⁻N >100, el ion cloruro bloquea competitivamente la absorción branquial de NO₂⁻, protegiendo a los peces.'},
       {q:'¿Por qué las NOB (Nitrobacter) se ubican más profundo en el biofilm que las AOB?',opts:['Son más grandes','Las NOB usan NO₂⁻ producido por las AOB en las capas externas y requieren menos O₂','Son menos abundantes','Ninguna de las anteriores'],answer:1,exp:'Las AOB (Nitrosomonas) colonizan las capas externas. Las NOB viven más profundo, aprovechando el NO₂⁻ producido por las AOB.'},
-      {q:'¿Cómo se mantiene la alcalinidad adecuada en RAS?',opts:['Cambiando toda el agua diariamente','Dosificando NaHCO₃ o Ca(OH)₂ según la tasa de nitrificación; mantener >1 mmol/L (45 mg CaCO₃/L)','Con algas en el biofiltro','Con calefactores eléctricos'],answer:1,exp:'La nitrificación consume alcalinidad continuamente. La dosificación de NaHCO₃ o Ca(OH)₂ repone la alcalinidad y estabiliza el pH del sistema.'}
+      {q:'¿Cómo se mantiene la alcalinidad adecuada en RAS?',opts:['Cambiando toda el agua diariamente','Dosificando NaHCO₃ o Ca(OH)₂ según la tasa de nitrificación; mantener >1 mmol/L (45 mg CaCO₃/L)','Con algas en el biofiltro','Con calefactores eléctricos'],answer:1,exp:'La nitrificación consume alcalinidad continuamente. La dosificación de NaHCO₃ o Ca(OH)₂ repone la alcalinidad y estabiliza el pH del sistema.'},
+      {q:'¿Cuál es la longitud de onda del UV-C que se usa para desinfección en RAS?',opts:['100 nm','254 nm','400 nm','700 nm'],answer:1,exp:'La longitud de onda UV-C de 254 nm es la más efectiva para la desinfección. Coincide con el máximo de absorción del ADN de los microorganismos, dañando su capacidad reproductiva.'},
+      {q:'¿Qué es la dosis UV y cómo se mide?',opts:['Temperatura del agua en el UV','Producto de la irradiancia UV-C (mW/cm²) × tiempo de exposición (s), en mJ/cm²','Número de pases del agua por el UV','Voltaje de las lámparas UV'],answer:1,exp:'La dosis UV (mJ/cm²) = irradiancia × tiempo. Para desinfección en acuicultura se requieren dosis mínimas de 25–40 mJ/cm² para inactivar patógenos clave como ISAv.'},
+      {q:'¿Por qué el rendimiento del UV cae con el tiempo de uso?',opts:['Las lámparas ganan potencia con el uso','Las lámparas UV-C pierden intensidad gradualmente; tras 8.000–12.000 horas la dosis efectiva puede caer bajo el mínimo requerido','El UV no se degrada nunca','Solo cambia el color de la luz, no la efectividad'],answer:1,exp:'Las lámparas UV-C pierden intensidad gradualmente. Se deben reemplazar según horas de operación (8.000–12.000 h) o cuando la intensidad cae bajo el umbral mínimo para la dosis objetivo.'},
+      {q:'¿Qué gas tóxico se genera en el desgasificador si no funciona correctamente?',opts:['El desgasificador no genera gases tóxicos','El CO₂ se acumula si el desgasificador falla, bajando el pH y causando hipercapnia','H₂S se genera siempre en el desgasificador','Solo genera O₂ puro'],answer:1,exp:'Si el desgasificador falla (ventiladores apagados, obstrucción), el CO₂ no se elimina, se acumula en el agua, baja el pH y causa hipercapnia en los peces.'},
+      {q:'¿Para qué sirve el intercambiador de calor en el sistema RAS?',opts:['Enfriar los motores de las bombas','Controlar la temperatura del agua del sistema usando agua fría o caliente para ajustar al valor objetivo','Para calentar el alimento','Para separar el agua salada del agua dulce'],answer:1,exp:'El intercambiador de calor transfiere energía térmica entre el agua del sistema y un fluido de temperatura controlada (agua de mar o pozo), regulando la temperatura del cultivo.'},
+      {q:'¿Qué consecuencia tiene un pH bajo (< 6.5) en el sistema de tratamiento de agua?',opts:['Mejora la nitrificación','La actividad nitrificante cae significativamente; las bacterias AOB y NOB son inhibidas; el O₂ se vuelve más soluble','No tiene efectos sobre la nitrificación','Solo afecta al O₂ disuelto'],answer:1,exp:'Bajo pH 6.5, las bacterias nitrificantes (AOB y NOB) reducen su actividad metabólica. El TAN y NO₂⁻ aumentan, la alcalinidad puede seguir cayendo en espiral de retroalimentación negativa.'},
+      {q:'¿Cuál es la concentración máxima de ozono (O₃) residual permitida en RAS?',opts:['Sin límite, el O₃ es beneficioso','0.01 mg/L es el límite superior; sobre ese nivel es tóxico para peces y bacterias nitrificantes','10 mg/L es el límite seguro','El O₃ no se usa en RAS'],answer:1,exp:'El ozono es muy tóxico sobre 0.01 mg/L. Si se usa en RAS (oxidación de materia orgánica disuelta), debe destruirse completamente antes de retornar al sistema. Se usa una cámara de contacto y un destructor de O₃.'},
+      {q:'¿Cuál es la función de la cal (Ca(OH)₂) en el tratamiento de agua RAS?',opts:['Matar bacterias','Reponer alcalinidad, subir el pH y aportar Ca²⁺ para dureza del agua','Eliminar SS del agua','Solo se usa en la planta de lodos'],answer:1,exp:'Ca(OH)₂ (cal hidratada) eleva el pH, aporta alcalinidad (como CaCO₃) y calcio para dureza. Es una alternativa económica al NaHCO₃, especialmente para correcciones más rápidas de pH.'},
+      {q:'¿Cómo funciona el control automático de pH en el sistema RAS?',opts:['El pH se ajusta manualmente dos veces al día','Un sensor de pH monitorea en continuo y activa dosificadores automáticos de base o ácido para mantener el setpoint','El pH no se controla en RAS','Solo se controla el pH en el biofiltro'],answer:1,exp:'El control automático de pH usa sensores en continuo que comandan dosificadores. Cuando el pH cae (nitrificación), activa la dosificación de NaHCO₃ o Ca(OH)₂ para mantenerlo en el rango 6.8–7.5.'},
+      {q:'¿Qué es la calibración de sensores y por qué es importante?',opts:['Es solo un proceso estético del equipo','Ajustar el sensor a patrones de referencia conocidos para asegurar mediciones precisas y confiables','Solo se calibra el sensor de temperatura','La calibración solo la hace el fabricante'],answer:1,exp:'La calibración verifica y ajusta la lectura del sensor contra patrones conocidos (buffers de pH, solución de O₂ saturado). Sin calibración regular, los valores pueden estar fuera de rango y llevar a decisiones incorrectas.'}
     ]},
   { id:'winter', level:3, icon:'❄️', title:'Unidad Winter — Biofiltración y Control',
     desc:'Operación invernal de las unidades Billund: biofiltros, bacterias nitrificantes y control avanzado de parámetros.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:200,
@@ -1054,7 +1096,28 @@ const MODULES = [
       {q:'¿Cómo afecta un ayuno por vacunación a los niveles de nitrito?',opts:['Los niveles de nitrito bajan inmediatamente','Las variaciones en alimentación tienen repercusiones en NO₂⁻ ≈3 días después','No hay relación entre ayunos y nitrito','Los niveles siempre mejoran con ayunos'],answer:1,exp:'El biofiltro adapta su actividad al substrato disponible. Cambios bruscos en la alimentación provocan desequilibrios detectables 2–3 días después.'},
       {q:'¿Qué es el biofilm y cuál es su composición?',opts:['Solo bacterias en suspensión','Comunidad de bacterias fijadas al sustrato, en matriz de exopolisacáridos: 10% bacterias, 90% exopolisacáridos','Solo algas','Solo materia orgánica inerte'],answer:1,exp:'El biofilm es una biopelícula donde las bacterias se adhieren al biomedio rodeadas de exopolisacáridos que las protegen y facilitan la captura de sustratos.'},
       {q:'¿Qué ocurre con la nitrificación ante cambios bruscos de pH?',opts:['No se ve afectada','Cambios de 0.5–1 unidad de pH en minutos pueden inhibir fuertemente a las bacterias nitrificantes','Mejora la nitrificación','Solo afecta la temperatura'],answer:1,exp:'Las bacterias nitrificantes son muy sensibles a cambios rápidos de pH. Una variación brusca de 0.5–1 pH puede reducir la actividad nitrificante drásticamente.'},
-      {q:'¿Cuál es la superficie específica del biomedio RK en biofiltros MBBR?',opts:['50 m²/m³','200 m²/m³','700 m²/m³','1500 m²/m³'],answer:2,exp:'El biomedio RK (y similares K3, K5) ofrece ≈700 m²/m³ de superficie protegida para el biofilm nitrificante, muy superior al Trickling.'}
+      {q:'¿Cuál es la superficie específica del biomedio RK en biofiltros MBBR?',opts:['50 m²/m³','200 m²/m³','700 m²/m³','1500 m²/m³'],answer:2,exp:'El biomedio RK (y similares K3, K5) ofrece ≈700 m²/m³ de superficie protegida para el biofilm nitrificante, muy superior al Trickling.'},
+      {q:'¿Cuántos estanques tiene la unidad Winter y cuál es su tamaño individual?',opts:['8 estanques de 275 m³ cada uno','4 estanques de 500 m³ cada uno','6 estanques de 300 m³ cada uno','10 estanques de 150 m³ cada uno'],answer:0,exp:'La unidad Winter posee 8 estanques de cultivo de 275 m³ cada uno, dando un volumen total de estanques de 2.200 m³.'},
+      {q:'¿Cuál es la densidad máxima de cultivo admitida en la unidad Winter para peces de 80 g?',opts:['80 kg/m³','60 kg/m³','40 kg/m³','20 kg/m³'],answer:2,exp:'Según los criterios de dimensionamiento del sistema Winter, la densidad máxima a 80 g es de 40 kg/m³.'},
+      {q:'¿Cuál es la temperatura de cultivo de diseño del sistema Winter?',opts:['10°C','12°C','16°C','14°C'],answer:3,exp:'El sistema Winter está dimensionado para una temperatura de cultivo de 14°C. Este valor es crítico para el dimensionamiento de la biofiltración y la alimentación.'},
+      {q:'¿Cuál es el flujo total del sistema Winter?',opts:['1.000 m³/h','8.800 m³/h','4.950 m³/h','2.200 m³/h'],answer:2,exp:'El flujo total del sistema Winter es de 4.950 m³/h, resultado de los 8 estanques × 275 m³ × 2,25 V/h de tasa de recambio.'},
+      {q:'¿Qué consecuencia tiene apagar los ventiladores del desgasificador en el sistema Winter?',opts:['El pH sube, mejorando la nitrificación','Aumenta la temperatura del agua','El pH desciende, afectando la calidad del agua del sistema','No tiene consecuencias sobre el sistema'],answer:2,exp:'El manual indica explícitamente: si los ventiladores se encuentran apagados, provocará que el valor de pH descienda, lo que puede producir alteraciones en la calidad del agua del sistema.'},
+      {q:'¿Para qué sirve el filtro UV en el sistema Winter?',opts:['Aumentar el pH del agua','Eliminar sólidos en suspensión mayores a 60 µm','Desgasificar el CO₂ del agua','Reducir la carga bacteriana del agua antes de ingreso a estanques'],answer:3,exp:'El filtro UV (Atlantium EP 600-12) desinfecta el agua disminuyendo la carga microbiana. En Winter, el 16,6% del flujo total pasa por el UV.'},
+      {q:'¿Qué modelo de filtro tambor rotatorio (FTR) usa el sistema Winter?',opts:['Hydrotech HDF 2400','Hydrotech 2007-1AS','Grundfos NB 250-350','Kaeser BB89C'],answer:1,exp:'El sistema Winter usa el filtro Hydrotech 2007-1AS (2 unidades), con capacidad de diseño de Q=2.475 m³/h y malla de 60 µm.'},
+      {q:'¿En qué condición debe estar el selector de un equipo para que el PLC pueda controlarlo?',opts:['En posición "Local"','En posición "Remoto (REM)"','En posición "Manual"','En posición "0" (apagado)'],answer:1,exp:'Para el correcto funcionamiento de los lazos de control, todos los equipos deben estar con su selector en condición "REMOTO". En "Local" funcionan de forma ininterrumpida sin responder al PLC.'},
+      {q:'¿Qué indica el color rojo parpadeante en el display de alarmas del HMI?',opts:['Alarma resuelta — el sistema funciona normalmente','Alarma en curso que no ha sido silenciada aún','Alarma silenciada que espera resolución','Estado normal de operación'],answer:0,exp:'Cuando se genera una alarma, esta tiene un mensaje en rojo que parpadea hasta que se silencia. Después queda en amarillo esperando resolución. Verde significa resuelta.'},
+      {q:'¿Cuál es el rango de presión de trabajo recomendado en los conos de oxigenación Winter?',opts:['0,2–0,5 bar','0,8–1,0 bar','1,5–2,0 bar','2,5–3,0 bar'],answer:1,exp:'La presión máxima del cono de oxigenación es de 1,5 bar; la presión de trabajo debe estar en el rango de 0,8–1,0 bar para una transferencia eficiente de oxígeno.'},
+      {q:'¿Qué acción ejecuta el sensor capacitivo "Bajo" en el cono de oxigenación?',opts:['Abre la válvula proporcional al 100%','Silencia la alarma de nivel bajo','Envía una alerta al operario de nivel excesivo','Detiene el ingreso de oxígeno y genera una alarma'],answer:3,exp:'El sensor capacitivo "Bajo" detiene el ingreso de oxígeno en el cono y genera una alarma de nivel bajo para alertar al operador.'},
+      {q:'¿Cuál es el valor de N-NH₃ que activa alerta en el sistema Winter?',opts:['> 1,0 mg/L','0,0100–0,0125 mg/L','> 0,5 mg/L','< 0,001 mg/L'],answer:1,exp:'Según la tabla de semáforo del manual Winter, el valor de alerta para N-NH₃ es 0,0100–0,0125 mg/L y el valor crítico es >0,0125 mg/L.'},
+      {q:'¿Cuál es el rango de pH normal (recomendado) en el sistema Winter?',opts:['6,8–7,8','5,0–6,0','8,0–9,0','4,0–5,5'],answer:0,exp:'El pH recomendado en el sistema es 6,8–7,8. El rango de alerta es <6,8 o >7,8. Los valores críticos son <6,2 o >8,0.'},
+      {q:'¿Qué mide el sensor hidrostático instalado en los estanques de cultivo Winter?',opts:['Concentración de O₂','Temperatura del agua','Nivel de agua en tiempo real','Turbidez del agua'],answer:2,exp:'El sensor de nivel hidrostático mide en tiempo real el nivel de agua presente en el estanque, siendo el parámetro que controla la apertura de la válvula de ingreso.'},
+      {q:'¿Cuántas cámaras de biofiltro tiene el sistema Winter?',opts:['2 cámaras','4 cámaras','8 cámaras','6 cámaras'],answer:3,exp:'El sistema Winter tiene 6 cámaras de biofiltro, con un volumen unitario de 87,55 m³ cada una, dando un total de 525,31 m³ de volumen de biofiltración.'},
+      {q:'¿Qué hace la bomba de retrolavado del FTR en el sistema Winter?',opts:['Envía agua de los estanques al biofiltro','Impulsa agua a alta presión hacia los aspersores para limpiar la malla del FTR','Recircula agua del reservorio 2 al estanque de cabecera','Extrae lodo hacia la planta de tratamiento'],answer:1,exp:'La bomba de retrolavado (Grundfos CR 15-6, Q=13 m³/h) impulsa agua a presión hacia los aspersores del FTR para limpiar los paneles filtrantes, con un desfase de 3 segundos tras el arranque del filtro.'},
+      {q:'¿Cuál es el volumen total del sistema Winter incluyendo todos sus componentes?',opts:['3.249,68 m³','2.200 m³','5.755 m³','1.500 m³'],answer:0,exp:'El volumen total del sistema Winter es 3.249,68 m³, sumando estanques (2.200), reservorio 1 (113,4), biofiltros (525,31), desgasificador (186,69), estanque cabecera (49,5) y tuberías (174,78).'},
+      {q:'¿Cuántas bombas de cabecera tiene el sistema Winter para llevar agua al estanque de cabecera?',opts:['2 bombas','4 bombas','8 bombas','6 bombas'],answer:3,exp:'El sistema Winter cuenta con 6 bombas de cabecera Grundfos NB 250-350/366 (Q=825 m³/h cada una) que llevan el agua desde el reservorio 2 hacia el estanque de cabecera.'},
+      {q:'¿A qué temperatura debe mantenerse el agua durante la maduración de biofiltros en la unidad Winter?',opts:['6–8°C','10–12°C','14–16°C','18–20°C'],answer:2,exp:'Durante la maduración de biofiltros, se debe mantener la temperatura del agua lo más alta posible, entre 14 a 16°C, para favorecer el crecimiento de las bacterias nitrificantes.'},
+      {q:'¿Qué químico se utiliza en el sistema Winter para elevar el pH a 12 durante la limpieza?',opts:['Ácido clorhídrico (HCl)','Hidróxido de sodio (NaOH)','Ácido peracético','Hipoclorito de sodio'],answer:1,exp:'Durante la limpieza, se incorpora agua dulce y se aumenta el pH a 12 con hidróxido de sodio (NaOH), dejando recircular 12 horas. Luego se neutraliza a pH 7 y se enjuaga.'},
+      {q:'¿Qué niveles define el operador para el lavado semi-automático del biofiltro Winter?',opts:['Solo nivel de inicio y fin','Nivel de limpieza, nivel de enjuague, nivel de vaciado y nivel de rellenado','Solo nivel de vaciado','Solo nivel de rellenado y nivel de operación'],answer:1,exp:'En el lavado semi-automático del biofiltro se configuran 4 niveles: nivel de limpieza (primer vaciado donde inicia aireación), nivel de enjuague (posterior a aireación), nivel de vaciado (vaciado total) y nivel de rellenado.'}
     ]},
   { id:'summer', level:3, icon:'☀️', title:'Unidad Summer — Producción y Manejos',
     desc:'Operación estival de las unidades Billund: control térmico, biometría y gestión de alimentación.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:200,
@@ -1068,7 +1131,27 @@ const MODULES = [
       {q:'Al realizar un muestreo biométrico, ¿qué datos mínimos deben registrarse?',opts:['Solo el peso','Fecha, estanque, N° peces muestreados, peso, condición sanitaria y responsable','Solo la longitud','Solo la temperatura'],answer:1,exp:'Un muestreo biométrico requiere: fecha, unidad, estanque, peso, N° peces, peso promedio, factor K, observaciones sanitarias y responsable.'},
       {q:'¿Qué indica el Factor de Condición K de Fulton?',opts:['Cantidad de O₂ en sangre','El estado de robustez del pez; K bajo indica peces flacos o con problemas','La tasa de crecimiento','El estrés en sangre'],answer:1,exp:'K = (Peso/Longitud³) × 100. K bajo (<1.0 en salmón Atlántico) indica peces delgados: posible enfermedad, subnutrición o mala calidad de agua.'},
       {q:'¿Cuándo se activa el protocolo de turno de emergencia?',opts:['Solo los fines de semana','Ante falla de equipos críticos, mortalidad masiva, cortes de luz o alerta sanitaria','Solo en época de cosecha','Cuando el jefe está de vacaciones'],answer:1,exp:'El protocolo de emergencia se activa ante eventos críticos: pérdida de oxígeno, falla de bombas principales, corte de energía, mortalidad anormal o alerta de enfermedad.'},
-      {q:'¿Qué es la densidad de carga y cuál es el límite en RAS avanzado?',opts:['Kg alimento/día; máximo 1 kg/m³','Kg peces por m³ de agua; en RAS avanzado se puede superar 80-100 kg/m³ con buena gestión','N° peces por m² de superficie','Nivel de ruido; máximo 60 dB'],answer:1,exp:'Densidad de carga = kg peces / m³. En RAS Billund se puede trabajar a 60-100 kg/m³ con agua de alta calidad. Sobre el límite hay estrés y enfermedades.'}
+      {q:'¿Qué es la densidad de carga y cuál es el límite en RAS avanzado?',opts:['Kg alimento/día; máximo 1 kg/m³','Kg peces por m³ de agua; en RAS avanzado se puede superar 80-100 kg/m³ con buena gestión','N° peces por m² de superficie','Nivel de ruido; máximo 60 dB'],answer:1,exp:'Densidad de carga = kg peces / m³. En RAS Billund se puede trabajar a 60-100 kg/m³ con agua de alta calidad. Sobre el límite hay estrés y enfermedades.'},
+      {q:'¿Cuántos estanques tiene la unidad Summer y cuál es su tamaño individual?',opts:['8 estanques de 500 m³ cada uno','4 estanques de 275 m³ cada uno','6 estanques de 400 m³ cada uno','8 estanques de 275 m³ cada uno'],answer:0,exp:'La unidad Summer posee 8 estanques de cultivo de 500 m³ cada uno, dando un volumen total de estanques de 4.000 m³, significativamente mayor que la Winter (275 m³ por estanque).'},
+      {q:'¿En qué se diferencia el tamaño del estanque de la unidad Summer respecto a la Winter?',opts:['Son iguales','La Summer tiene estanques más pequeños (200 m³)','La Summer tiene estanques el doble de grandes (500 m³ vs 275 m³ en Winter)','La Summer solo tiene 4 estanques'],answer:2,exp:'Los estanques Summer tienen 500 m³ vs 275 m³ en Winter. Esto hace que el sistema Summer tenga mayor capacidad productiva.'},
+      {q:'¿Cuántos filtros tambor rotatorio (FTR) tiene el sistema Summer?',opts:['1','2','3','4'],answer:2,exp:'El sistema Summer tiene 3 filtros FTR Hydrotech 2007-1AS, uno más que el sistema Winter que tiene 2, dada la mayor carga hidráulica del Summer.'},
+      {q:'¿Cuál es la densidad máxima de cultivo admitida en la unidad Summer para peces de 150 g?',opts:['30 kg/m³','50 kg/m³','80 kg/m³','100 kg/m³'],answer:1,exp:'Según los criterios de dimensionamiento, la densidad máxima a 150 g en el sistema Summer es 50 kg/m³, mayor que la Winter (40 kg/m³ a 80 g).'},
+      {q:'¿Qué sistema de oxigenación usa la unidad Summer a diferencia de la unidad Winter?',opts:['Sistema Venturi en Summer vs conos de oxigenación en Winter','Cámaras de oxigenación en Summer vs Venturi en Winter','Ambas usan conos de oxigenación idénticos','Ambas usan sistema Venturi idéntico'],answer:0,exp:'El sistema Summer usa sistema Venturi para inyección de oxígeno controlada (por gravedad), mientras que la Winter usa conos de oxigenación de fibra de vidrio con bombas de presión.'},
+      {q:'¿Cuántos ventiladores de vacío tiene el desgasificador del sistema Summer?',opts:['2 ventiladores','4 ventiladores','6 ventiladores','8 ventiladores'],answer:2,exp:'El sistema Summer tiene 6 ventiladores de vacío Sodeca CAS-1250-2T-15/A IE3 en el desgasificador, mientras el Winter tiene 4 ventiladores convencionales.'},
+      {q:'¿Cuál es el volumen total del sistema Summer incluyendo todos sus componentes?',opts:['3.249,68 m³','2.200 m³','5.755 m³','4.000 m³'],answer:2,exp:'El volumen total del sistema Summer es 5.755 m³ (estanques 4.000 + reservorio 222 + biofiltros 726 + desgasificador 312 + estanque cabecera 81 + tuberías 412), mayor que el Winter con 3.249 m³.'},
+      {q:'¿Cuál es la salinidad máxima admisible en el sistema Summer?',opts:['5 g/L','15 g/L','30 g/L','0 g/L (solo agua dulce)'],answer:2,exp:'La salinidad máxima del sistema Summer es 30 g/L (igual a la del agua de mar). La unidad Winter admite solo 5 g/L como máximo.'},
+      {q:'¿Qué fracción del flujo total pasa por el filtro UV en el sistema Summer?',opts:['El 17% del flujo total','El 50% del flujo total','El 100% del flujo total','El 5% del flujo total'],answer:0,exp:'En el sistema Summer el 17% del flujo total dirigido hacia el estanque de cabecera pasa por el filtro UV Atlantium EP 600-2 para desinfección.'},
+      {q:'¿Qué es el "punto de seteo" en el HMI del control de estanque Summer?',opts:['La temperatura objetivo de alarma','El volumen diario de alimento','El pH objetivo de trabajo','El nivel de agua objetivo que el sistema debe mantener en el estanque'],answer:3,exp:'El "punto de seteo" es el nivel de agua objetivo que el operador ingresa en el HMI. El sistema mantiene ese nivel automáticamente controlando la apertura de la válvula Auma de ingreso.'},
+      {q:'¿Qué ocurre con los sólidos en suspensión si el FTR está en mantención y no puede filtrar?',opts:['Se eliminan automáticamente al biofiltro UV','Los sólidos son conducidos directamente hacia el desgasificador y el resto del sistema','El sistema se detiene automáticamente','Los sólidos precipitan en el reservorio 1'],answer:1,exp:'Si el FTR está en mantenimiento, los sólidos en suspensión son conducidos directamente hacia el filtro desgasificador y al resto del sistema, afectando la calidad del agua del biofiltro.'},
+      {q:'¿Qué modelo de soplador de biofiltro usa el sistema Summer?',opts:['Kaeser BB89C','Grundfos NB 125-200','Kaeser CB 131C','Sodeca HCT/MAR 904T4'],answer:2,exp:'El sistema Summer usa el soplador Kaeser CB 131C (Q=640 m³/h, H=450 mbar, 15 kW), mayor que el Kaeser BB89C del sistema Winter (11 kW), acorde al mayor volumen del sistema.'},
+      {q:'¿Qué indica una alarma sonora y visual en el sistema Summer?',opts:['Que el sistema está operando en óptimas condiciones','Que un equipo está en mantenimiento programado','Que alguna variable está fuera de los parámetros configurados','Que se debe agregar más alimento'],answer:2,exp:'Las variables con nivel alto o bajo (temperatura, O₂, pH, etc.) despliegan una alarma sonora y de luz cuando superan los valores configurados, alertando al operador sobre anomalías del sistema.'},
+      {q:'¿Cuántos segundos de retardo existe entre el arranque de los FTR y la activación de la bomba de retrolavado?',opts:['1 segundo','5 segundos','10 segundos','3 segundos'],answer:3,exp:'La bomba de retrolavado del FTR se activa con un desfase de 3 segundos tras la activación del FTR, y se detiene con el mismo retardo cuando el FTR para.'},
+      {q:'¿Cuál es la capacidad de alimentación total del sistema Summer a 14°C?',opts:['1.760 kg/día','2.165 kg/día','3.000 kg/día','1.000 kg/día'],answer:1,exp:'La capacidad de alimentación total del sistema Summer a 14°C es 2.165 kg/día, mayor que el sistema Winter (1.760 kg/día), acorde a su mayor biomasa de peces.'},
+      {q:'¿Qué parámetros puede configurar el operador para el control automático de oxígeno en el HMI?',opts:['Solo el encendido y apagado manual','Punto de seteo, histéresis, valor de alarma alta y valor de alarma baja','Solo temperatura objetivo','Solo el caudal de bombeo'],answer:1,exp:'El operador puede configurar: punto de seteo (O₂ objetivo), histéresis (diferencia para activar/detener), valor de alarma alta y valor de alarma baja que activa el O₂ de emergencia.'},
+      {q:'¿Para qué sirve la flauta de ingreso de agua en los estanques Summer?',opts:['Para airear el agua mediante burbujeo fino','Para medir el O₂ disuelto en tiempo real','Para mantener el nivel de agua constante','Para generar corriente circular autolimpiante y distribuir el agua uniformemente'],answer:3,exp:'La flauta es una tubería vertical con múltiples perforaciones distribuidas uniformemente que genera una corriente circular autolimpiante, facilitando los recambios necesarios y el movimiento de fecas.'},
+      {q:'¿Cuál es el nivel de N-NO₂ en valor de alerta en el sistema Summer?',opts:['> 2 mg/L','< 0,1 mg/L','> 10 mg/L','0,5 mg/L (igual al valor crítico)'],answer:3,exp:'El valor de alerta para N-NO₂ en el sistema Summer es 0,5 mg/L (alerta = crítico en esta tabla). El valor normal recomendado es <0,5 mg/L.'},
+      {q:'¿Qué indica el color verde en el display del biofiltro en el HMI del sistema Summer?',opts:['El biofiltro necesita lavado urgente','El biofiltro está en valor de alerta','El biofiltro está limpio y en buen estado','El biofiltro está en mantenimiento programado'],answer:2,exp:'En el display HMI del biofiltro, el color verde indica que el biofiltro está limpio, el naranja es advertencia y el rojo indica que debe ser lavado.'},
+      {q:'¿Cuál es el orden correcto de la secuencia de lavado del biofiltro en el sistema Summer?',opts:['Vaciado → Enjuague → Aireación → Rellenado','Rellenado → Limpieza → Vaciado → Enjuague','Limpieza (vaciado + aireación) → Enjuague (segundo vaciado) → Vaciado total → Rellenado','Aireación → Rellenado → Limpieza → Vaciado'],answer:2,exp:'La secuencia correcta es: (1) nivel limpieza = primer vaciado + aireación, (2) nivel enjuague = segundo vaciado/enjuague post-aireación, (3) nivel vaciado = vaciado total, (4) nivel rellenado = relleno del biofiltro.'}
     ]},
   { id:'postsmolt', level:3, icon:'🐟', title:'Post Smolt — Producción y Cuidado',
     desc:'Manejo de la fase post smolt: smoltificación, adaptación, alimentación y monitoreo.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:150,
@@ -1093,7 +1176,17 @@ const MODULES = [
       {q:'¿Por qué el fósforo es relevante en la gestión de RAS?',opts:['No es relevante','El fósforo del alimento se excreta y está regulado por normativa ambiental (RCA)','El fósforo solo beneficia a las bacterias','Solo importa la concentración de nitratos'],answer:1,exp:'El fósforo es un nutriente eutrofizante limitado en la RCA del centro. Su remoción ocurre principalmente con los lodos generados en el sistema.'},
       {q:'¿Cómo se calcula el SGR (Tasa de Crecimiento Específico)?',opts:['Peso final / días de cultivo','SGR (%/día) = [(ln Pf − ln Pi) / días] × 100','Peso ganado / alimento consumido','N° peces × temperatura'],answer:1,exp:'El SGR calcula el crecimiento porcentual diario relativo al peso corporal. Un SGR de 1–2%/día es típico en smolt RAS de buena calidad.'},
       {q:'¿Cuál es el nivel de temperatura que genera estrés térmico significativo en salmónidos?',opts:['>10°C','>17°C','>5°C','La temperatura no afecta a los salmones'],answer:1,exp:'Sobre 17°C los salmónidos sufren estrés térmico: aumenta la susceptibilidad a SRS, se reduce el apetito y cae el FCR. El rango óptimo es 8–16°C.'},
-      {q:'¿Cuál es la concentración normal de O₂ (% saturación) en un sistema RAS operativo?',opts:['20–30%','70–100%','150–200%','10–20%'],answer:1,exp:'En RAS se trabaja con O₂ puro para mantener 70–100% de saturación (≈7–10 mg/L a 14°C), o incluso sobre-saturación controlada (100–120%).'}
+      {q:'¿Cuál es la concentración normal de O₂ (% saturación) en un sistema RAS operativo?',opts:['20–30%','70–100%','150–200%','10–20%'],answer:1,exp:'En RAS se trabaja con O₂ puro para mantener 70–100% de saturación (≈7–10 mg/L a 14°C), o incluso sobre-saturación controlada (100–120%).'},
+      {q:'¿Cuántos estanques y cuál es el volumen individual en el sistema Post Smolt de Los Arrayanes?',opts:['8 estanques de 275 m³','8 estanques de 500 m³','6 estanques de 1.250 m³','4 estanques de 2.000 m³'],answer:2,exp:'El sistema Post Smolt tiene 6 estanques de 1.250 m³ cada uno, dando un volumen total de estanques de 7.500 m³. Es el sistema de mayor tamaño de la piscicultura.'},
+      {q:'¿Cuál es la temperatura de cultivo del sistema Post Smolt de Los Arrayanes?',opts:['14°C','16°C','10°C','8°C'],answer:2,exp:'El sistema Post Smolt está dimensionado para una temperatura de cultivo de 10°C, inferior a Winter (14°C) y Summer (14°C), adecuado para smolts en adaptación al agua de mar.'},
+      {q:'¿Cuántas cámaras de biofiltro tiene el sistema Post Smolt?',opts:['6 cámaras','12 cámaras','18 cámaras','24 cámaras'],answer:2,exp:'El sistema Post Smolt tiene 18 cámaras de biofiltro (con volumen unitario de 101 m³), la mayor cantidad entre los sistemas de la piscicultura, acorde a su mayor flujo de 21.375 m³/h.'},
+      {q:'¿Cuál es el flujo total del sistema Post Smolt?',opts:['4.950 m³/h','8.800 m³/h','21.375 m³/h','1.000 m³/h'],answer:2,exp:'El flujo total del sistema Post Smolt es 21.375 m³/h (6 estanques × 1.250 m³ × 2.85 V/h), el mayor de los tres sistemas de la piscicultura.'},
+      {q:'¿Cuál es la densidad máxima de cultivo en el Post Smolt para peces de 300 g?',opts:['40 kg/m³','50 kg/m³','60 kg/m³','80 kg/m³'],answer:2,exp:'El sistema Post Smolt está dimensionado para una densidad máxima de 60 kg/m³ a 300 g. Esta alta densidad requiere óptima calidad de agua y manejo del O₂.'},
+      {q:'¿Qué es el "smolt challenge test" y para qué se usa?',opts:['Una prueba de natación para medir la condición física','Exposición a agua de mar (30-35 ppt) por 24h para evaluar si el salmón osmoregula correctamente y está listo para el mar','Una biometría de peso y talla','Una prueba de resistencia a enfermedades'],answer:1,exp:'El smolt challenge test verifica la preparación del smolt para el agua de mar. Si el Cl⁻ plasmático es <130 mmol/L después de la exposición, el pez osmoregula bien y puede ir al mar.'},
+      {q:'¿Cuál es la capacidad de alimentación total del sistema Post Smolt a 12°C?',opts:['1.760 kg/día','2.165 kg/día','7.425 kg/día','500 kg/día'],answer:2,exp:'La capacidad de alimentación del Post Smolt a 12°C es de 7.425 kg/día, significativamente mayor que Winter (1.760 kg/día) y Summer (2.165 kg/día), acorde a su enorme biomasa.'},
+      {q:'¿Cuántos FTR (filtros tambor rotatorio) tiene el sistema Post Smolt?',opts:['2','3','5','8'],answer:2,exp:'El sistema Post Smolt tiene 5 filtros FTR Hydrotech 2009 (malla 90 µm), acorde al mayor flujo hidráulico del sistema (21.375 m³/h).'},
+      {q:'¿Cuál es el volumen total del sistema Post Smolt incluyendo todos los componentes?',opts:['3.249 m³','5.755 m³','11.544 m³','20.000 m³'],answer:2,exp:'El volumen total del Post Smolt es 11.544 m³ (estanques 7.500 + Pre-sump 30 + Drumfilter sump 364 + biofiltros 1.818 + desgasificador 432 + cabecera 81 + tuberías 803).'},
+      {q:'¿Cuál es la salinidad máxima admisible en el sistema Post Smolt?',opts:['0 g/L (solo agua dulce)','5 g/L','30 g/L','50 g/L'],answer:2,exp:'La salinidad máxima del Post Smolt es 30 g/L, igual que el Summer. El sistema trabaja en agua dulce o mezcla según la etapa de smoltificación, con hasta 30 g/L de agua de mar.'}
     ]},
   { id:'planta-lodos', level:3, icon:'🏭', title:'Planta de Riles',
     desc:'Tratamiento de efluentes sólidos y líquidos, gestión de lodos, normativa ambiental y disposición final.', levelTag:'n3', levelLabel:'Nivel 3 · Especializado', xp:150,
@@ -1118,7 +1211,17 @@ const MODULES = [
       {q:'¿Qué nivel de SS se considera desfavorable en salmones?',opts:['<10 mg/L','10–30 mg/L','>80–100 mg/L','Los SS no causan estrés'],answer:2,exp:'Sobre 80–100 mg/L los SS causan daño branquial, reducen la eficiencia del UV y sobrecargan el biofiltro. El objetivo en RAS es <30 mg/L.'},
       {q:'¿Qué relación hay entre DQO y DBO en piscicultura RAS?',opts:['Son iguales','DQO ≈ doble de la DBO; mide también la fracción no biodegradable','DQO siempre es menor','DQO solo mide nitratos'],answer:1,exp:'La DQO incluye toda la materia oxidable (biodegradable y no biodegradable). En piscicultura DQO ≈ 2 × DBO.'},
       {q:'¿Qué indica un aumento repentino en la turbidez del efluente del drum filter?',opts:['Operación normal','Posible sobrealimentación, alimento deficiente, alta mortalidad o rotura de malla','El sistema mejoró su eficiencia','Los peces están en excelente estado'],answer:1,exp:'Un aumento brusco de sólidos es una señal de alerta: revisar alimentación, estado de la malla y mortalidad en los estanques.'},
-      {q:'¿Cómo protegen los SS a los patógenos de la radiación UV?',opts:['No los protegen','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV es inefectivo independientemente de los SS','Solo protegen bacterias, no virus'],answer:1,exp:'Los patógenos dentro o adheridos a partículas sólidas no reciben la dosis UV necesaria para inactivarse. Por eso se requiere filtración mecánica previa al UV.'}
+      {q:'¿Cómo protegen los SS a los patógenos de la radiación UV?',opts:['No los protegen','Las partículas absorben y dispersan la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV es inefectivo independientemente de los SS','Solo protegen bacterias, no virus'],answer:1,exp:'Los patógenos dentro o adheridos a partículas sólidas no reciben la dosis UV necesaria para inactivarse. Por eso se requiere filtración mecánica previa al UV.'},
+      {q:'¿Qué es la materia seca (% MS) en el contexto de la gestión de lodos?',opts:['La temperatura del lodo seco','El porcentaje de sólidos tras eliminar el agua; indica la eficiencia del deshidratado','El color del lodo deshidratado','El contenido de fósforo del lodo'],answer:1,exp:'El % MS indica qué fracción del lodo es material sólido (sin agua). Lodo fresco tiene <5% MS. Tras deshidratación se busca >15-20% MS para reducir volumen y facilitar el transporte.'},
+      {q:'¿Cuáles son los pasos para un espacio confinado en la planta de lodos?',opts:['Entrar directamente si hay necesidad urgente','Autorización de trabajo, detector de gases (H₂S, CH₄, O₂), arnés, comunicación continua y vigía externo','Solo usar mascarilla','Ventilar 5 minutos y entrar'],answer:1,exp:'Los espacios confinados (pozos, estanques de lodo) requieren: permiso de trabajo, monitoreo de gases (H₂S tóxico, CH₄ explosivo, O₂ bajo), arnés, comunicación y vigía. Es procedimiento crítico de seguridad.'},
+      {q:'¿Dónde se debe llevar el lodo según la normativa ambiental chilena?',opts:['A cualquier vertedero','A una empresa gestora de residuos autorizada o para uso como bioabono con Plan de Manejo aprobado por SERNAPESCA','Al mar directamente','A la parcela del centro sin tratamiento'],answer:1,exp:'Los lodos de piscicultura son residuos industriales regulados. Requieren empresa autorizada o Plan de Manejo aprobado por SERNAPESCA para su uso como bioabono en predios autorizados.'},
+      {q:'¿Con qué frecuencia se debe revisar la malla del drum filter para detectar roturas?',opts:['Solo cuando hay alerta de alta turbidez','Solo una vez al año','Diariamente como parte de la rutina de inspección, antes de cada turno','Solo cuando hay mortalidad'],answer:2,exp:'La inspección de la malla del drum filter debe ser diaria. Una rotura no detectada puede pasar sólidos al biofiltro, deteriorar la calidad del agua y ocultar el verdadero estado del sistema.'},
+      {q:'¿Qué ventaja tiene el uso de polímeros catiónicos en la gestión de lodos?',opts:['Desinfectan el lodo elimando patógenos','No tienen ventajas reales','Aglutinan partículas finas formando flóculos más grandes y densos, mejorando la separación sólido-líquido','Solo cambian el color del lodo'],answer:2,exp:'Los polímeros catiónicos (floculantes) neutralizan las cargas negativas de las partículas, haciendo que se agrupen en flóculos. Esto mejora la decantación y el rendimiento de la deshidratación.'},
+      {q:'¿Cuál es la diferencia entre aguas residuales del drum filter y las de retrolavado del biofiltro?',opts:['Son idénticas','Drum filter: sólidos gruesos y frescos; retrolavado biofiltro: sólidos más estabilizados con alto contenido de biomasa bacteriana','Solo difieren en el color','El drum filter no genera lodos'],answer:1,exp:'El drum filter genera lodos frescos con alta carga orgánica activa. El retrolavado del biofiltro produce lodos con bacterias nitrificantes y material más mineralizado, con distinta composición y tratamiento.'},
+      {q:'¿Qué gas produce la descomposición anaeróbica de los lodos?',opts:['Solo CO₂','H₂S (sulfuro de hidrógeno, tóxico) y CH₄ (metano, explosivo)','Solo O₂','Solo nitrógeno'],answer:1,exp:'Los lodos en condiciones anaeróbicas (pozos, estanques sin aireación) generan H₂S (muy tóxico, olor a huevo podrido) y CH₄ (explosivo). Por eso es obligatorio usar detector de gases en espacios confinados.'},
+      {q:'¿Qué documento debe acompañar el traslado de lodos a su destino final?',opts:['Ningún documento','Declaración de carga solo para transporte','Manifiesto de residuos sólidos y registros de volumen, origen, destino y empresa transportista','Solo la factura del servicio'],answer:2,exp:'Los residuos industriales (incluidos lodos de piscicultura) requieren un manifiesto de residuos que documenta origen, composición, cantidad, transporte y destino. Es requisito auditado por SERNAPESCA y MMA.'},
+      {q:'¿Cuál es el riesgo biológico del trabajo con lodos de piscicultura?',opts:['No hay riesgo biológico','Los lodos contienen agentes patógenos (bacterias, parásitos), material fecal y posibles microorganismos oportunistas para humanos','Solo hay riesgo de resbalones','El riesgo solo es para los peces, no para el personal'],answer:1,exp:'Los lodos de piscicultura contienen agentes patógenos (Aeromonas, Pseudomonas, parásitos), material fecal y potencialmente microorganismos zoonóticos. El EPP completo protege al personal de la exposición.'},
+      {q:'¿Cuál es el principal objetivo del tratamiento de lodos antes de su disposición final?',opts:['Cambiarles el color para que sean menos visibles','Reducir el volumen, estabilizar la materia orgánica y eliminar o reducir patógenos para cumplir con la normativa ambiental','Solo enfriarlos','Solo eliminar el olor'],answer:1,exp:'El tratamiento de lodos busca: reducir volumen (deshidratación), estabilizar la materia orgánica (evitar putrefacción) y reducir la carga patógena, cumpliendo con las exigencias de la normativa ambiental (MMA y SERNAPESCA).'}
     ]},
   { id:'equipos', level:4, icon:'⚙️', title:'Mantenimiento de Equipos',
     desc:'Operación, mantenimiento preventivo y troubleshooting de bombas, filtros HDF y sensores.', levelTag:'n4', levelLabel:'Nivel 4 · Asistente de Centro', xp:200,
@@ -1143,7 +1246,17 @@ const MODULES = [
       {q:'¿Por qué se debe controlar el espesor del biofilm?',opts:['Solo por estética','Un biofilm muy grueso genera zonas anaeróbicas internas que reducen la nitrificación','El espesor no importa','Para que el filtro sea más visible'],answer:1,exp:'Las capas internas del biofilm grueso quedan sin O₂, generando zonas anaeróbicas donde no ocurre nitrificación.'},
       {q:'¿Cuál es el rango de tamaño de partícula que filtra el Hydrotech HDF?',opts:['1–5 µm','40–100 µm','500–2000 µm','0.01–0.1 µm'],answer:1,exp:'Los HDF (Hydrotech Drum Filter) retienen partículas ≥40–100 µm. Son el primer filtro de sólidos en el tratamiento del agua de RAS.'},
       {q:'¿Cuál es la verificación de seguridad obligatoria antes de mantener tuberías a presión?',opts:['Solo ponerse guantes','LOTO: aislar, bloquear con candado, purgar presión y verificar presión cero con manómetro','Solo informar al jefe','Abrir la válvula más cercana'],answer:1,exp:'El procedimiento LOTO (Lockout-Tagout) es obligatorio para trabajar con sistemas presurizados. Protege de liberaciones accidentales de energía.'},
-      {q:'¿Cuándo deben cambiarse las lámparas UV para garantizar la desinfección?',opts:['Cada 10 años','Nunca, son de larga vida','Según horas de operación (8.000–12.000 h) o cuando la intensidad cae bajo el umbral mínimo','Solo cuando se ve la luz apagada'],answer:2,exp:'Las lámparas UV-C pierden intensidad con el uso. Cuando la irradiancia cae del mínimo requerido para la dosis objetivo, se deben reemplazar.'}
+      {q:'¿Cuándo deben cambiarse las lámparas UV para garantizar la desinfección?',opts:['Cada 10 años','Nunca, son de larga vida','Según horas de operación (8.000–12.000 h) o cuando la intensidad cae bajo el umbral mínimo','Solo cuando se ve la luz apagada'],answer:2,exp:'Las lámparas UV-C pierden intensidad con el uso. Cuando la irradiancia cae del mínimo requerido para la dosis objetivo, se deben reemplazar.'},
+      {q:'¿Cuál es el procedimiento correcto al detectar una bomba de retorno que no arranca?',opts:['Dejarla sin intervenir hasta la próxima mantención programada','Verificar selector en REMOTO, revisar fusibles/variador, descartar obstrucción mecánica y si no, escalar al técnico eléctrico','Solo apagarla y encenderla','Reemplazarla inmediatamente sin diagnóstico'],answer:1,exp:'El diagnóstico de una bomba que no arranca sigue una secuencia: (1) selector en REM; (2) alarma activa; (3) fusibles/breaker; (4) variador (si tiene); (5) bloqueo mecánico (impulsor). Escalar si no hay solución.'},
+      {q:'¿Con qué frecuencia se debe calibrar el sensor de oxígeno (OD) en RAS?',opts:['Una vez al año','Nunca si está en modo automático','Al menos semanalmente o según el manual del fabricante, usando solución saturada de O₂ o aire','Solo cuando da valores anormales'],answer:2,exp:'Los sensores de O₂ (ópticos o electroquímicos) derivan con el tiempo. La calibración semanal (o según fabricante) asegura lecturas precisas para la gestión del sistema.'},
+      {q:'¿Qué indica una vibración excesiva en una bomba centrífuga?',opts:['Operación normal de alta eficiencia','Posible cavitación, desgaste de rodamientos, desalineación del eje o desequilibrio del impulsor','Solo que la bomba trabaja al máximo','La bomba no necesita mantención'],answer:1,exp:'La vibración excesiva es síntoma de problemas mecánicos: cavitación (presión de entrada insuficiente), rodamientos gastados, eje desalineado o impulsor desequilibrado. Requiere diagnóstico y mantención inmediata.'},
+      {q:'¿Qué es la cavitación en bombas y qué daño causa?',opts:['Una técnica de limpieza','Formación y colapso de burbujas de vapor en el impulsor que erosiona el material y reduce el caudal','Un tipo especial de flujo eficiente','Solo afecta a las bombas de aguas residuales'],answer:1,exp:'La cavitación ocurre cuando la presión en el impulsor cae por debajo de la presión de vapor. Las burbujas colapsan violentamente, erosionando el impulsor y la carcasa, reduciendo caudal y causando vibración y ruido.'},
+      {q:'¿Cómo se verifica el correcto funcionamiento del drum filter Hydrotech?',opts:['Solo por inspección visual del color del agua','Revisando la presión diferencial, funcionamiento del retrolavado automático, integridad de la malla e inspección visual de turbidez post-filtro','Solo encendiéndolo y apagándolo','Únicamente durante auditorías externas'],answer:1,exp:'La verificación del HDF incluye: presión diferencial normal (indica malla no obstruida), retrolavado activándose correctamente, malla sin roturas e inspección visual del agua post-filtro (debe ser clara).'},
+      {q:'¿Qué mantenimiento preventivo requieren los sopladores del biofiltro?',opts:['Ninguno; son equipos de bajo mantenimiento','Revisión del nivel y calidad de aceite, limpieza de filtros de aire, verificación de vibraciones y temperatura, y lubricación según ciclo del fabricante','Solo lubricación anual','Solo reemplazo cuando se rompen'],answer:1,exp:'Los sopladores (Kaeser, etc.) requieren: revisión de aceite, limpieza de filtros de aire, verificación de temperaturas y vibraciones. El mantenimiento preventivo evita fallas que dejan al biofiltro sin aireación.'},
+      {q:'¿Qué indica una presión diferencial muy baja en el drum filter (menor a lo normal)?',opts:['La malla está muy limpia: situación ideal','Posible rotura de la malla: los sólidos pasan al biofiltro sin ser capturados','El caudal es muy alto','El drum filter funciona a máxima eficiencia'],answer:1,exp:'Una ΔP anormalmente baja puede indicar rotura de la malla: el agua pasa sin obstrucción pero los sólidos también, aumentando la carga sobre el biofiltro. Se debe inspeccionar la malla inmediatamente.'},
+      {q:'¿Qué revisión se debe hacer al sensor de pH antes de confiar en su lectura?',opts:['Ninguna; los sensores de pH nunca fallan','Verificar que el sensor esté limpio, sin biopelícula, y calibrado con buffers de pH 4, 7 y 10','Solo encender y apagar','Solo verificar que el cable esté conectado'],answer:1,exp:'Los sensores de pH deben estar limpios (sin biofilm), calibrados con dos buffers (mínimo pH 4 y 7, idealmente pH 7 y 10) y verificados contra muestras de referencia para asegurar lecturas confiables.'},
+      {q:'¿Cuál es el primer paso al responder a una alarma de nivel bajo en el estanque de cabecera?',opts:['Desactivar la alarma sin investigar','Verificar funcionamiento de bombas de cabecera, nivel del reservorio 2 y ausencia de obstrucciones en la tubería','Agregar agua directamente con una manguera','Esperar que el nivel se recupere solo'],answer:1,exp:'Nivel bajo en estanque de cabecera indica que el flujo de entrada es menor al de salida. Prioridad: verificar si las bombas de cabecera están funcionando, luego el nivel del reservorio 2 (fuente) y posibles obstrucciones.'},
+      {q:'¿Qué se debe verificar antes de poner en servicio una bomba que estuvo fuera de operación por más de una semana?',opts:['Nada especial; solo encenderla','Girar el eje a mano para verificar libertad de movimiento, purgar el aire, verificar sentido de giro, sellos sin fugas y operación sin vibración anormal antes de poner en servicio continuo','Solo verificar que tenga energía','Solo que el variador esté configurado'],answer:1,exp:'Una bomba que estuvo detenida puede tener sellos secos, el impulsor trabado o aire en la carcasa. El procedimiento de puesta en marcha previene daños: girar a mano, purgado de aire, verificar giro correcto y operación estable.'}
     ]},
   { id:'asistente', level:4, icon:'📋', title:'Gestión y Liderazgo — Asistente de Centro',
     desc:'Coordinación de turnos, reportes de producción, comunicación con equipo técnico y jefatura.', levelTag:'n4', levelLabel:'Nivel 4 · Asistente de Centro', xp:250,
@@ -1168,7 +1281,17 @@ const MODULES = [
       {q:'¿Qué papel juega la alcalinidad en el informe de turno?',opts:['No se registra','Es parámetro clave: su descenso indica actividad nitrificante y puede limitar el biofiltro si baja demasiado','Solo se registra mensualmente','Solo importa en sistemas de agua de mar'],answer:1,exp:'La alcalinidad es un indicador indirecto de la actividad del biofiltro. Su caída requiere dosificación correctiva inmediata para evitar desestabilización del pH.'},
       {q:'¿Cómo impacta el aumento de SS en la eficiencia del sistema UV?',opts:['Mejora la eficiencia UV','Las partículas SS absorben la radiación UV-C, reduciendo la dosis efectiva de desinfección','El UV no se ve afectado por SS','Aumenta la dosis UV sin efecto en peces'],answer:1,exp:'Los SS altos reducen la transmitancia UV. El asistente debe garantizar que el drum filter funcione correctamente para proteger la eficiencia de desinfección.'},
       {q:'¿Por qué el asistente de centro debe conocer los principios de biofiltración?',opts:['No es parte de sus funciones','Para interpretar variaciones de TAN y NO₂, coordinar manejos y tomar decisiones informadas','Solo el médico veterinario debe saberlo','Solo para explicar a visitas externas'],answer:1,exp:'El asistente toma decisiones operativas diarias que afectan directamente al biofiltro. Entender la biofiltración permite prevenir problemas y gestionar contingencias.'},
-      {q:'¿Qué porcentaje de reutilización del agua es típico en un RAS moderno?',opts:['50%','75%','Superior al 95–99%','100% sin ingreso de agua fresca'],answer:2,exp:'En RAS moderno el agua se reutiliza en más del 95–99%. Solo se repone el agua de purga de lodos y la evaporada, minimizando el impacto ambiental.'}
+      {q:'¿Qué porcentaje de reutilización del agua es típico en un RAS moderno?',opts:['50%','75%','Superior al 95–99%','100% sin ingreso de agua fresca'],answer:2,exp:'En RAS moderno el agua se reutiliza en más del 95–99%. Solo se repone el agua de purga de lodos y la evaporada, minimizando el impacto ambiental.'},
+      {q:'¿Cuál es la diferencia clave entre el rol de operario y el de asistente de centro en un RAS?',opts:['No hay diferencia; ambos hacen las mismas tareas','El asistente coordina el turno, toma decisiones tácticas, supervisa operarios y es el primer escalón técnico antes del jefe de producción','El asistente solo hace papeleo','El operario tiene más responsabilidades'],answer:1,exp:'El asistente de centro es el referente operativo del turno: interpreta datos, coordina manejos, supervisa al equipo de operarios y escala al jefe de producción cuando supera su nivel de decisión.'},
+      {q:'¿Qué información debe contener un traspaso de turno efectivo?',opts:['Solo la temperatura del agua','Estado de peces, parámetros de calidad de agua, alarmas activas/resueltas, equipos fuera de servicio, medicamentos activos, tareas pendientes y observaciones relevantes','Solo las alarmas del día','Solo el nombre de los operarios presentes'],answer:1,exp:'Un traspaso de turno completo transmite toda la información necesaria para que el equipo entrante continúe sin pérdida de información: parámetros, alertas, equipos, tratamientos y tareas pendientes.'},
+      {q:'¿Cómo debe reaccionar el asistente ante una mortalidad inusual en un estanque?',opts:['Retirar los peces muertos y no reportar hasta tener muchos','Registrar mortalidad, revisar parámetros de calidad de agua, activar protocolo de sanidad, tomar muestras y escalar al médico veterinario','Solo aumentar la aireación','Trasladar todos los peces a otro estanque inmediatamente'],answer:1,exp:'La mortalidad inusual requiere actuación inmediata: registro, diagnóstico de calidad de agua, notificación al médico veterinario y cumplimiento del protocolo sanitario del centro.'},
+      {q:'¿Por qué es importante que el asistente entienda el ciclo del nitrógeno en el biofiltro?',opts:['Solo para rendir examen','Para anticipar picos de TAN/NO₂, gestionar arrancadas del biofiltro y tomar decisiones sobre alimentación, densidad y manejos','No es necesario para su cargo','Solo el jefe de producción necesita entenderlo'],answer:1,exp:'El ciclo del nitrógeno determina la salud del sistema. Un asistente que lo entiende puede predecir problemas, como el pico de NO₂⁻ 3 días después de un ayuno, y actuar preventivamente.'},
+      {q:'¿Qué debe hacer el asistente si el PLC entra en modo "LOCAL" durante su turno?',opts:['No es un problema, dejarlo así','Registrar el evento, identificar qué equipo quedó en LOCAL, evaluar el impacto en la automatización y notificar al jefe de producción o técnico','Apagar y encender el panel','Reiniciar todo el sistema'],answer:1,exp:'El modo LOCAL en un equipo significa que opera sin control del PLC (ininterrumpidamente). Esto puede desactivar lazos de control automático. Debe registrarse, evaluarse el impacto y notificarse para su resolución.'},
+      {q:'¿Cuál es el criterio para escalar una situación del asistente al jefe de producción?',opts:['Escalar todo inmediatamente','Solo escalar si el jefe pregunta','Cuando el problema supera el nivel de decisión del asistente, involucra salud de los peces, equipos críticos o potencial impacto en producción','Nunca escalar, resolver todo en el turno'],answer:2,exp:'El asistente resuelve lo que está dentro de su ámbito. Si la situación afecta la salud de los peces, equipos críticos o supera su capacidad de decisión, debe escalar al jefe de producción sin demora.'},
+      {q:'¿Por qué se deben registrar los parámetros de calidad de agua aunque parezcan normales?',opts:['Es solo un requisito burocrático sin valor práctico','El registro histórico permite detectar tendencias, establecer valores basales del centro e identificar cambios graduales antes de que se vuelvan críticos','Solo se registran cuando hay problemas','Solo para inspecciones externas'],answer:1,exp:'Los registros históricos son la herramienta de diagnóstico más valiosa. Detectar una tendencia al alza de TAN antes de que sea crítica permite intervenir a tiempo y evitar pérdidas de producción.'},
+      {q:'¿Qué protocolo debe seguir el asistente al recibir un tratamiento veterinario con antibióticos?',opts:['Aplicar sin más información','Verificar la prescripción veterinaria, confirmar dosis y duración, registrar en libro de medicamentos, aplicar período de carencia y anotar en traspaso de turno','Solo anotarlo en el turno sin más','Aplicar solo si el operario de turno lo aprueba'],answer:1,exp:'Los tratamientos con antibióticos requieren receta veterinaria, registro en libro oficial, aplicación correcta de dosis y período de carencia. El asistente es responsable del cumplimiento del protocolo.'},
+      {q:'¿Qué impacto tiene la temperatura del agua en la tasa metabólica del salmón y en la dosificación de alimento?',opts:['La temperatura no afecta al metabolismo','A mayor temperatura, mayor tasa metabólica y mayor conversión alimenticia; la tabla de alimentación se ajusta según T°C del agua','La temperatura solo afecta en invierno','Solo afecta a temperaturas superiores a 20°C'],answer:1,exp:'El metabolismo del salmón es ectotérmico: sube con la temperatura. Las tablas de alimentación de Billund se ajustan a la T°C del agua. El asistente debe verificar que la dosificación corresponda a la temperatura real.'},
+      {q:'¿Cuáles son los indicadores que el asistente debe monitorear para evaluar el bienestar de los peces?',opts:['Solo la mortalidad acumulada','Comportamiento natatoria (superficie, letargia, natación anormal), apetito, coloración, mortalidad, erosiones en aletas y TGP','Solo el peso promedio','Solo el consumo de alimento diario'],answer:1,exp:'El bienestar de los peces se evalúa por múltiples indicadores: comportamiento en el agua, apetito, coloración, mortalidad diaria, TGP y estado físico de las aletas. El asistente observa todos estos durante el turno.'}
     ]}
 ];
 
@@ -1205,132 +1328,33 @@ const BADGES = [
 // ══════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════
-let currentUser  = null;   // { name, cargo, admin }
-// Set all logo images once DOM is ready
-let currentProgress = null; // progress object from localStorage
+let currentUser     = null;
+let currentProgress = null;
 let quiz = {};
-let _deleteTarget = null;
-let _cargoTarget  = null;
 
-// ── Firebase config & inicialización ─────────────────────
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDHf5liQ7yiyCPqJCtrHiG7-58I2kX3HHY",
-  authDomain: "piscicultura-arrayanes.firebaseapp.com",
-  databaseURL: "https://piscicultura-arrayanes-default-rtdb.firebaseio.com",
-  projectId: "piscicultura-arrayanes",
-  storageBucket: "piscicultura-arrayanes.firebasestorage.app",
-  messagingSenderId: "410704955985",
-  appId: "1:410704955985:web:0046dee62af29ecaa60670"
-};
-firebase.initializeApp(FIREBASE_CONFIG);
-const db = firebase.database();
-
-// ── Claves y caché de progreso ────────────────────────────
-// Formato localStorage legacy: la_prog_NOMBRE  /  la_cargo_NOMBRE
+// ── Progreso: solo localStorage, por dispositivo ──────────
 const DATA_VERSION = 2;
-const progressCache = {}; // caché en memoria: fbKey → objeto de progreso
 
-function getKey(name)  { return 'la_prog_' + name.trim().toUpperCase(); } // clave localStorage (migración)
-function fbKey(name)   { return name.trim().toUpperCase().replace(/\s+/g,'_').replace(/[^A-Z0-9_]/g,''); }
+function getKey(name) { return 'la_prog_' + name.trim().toUpperCase(); }
 
-// Lectura síncrona desde caché (requiere preloadUserProgress/preloadAllProgress previo)
 function loadProgress(name) {
-  const k = fbKey(name);
-  if (progressCache[k]) return progressCache[k];
-  // Fallback: localStorage (migración de datos antiguos)
   try {
     const raw = localStorage.getItem(getKey(name));
     if (!raw) return { modules: {}, _v: DATA_VERSION };
     const data = JSON.parse(raw);
     if (!data.modules) data.modules = {};
-    progressCache[k] = data;
     return data;
   } catch(e) { return { modules: {}, _v: DATA_VERSION }; }
 }
 
-// Escritura a Firebase + actualiza caché (async fire-and-forget)
 function saveProgress(name, prog) {
   prog._v = DATA_VERSION;
-  const k = fbKey(name);
-  progressCache[k] = prog;
-  db.ref('progreso/' + k).set(prog).catch(e => {
-    console.warn('Firebase save error, guardando en localStorage:', e);
-    localStorage.setItem(getKey(name), JSON.stringify(prog));
-  });
+  try { localStorage.setItem(getKey(name), JSON.stringify(prog)); } catch(e) { console.warn('localStorage save error:', e); }
 }
 
-// Borrar de Firebase + caché
 function deleteProgressData(name) {
-  const k = fbKey(name);
-  delete progressCache[k];
-  db.ref('progreso/' + k).remove().catch(e => console.warn('Firebase delete error:', e));
   localStorage.removeItem(getKey(name));
 }
-
-// Precarga el progreso de UN usuario desde Firebase (incluye migración desde localStorage)
-async function preloadUserProgress(name) {
-  const k = fbKey(name);
-  try {
-    const snap = await db.ref('progreso/' + k).get();
-    let data = snap.val();
-    if (!data) {
-      // Migración: revisar localStorage y subir a Firebase
-      try {
-        const raw = localStorage.getItem(getKey(name));
-        if (raw) {
-          data = JSON.parse(raw);
-          if (data) {
-            await db.ref('progreso/' + k).set(data);
-            localStorage.removeItem(getKey(name));
-          }
-        }
-      } catch(e) {}
-    }
-    data = data || { modules: {}, _v: DATA_VERSION };
-    if (!data.modules) data.modules = {};
-    progressCache[k] = data;
-  } catch(e) {
-    console.warn('Firebase preload error para', name, e);
-    progressCache[k] = progressCache[k] || { modules: {}, _v: DATA_VERSION };
-  }
-}
-
-// Precarga el progreso de TODOS los usuarios desde Firebase (para panel admin)
-async function preloadAllProgress() {
-  try {
-    const snap = await db.ref('progreso').get();
-    const all = snap.val() || {};
-    Object.entries(all).forEach(([k, v]) => {
-      if (v && typeof v === 'object') {
-        if (!v.modules) v.modules = {};
-        progressCache[k] = v;
-      }
-    });
-  } catch(e) {
-    console.warn('Firebase preloadAll error:', e);
-  }
-  // Migrar datos de localStorage que no estén en Firebase aún
-  USERS_DB.forEach(u => {
-    const k = fbKey(u.name);
-    if (!progressCache[k]) {
-      try {
-        const raw = localStorage.getItem(getKey(u.name));
-        if (raw) {
-          const data = JSON.parse(raw);
-          if (data) {
-            if (!data.modules) data.modules = {};
-            progressCache[k] = data;
-            db.ref('progreso/' + k).set(data).then(() => localStorage.removeItem(getKey(u.name))).catch(()=>{});
-          }
-        }
-      } catch(e) {}
-      if (!progressCache[k]) progressCache[k] = { modules: {}, _v: DATA_VERSION };
-    }
-  });
-}
-
-function getCargoOverride(name) { return localStorage.getItem('la_cargo_' + name.trim().toUpperCase()); }
-function setCargoOverride(name, cargo) { localStorage.setItem('la_cargo_' + name.trim().toUpperCase(), cargo); }
 
 function getUserRecord(name) {
   return USERS_DB.find(u => u.name.toUpperCase() === name.trim().toUpperCase());
@@ -1384,7 +1408,6 @@ async function restoreSession() {
     const record = getUserRecord(u.name);
     if (!record) { clearSession(); return false; }
     currentUser = { name: u.name, cargo: u.cargo, admin: u.admin };
-    await preloadUserProgress(u.name);
     currentProgress = loadProgress(u.name);
     showApp();
     return true;
@@ -1406,18 +1429,135 @@ function updateBackBtn() {
   if (backBtn) backBtn.style.display = (!hideOn.includes(id) && _prevPage) ? 'inline-block' : 'none';
 }
 
-// POPULATE LOGIN DROPDOWN
 // ══════════════════════════════════════════════════════════
-(async function populateDropdown() {
+// GESTIÓN DE PERSONAL (localStorage)
+// ══════════════════════════════════════════════════════════
+const LS_EXTRA   = 'la_users_extra';
+const LS_DELETED = 'la_users_deleted';
+
+function loadUserOverrides() {
+  try {
+    const extra   = JSON.parse(localStorage.getItem(LS_EXTRA)   || '[]');
+    const deleted = JSON.parse(localStorage.getItem(LS_DELETED) || '[]');
+    // Quitar eliminados
+    USERS_DB = USERS_DB.filter(u => !deleted.includes(u.name.trim().toUpperCase()));
+    // Agregar extras sin duplicados
+    const existing = new Set(USERS_DB.map(u => u.name.trim().toUpperCase()));
+    extra.forEach(u => { if (u && u.name && !existing.has(u.name.trim().toUpperCase())) USERS_DB.push(u); });
+  } catch(e) { console.warn('loadUserOverrides error:', e); }
+}
+
+async function hashRutRaw(raw) {
+  const normalized = raw.replace(/[^0-9kK]/gi,'').toUpperCase();
+  const enc = new TextEncoder();
+  const buf = await crypto.subtle.digest('SHA-256', enc.encode(normalized));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function populateLoginDropdown() {
   const sel = document.getElementById('login-name');
-  const sorted = [...USERS_DB].sort((a,b) => a.name.localeCompare(b.name));
-  sorted.forEach(u => {
+  sel.innerHTML = '<option value="">— Selecciona tu nombre —</option>';
+  [...USERS_DB].sort((a,b) => a.name.localeCompare(b.name)).forEach(u => {
     const opt = document.createElement('option');
     opt.value = u.name;
     opt.textContent = u.name;
     sel.appendChild(opt);
   });
-  // Try to restore previous session after populating dropdown
+}
+
+function renderUserMgmt() {
+  const extra   = JSON.parse(localStorage.getItem(LS_EXTRA)   || '[]');
+  const extraNames = new Set(extra.map(u => u.name.trim().toUpperCase()));
+  const sorted  = [...USERS_DB].sort((a,b) => a.name.localeCompare(b.name));
+
+  const rows = sorted.map(u => {
+    const isSelf = u.name === currentUser.name;
+    const isExtra = extraNames.has(u.name.trim().toUpperCase());
+    const delBtn = isSelf
+      ? `<span style="font-size:0.72rem;color:var(--text-muted);">tu cuenta</span>`
+      : `<button class="btn-del-u" onclick="doDeleteUser('${u.name.replace(/'/g,"\\'")}')">🗑 Eliminar</button>`;
+    return `<div class="user-row">
+      <span class="ur-name">${u.name}</span>
+      <span class="ur-cargo">${u.cargo}</span>
+      ${u.admin ? '<span class="ur-badge">Admin</span>' : ''}
+      ${isExtra ? '<span class="ur-new">Nuevo</span>' : ''}
+      ${delBtn}
+    </div>`;
+  }).join('');
+
+  document.getElementById('admin-content').innerHTML = `
+    <div class="user-mgmt-section">
+      <h4>➕ Agregar usuario</h4>
+      <div class="umg-form">
+        <div class="umg-row">
+          <div><label>Nombre completo (mayúsculas)</label>
+            <input id="un-name" type="text" placeholder="JUAN PÉREZ" oninput="this.value=this.value.toUpperCase()"></div>
+          <div><label>Cargo</label>
+            <input id="un-cargo" type="text" placeholder="Operario (a) RAS"></div>
+        </div>
+        <div class="umg-row">
+          <div><label>RUT (será su contraseña de acceso)</label>
+            <input id="un-rut" type="text" placeholder="12345678K"></div>
+          <div class="umg-check">
+            <input id="un-admin" type="checkbox">
+            <label for="un-admin" style="margin:0;font-size:0.84rem;font-weight:400;">Acceso admin</label>
+          </div>
+        </div>
+        <button class="btn-action primary" style="justify-self:start;" onclick="doAddUser()">✅ Agregar</button>
+      </div>
+    </div>
+    <div class="user-mgmt-section">
+      <h4>👥 Personal registrado (${USERS_DB.length})</h4>
+      <div class="user-list">${rows}</div>
+    </div>`;
+}
+
+async function doAddUser() {
+  const name  = (document.getElementById('un-name').value  || '').trim().toUpperCase();
+  const cargo = (document.getElementById('un-cargo').value || '').trim();
+  const rut   = (document.getElementById('un-rut').value   || '').trim();
+  const isAdm = document.getElementById('un-admin').checked;
+
+  if (!name || !cargo || !rut) { toast('Completa nombre, cargo y RUT', ''); return; }
+  if (USERS_DB.find(u => u.name.toUpperCase() === name)) { toast('Ya existe un usuario con ese nombre', ''); return; }
+
+  const rutHash = await hashRutRaw(rut);
+  const newUser = { name, cargo, rutHash, admin: isAdm };
+
+  const extra = JSON.parse(localStorage.getItem(LS_EXTRA) || '[]');
+  extra.push(newUser);
+  localStorage.setItem(LS_EXTRA, JSON.stringify(extra));
+  USERS_DB.push(newUser);
+  populateLoginDropdown();
+  renderUserMgmt();
+  document.getElementById('un-name').value = '';
+  document.getElementById('un-cargo').value = '';
+  document.getElementById('un-rut').value = '';
+  document.getElementById('un-admin').checked = false;
+  toast('✅ ' + name + ' agregado', 'success');
+}
+
+function doDeleteUser(name) {
+  if (!confirm('¿Eliminar a ' + name + '?\nSu progreso guardado en este dispositivo permanece intacto.')) return;
+  const nameUp = name.trim().toUpperCase();
+  // Quitar de extras si está ahí
+  const extra = JSON.parse(localStorage.getItem(LS_EXTRA) || '[]').filter(u => u.name.trim().toUpperCase() !== nameUp);
+  localStorage.setItem(LS_EXTRA, JSON.stringify(extra));
+  // Agregar a eliminados
+  const deleted = JSON.parse(localStorage.getItem(LS_DELETED) || '[]');
+  if (!deleted.includes(nameUp)) { deleted.push(nameUp); localStorage.setItem(LS_DELETED, JSON.stringify(deleted)); }
+  // Quitar de USERS_DB en memoria
+  USERS_DB = USERS_DB.filter(u => u.name.trim().toUpperCase() !== nameUp);
+  populateLoginDropdown();
+  renderUserMgmt();
+  toast(name + ' eliminado', '');
+}
+
+// POPULATE LOGIN DROPDOWN
+// ══════════════════════════════════════════════════════════
+(async function populateDropdown() {
+  loadUserOverrides();
+  populateLoginDropdown();
   if (!await restoreSession()) {
     showPageRaw('page-login');
   }
@@ -1454,13 +1594,7 @@ async function loginUser() {
     return;
   }
 
-  const cargoOverride = getCargoOverride(record.name);
-  currentUser = {
-    name:  record.name,
-    cargo: cargoOverride || record.cargo,
-    admin: record.admin
-  };
-  await preloadUserProgress(record.name);
+  currentUser = { name: record.name, cargo: record.cargo, admin: record.admin };
   currentProgress = loadProgress(record.name);
   showApp();
 }
@@ -1484,15 +1618,15 @@ function logout() {
 
 function showApp() {
   document.getElementById('main-nav').style.display = 'flex';
-  document.getElementById('mobile-bottom-nav').style.display = '';  // CSS handles visibility
+  document.getElementById('mobile-bottom-nav').style.display = '';
   saveSession(currentUser);
   document.getElementById('nav-user').textContent = currentUser.name;
   const adminBtn = document.getElementById('btn-nav-admin');
   const mnbAdmin = document.getElementById('mnb-admin');
-  adminBtn.style.display = currentUser.admin ? 'inline-block' : 'none';
+  if (adminBtn) adminBtn.style.display = currentUser.admin ? 'inline-block' : 'none';
   if (mnbAdmin) mnbAdmin.style.display = currentUser.admin ? '' : 'none';
-  if (currentUser.admin) { renderAdmin(); showPage('page-admin'); }
-  else { renderDashboard(); showPage('page-dashboard'); }
+  renderDashboard();
+  showPage('page-dashboard');
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1507,7 +1641,7 @@ function showPage(id) {
   if (id === 'page-dashboard' || id === 'page-login') _prevPage = null;
   showPageRaw(id);
   if (id === 'page-dashboard') renderDashboard();
-  if (id === 'page-admin') renderAdmin();
+  if (id === 'page-admin') renderUserMgmt();
   updateBackBtn();
   updateMobileNav(id);
 }
@@ -1884,228 +2018,6 @@ function escH(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ══════════════════════════════════════════════════════════
-// ADMIN
-// ══════════════════════════════════════════════════════════
-function adminTab(tab, el) {
-  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('admin-team-view').style.display  = tab==='team'  ? 'block' : 'none';
-  document.getElementById('admin-stats-view').style.display = tab==='stats' ? 'block' : 'none';
-  if (tab==='stats') renderAdminStats();
-}
-
-async function renderAdmin() {
-  document.getElementById('admin-team-view').innerHTML =
-    '<div style="text-align:center;padding:28px;color:var(--text-muted);">⏳ Cargando datos del equipo...</div>';
-  await preloadAllProgress();
-  const sorted = [...USERS_DB].sort((a,b)=>a.name.localeCompare(b.name));
-  document.getElementById('admin-team-view').innerHTML = `
-    <div style="margin-bottom:14px;font-size:0.82rem;color:var(--text-muted);">
-      ${USERS_DB.length} colaboradores registrados
-    </div>
-    <div class="admin-grid">${sorted.map(u => renderWorkerCard(u)).join('')}</div>`;
-}
-
-function renderWorkerCard(u) {
-  const prog = loadProgress(u.name);
-  const lvIdx = getUserLevel(prog);
-  const lv = LEVELS[lvIdx];
-  const xp = getTotalXP(prog);
-  const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
-  const xpPct = Math.round((xp/maxXP)*100);
-  const completed = MODULES.filter(m=>prog.modules?.[m.id]?.completed);
-  const hasProgress = Object.keys(prog.modules||{}).length > 0;
-  const initials = u.name.split(/[\s,]+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const cargoOverride = getCargoOverride(u.name);
-  const displayCargo = cargoOverride || u.cargo;
-
-  return `<div class="worker-card" id="wcard-${btoa(u.name).replace(/=/g,'')}">
-    <div class="worker-header">
-      <div class="worker-avatar ${u.admin?'admin-av':''}">${u.admin?'⭐':initials}</div>
-      <div>
-        <div class="worker-name">${u.name}</div>
-        <div class="worker-role">${lv.emoji} ${lv.name} ${u.admin?'· <strong style="color:var(--accent)">Jefatura</strong>':''}</div>
-        <div style="font-size:0.7rem;color:var(--text-muted);">${displayCargo}</div>
-      </div>
-    </div>
-    ${hasProgress ? `
-    <div class="worker-bar-wrap"><div class="worker-bar-fill l${lvIdx+1}" style="width:${xpPct}%"></div></div>
-    <div class="worker-stats-row">
-      <span>${xp} XP · ${xpPct}% completado</span>
-      <span>${completed.length}/${MODULES.length} módulos</span>
-    </div>
-    <div class="worker-modules">
-      ${MODULES.map(m=>`<span class="mod-pill ${prog.modules?.[m.id]?.completed?'done':''}">${m.icon}</span>`).join('')}
-    </div>` : `<div class="not-started">Sin actividad registrada aún</div>`}
-    <div class="worker-actions">
-      <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openWorkerDetail('${u.name.replace(/'/g,"\\'")}')">🔍 Ver detalle</button>
-      <button class="btn-sm edit" onclick="openEditCargo('${u.name.replace(/'/g,"\\'")}','${displayCargo.replace(/'/g,"\\'")}')">✏️ Editar cargo</button>
-      ${hasProgress ? `<button class="btn-sm danger" onclick="openDeleteConfirm('${u.name.replace(/'/g,"\\'")}')">🗑️ Borrar progreso</button>` : ''}
-    </div>
-  </div>`;
-}
-
-async function renderAdminStats() {
-  document.getElementById('admin-stats-view').innerHTML =
-    '<div style="text-align:center;padding:28px;color:var(--text-muted);">⏳ Calculando estadísticas...</div>';
-  await preloadAllProgress();
-  const modStats = MODULES.map(m => {
-    const completions = USERS_DB.filter(u => loadProgress(u.name).modules?.[m.id]?.completed).length;
-    const avgScore = USERS_DB.reduce((acc,u)=>acc+(loadProgress(u.name).modules?.[m.id]?.score||0),0) / USERS_DB.length;
-    return { ...m, completions, avgScore, pct: Math.round((completions/USERS_DB.length)*100) };
-  });
-
-  const totalStarted = USERS_DB.filter(u => Object.keys(loadProgress(u.name).modules||{}).length > 0).length;
-
-  document.getElementById('admin-stats-view').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px;">
-      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
-        <div style="font-size:2rem;font-weight:800;color:var(--primary);">${totalStarted}</div>
-        <div style="font-size:0.75rem;color:var(--text-muted);">Han iniciado el plan</div>
-      </div>
-      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
-        <div style="font-size:2rem;font-weight:800;color:var(--secondary);">${USERS_DB.length - totalStarted}</div>
-        <div style="font-size:0.75rem;color:var(--text-muted);">Sin actividad aún</div>
-      </div>
-      <div style="background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:center;">
-        <div style="font-size:2rem;font-weight:800;color:var(--accent);">${USERS_DB.filter(u=>loadProgress(u.name).modules&&Object.values(loadProgress(u.name).modules).filter(m=>m.completed).length>=MODULES.length).length}</div>
-        <div style="font-size:0.75rem;color:var(--text-muted);">Completaron todos los módulos</div>
-      </div>
-    </div>
-    <h3 style="margin-bottom:14px;font-size:0.9rem;">📊 Avance por módulo</h3>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
-      ${modStats.map(ms=>`
-        <div style="background:var(--card);border-radius:10px;padding:15px;box-shadow:var(--shadow);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-            <span style="font-weight:700;font-size:0.9rem;">${ms.icon} ${ms.title}</span>
-            <span style="font-size:0.78rem;color:var(--text-muted);">${ms.completions}/${USERS_DB.length} aprobados · ${ms.pct}%</span>
-          </div>
-          <div style="background:var(--bg);border-radius:20px;height:9px;overflow:hidden;">
-            <div style="height:100%;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:${ms.pct}%;transition:width .6s;"></div>
-          </div>
-          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">Promedio: ${ms.avgScore.toFixed(1)}/${MODULES.find(m=>m.id===ms.id)?.questions.length||10} correctas</div>
-        </div>`).join('')}
-    </div>
-    <h3 style="margin-bottom:14px;font-size:0.9rem;">🏆 Ranking del equipo</h3>
-    <div style="background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);">
-      ${[...USERS_DB]
-        .map(u => ({ u, xp: getTotalXP(loadProgress(u.name)), prog: loadProgress(u.name) }))
-        .sort((a,b) => b.xp - a.xp)
-        .filter(item => item.xp > 0)
-        .slice(0, 10)
-        .map((item, i) => {
-          const medals = ['🥇','🥈','🥉'];
-          const pos = medals[i] || `${i+1}.`;
-          const mods = Object.values(item.prog.modules||{}).filter(m=>m.completed).length;
-          const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
-          const pct = Math.round((item.xp/maxXP)*100);
-          return `<div class="ranking-row">
-            <span class="ranking-pos">${pos}</span>
-            <span class="ranking-name">${item.u.name}<br><span style="font-size:0.72rem;color:var(--text-muted);font-weight:400;">${mods}/${MODULES.length} módulos</span></span>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div class="stat-chart-bar-wrap" style="width:80px;"><div class="stat-chart-bar-fill" style="width:${pct}%"></div></div>
-              <span class="ranking-xp">${item.xp} XP</span>
-            </div>
-          </div>`;
-        }).join('') || '<div style="color:var(--text-muted);font-size:0.85rem;">Aún no hay actividad registrada.</div>'}
-    </div>`;
-}
-
-// ══════════════════════════════════════════════════════════
-// ADMIN ACTIONS
-// ══════════════════════════════════════════════════════════
-function openWorkerDetail(name) {
-  const u = getUserRecord(name);
-  if (!u) return;
-  const prog = loadProgress(name);
-  const lvIdx = getUserLevel(prog);
-  const lv = LEVELS[lvIdx];
-  const xp = getTotalXP(prog);
-  const maxXP = MODULES.reduce((a,m)=>a+m.xp,0);
-  const xpPct = Math.round((xp/maxXP)*100);
-  const initials = name.split(/[\s,]+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const cargoDisplay = getCargoOverride(name) || u.cargo;
-
-  const moduleRows = MODULES.map(m => {
-    const mod = prog.modules?.[m.id];
-    const done = mod?.completed;
-    const started = mod && (mod.score > 0 || mod.attempts > 0);
-    const pct = mod?.total ? Math.round((mod.score/mod.total)*100) : 0;
-    const pill = done
-      ? `<span class="pill-done">✓ Aprobado</span>`
-      : (started ? `<span class="pill-prog">En curso</span>` : `<span class="pill-none">Sin iniciar</span>`);
-    const scoreText = done || started ? `${mod.score}/${mod.total||m.questions.length}` : '—';
-    const barWidth = done || started ? pct : 0;
-    return `<tr>
-      <td>${m.icon}</td>
-      <td><strong>${m.title}</strong><br><span style="font-size:0.72rem;color:var(--text-muted);">${m.levelLabel}</span></td>
-      <td>${pill}</td>
-      <td><div style="display:flex;align-items:center;gap:6px;">
-        <span>${scoreText}</span>
-        <div class="detail-score-bar-wrap"><div class="detail-score-bar-fill" style="width:${barWidth}%"></div></div>
-      </div></td>
-    </tr>`;
-  }).join('');
-
-  const earnedBadges = BADGES.filter(b => b.cond(prog));
-  const badgeHtml = BADGES.map(b => {
-    const earned = b.cond(prog);
-    return `<div class="detail-badge ${earned?'earned':''}">
-      <span>${b.icon}</span><span style="${earned?'':'color:var(--text-muted);'}">${b.name}</span>
-    </div>`;
-  }).join('');
-
-  document.getElementById('modal-worker-detail-content').innerHTML = `
-    <div class="detail-worker-header">
-      <div class="detail-avatar" style="${u.admin?'background:var(--secondary)':''}">${u.admin?'⭐':initials}</div>
-      <div>
-        <div style="font-size:1.1rem;font-weight:800;">${name}</div>
-        <div style="font-size:0.82rem;color:var(--text-muted);">${cargoDisplay}</div>
-        <div style="font-size:0.82rem;margin-top:2px;">${lv.emoji} ${lv.name} · <strong style="color:var(--primary);">${xp} XP</strong> (${xpPct}%)</div>
-      </div>
-    </div>
-    <h4 style="margin-bottom:10px;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;">Progreso por módulo</h4>
-    <table class="detail-module-table">
-      <thead><tr><th></th><th>Módulo</th><th>Estado</th><th>Puntaje</th></tr></thead>
-      <tbody>${moduleRows}</tbody>
-    </table>
-    <h4 style="margin-bottom:10px;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;">Insignias</h4>
-    <div class="detail-badges">${badgeHtml}</div>`;
-
-  document.getElementById('modal-worker-detail').classList.add('open');
-}
-
-function openEditCargo(name, currentCargo) {
-  _cargoTarget = name;
-  document.getElementById('modal-cargo-name').value = name;
-  document.getElementById('modal-cargo-value').value = currentCargo;
-  document.getElementById('modal-cargo').classList.add('open');
-}
-function saveCargo() {
-  const newCargo = document.getElementById('modal-cargo-value').value.trim();
-  if (!newCargo) { toast('Ingresa un cargo válido',''); return; }
-  setCargoOverride(_cargoTarget, newCargo);
-  closeModal('modal-cargo');
-  toast(`Cargo actualizado para ${_cargoTarget}`,'success');
-  // Update current user if editing self
-  if (currentUser && currentUser.name === _cargoTarget) currentUser.cargo = newCargo;
-  renderAdmin();
-}
-function openDeleteConfirm(name) {
-  _deleteTarget = name;
-  document.getElementById('confirm-delete-msg').textContent =
-    `¿Seguro que deseas borrar el progreso de ${name}? Esta acción no se puede deshacer.`;
-  document.getElementById('confirm-delete').classList.add('open');
-}
-function confirmDelete() {
-  if (!_deleteTarget) return;
-  deleteProgressData(_deleteTarget);
-  if (currentUser && currentUser.name === _deleteTarget) currentProgress = { modules: {} };
-  closeModal('confirm-delete');
-  toast(`Progreso de ${_deleteTarget} eliminado`,'');
-  renderAdmin();
-}
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 // ══════════════════════════════════════════════════════════
@@ -2128,9 +2040,6 @@ function toast(msg, type) {
 
 // Enter key on password
 document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key==='Enter') loginUser(); });
-// Close modals on overlay click
-document.getElementById('modal-cargo').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('modal-cargo'); });
-document.getElementById('confirm-delete').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('confirm-delete'); });
 </script>
 </body>
 </html>
