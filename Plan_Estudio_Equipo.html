@@ -905,44 +905,29 @@
 // ══════════════════════════════════════════════════════════
 // BASE DE DATOS DE USUARIOS (del archivo Excel)
 // ══════════════════════════════════════════════════════════
-let USERS_DB = [
+let USERS_DB = [ // Actualizado 07-11-2026
   // ── Jefatura ──────────────────────────────────────────────
-  { name: 'CARLOS GONZALEZ',     rutHash: 'be4a2cdf52dd0b9d5d526b45f8b8dc97c6ff40778a2bd98d776251f2fafbb4d4', cargo: 'Jefe de Centro',              admin: true  },
   { name: 'NICOLAS OPITZ',       rutHash: '5ca42b32cb2ccca2636a1c091bc1f8ae52abec988625f9e17fcea7daac5d7b31', cargo: 'Jefe de Producción',          admin: true  },
-  { name: 'MARCO MANSILLA',      rutHash: '52b985993e1d8a852ee6812f6c0931aded28805ae32632e80281cd6ae2a27fe9', cargo: 'Jefe de Unidad RAS',          admin: true  },
   // ── Asistentes de Centro ──────────────────────────────────
-  { name: 'GALVARINO HINOSTROZA', rutHash: '158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab', cargo: 'Subgerente de agua dulce',    admin: false },
-  { name: 'SERGIO VARGAS',       rutHash: 'c73e750fb0c74edaa685a3c698cd493b9a2e34fd0c435ff6c0fd2d17a9924ac5', cargo: 'Asistente de Centro',         admin: false },
-  { name: 'YURI SUBIABRE',       rutHash: '5d229f5130c953caad0ff0965b6750ca156786f6aa4b3882dcd8cdfa6329fb5e', cargo: 'Asistente de Centro',         admin: false },
-  { name: 'JUAN PABLO OLIVARES', rutHash: '2ea8b039e766b412b17f2239d0caa15694769752dd59eeec695fc8f6f5805f34', cargo: 'Asistente de Centro',         admin: false },
   { name: 'LORENZO JARA',        rutHash: '143601f1008b78a81c099e5b0224d914a86ffb698e8c0ff3aeb1de976b7feaa5', cargo: 'Asistente de Centro',         admin: false },
   { name: 'SEBASTIAN PALMA',     rutHash: 'f35b4deb6703876811ad7e99d1a5a63cd5fdc5b7b77d3f8aa32ff0da68a54755', cargo: 'Asistente de Centro',         admin: false },
   // ── Asistentes de Centro Training ────────────────────────
-  { name: 'THIARE RODRIGUEZ',    rutHash: '22b50c56c7cf0a418a1ed395f7421207f2f2d5123a8b711e1a164d09c1fceb02', cargo: 'Asistente de Centro Training',admin: false },
   { name: 'DANIEL BARRIA',       rutHash: '2ebca10140f3c3176dc55d74dd9356d198dba830eba97a5b690a2da54cda476f', cargo: 'Asistente de Centro Training',admin: false },
   { name: 'DAVID CAVERO',        rutHash: 'c7f178ebb6d5c1e5ce58099528baa6211b50ea49d86608c9e093bb5cb8c1a876', cargo: 'Asistente de Centro Training',admin: false },
+  { name: 'NAYELY ILLANES',      rutHash: 'fde8a7a3932e4af97fed30afefa3c693e2c90ef4e77a4af5e451d1eab8894129', cargo: 'Asistente de Centro Training',admin: false },
   // ── Asistentes Producción ─────────────────────────────────
-  { name: 'ANGELO VARGAS',       rutHash: '0ac0130e951a5eb4da51f3984d4dda55cd93319f778605fffd03532c70ce92c8', cargo: 'Asistente Producción',        admin: false },
-  { name: 'JERSON MOLINA',       rutHash: 'b815913531fa8116a7eda6d2e80b4f190199e32ee8f7685912e11e8686b786d0', cargo: 'Asistente Producción',        admin: false },
   { name: 'CARLOS MENESES',      rutHash: '8283faac98163cbab6ffaf7c10bb64c277f2c865402745d98d7d52eec4000a8c', cargo: 'Asistente Producción',        admin: false },
-  { name: 'CAMILA MACAYA',       rutHash: '558dd8cc22016b709b042c590a980da5a06e724cf10f00c1a26421689285fc10', cargo: 'Asistente Producción',        admin: false },
-  { name: 'MAURICIO HUAIQUIL',   rutHash: '669e85b51fa7bf6117f2443fa3c0a80f33e1d9e31145d51a48709ee70be5e123', cargo: 'Asistente Producción',        admin: false },
   { name: 'DANILO HERNANDEZ',    rutHash: 'bac4b6fc6c0aeb8464644537a0d3fb95166a558a569d0b30c2963cd615193667', cargo: 'Asistente Producción',        admin: false },
   { name: 'ALEXI ALVAREZ',       rutHash: '69c78419d8106e1ea4d5aaecc529a44bd172e54981e5e263a8f16fec1661186b', cargo: 'Asistente Producción',        admin: false },
   // ── Operarios RAS ─────────────────────────────────────────
-  { name: 'NICOLAS SANCHEZ',     rutHash: '650ad08969f258d51984acc9df35f25ab4708fc25c16f9ecbfa43957dffa2587', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'EDGARDO CARRILLO',    rutHash: '245f44d406ed9275d5efa767ed6fdb951a4d89e5c07e4bfe1c98da784a643a6a', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'LUIS GARCIA',         rutHash: '0f2e1e6326f0801599e82d8e850b31eb4f76c9aed77b0853d6ff2c7697436922', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'PATRICIA OYARZO',     rutHash: 'd1a3dd27e0d28792db5bc7cbc475ef9b93fd8f134a31928cfb988e78470eae3a', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'ROBERTO PEREZ',       rutHash: 'dae21676fcca15108ad31c734c265b174d3556dc54eb29614622e3a03d8d952e', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'ALLAN RAMIREZ',       rutHash: '1c70399ef7cacedf9e9bfc8b1ab010068736caeed1944186b1215b156ab05ea1', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'FELIPE ABURTO',       rutHash: '2bdd174b2fa502cd31275e4e22fb6ea48af7bff117b047d24188c366c3395d20', cargo: 'Operario (a) RAS',            admin: false },
   { name: 'ANGELO CERDA',        rutHash: '070e5f484d113ddfe134ee171034059590848c03dbe3f1139eee7aad3141dd4d', cargo: 'Operario (a) RAS',            admin: false },
   { name: 'MICHAEL GONZALEZ',    rutHash: 'd4b21d63cc0cffd1972ba99678186827370d95f403862072b87f86fd8585aacb', cargo: 'Operario (a) RAS',            admin: false },
   { name: 'ALFONSO SILVA',       rutHash: '6197e79f32d851bcad7a929a7a43d603236f6fd2a380632c6efd0202ae89c76c', cargo: 'Operario (a) RAS',            admin: false },
   { name: 'YENIFER YEUCUN',      rutHash: 'f7f67fe612a610048cd386ace61adc08531f1998a0d4cd5c8adcb2c914b26ff9', cargo: 'Operario (a) RAS',            admin: false },
-  { name: 'ISIDORA CABALLERO',   rutHash: 'f5b8dfab8e257fd219b404b53a848fc6520de7e7fac647d7c9b3bd375f0d7b2f', cargo: 'Operario (a) RAS',            admin: false },
   { name: 'CLAUDIA VARGAS',      rutHash: '4907c71db558eb974fe6803cee04f3d72e88ff367187638974c41f082ef24beb', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'EDUARDO GARCES',      rutHash: 'd8f502305f63f75b27af607df974bea4a2265a35147c714092c37ff7dcb5332a', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'LUIS AGUILERA',       rutHash: '3e5ec2cc14e8eea40a4c6fa59ac22dca244435a0a9d68f83297491645a3c2e02', cargo: 'Operario (a) RAS',            admin: false },
+  { name: 'PAMELA GUERRERO',     rutHash: 'b29dafe89c3e54c031b38bc72dc42f608f5fb1e8f94eda1a0146d23ef84913f2', cargo: 'Operario (a) RAS',            admin: false },
 ];
 
 // Normaliza RUT para comparación (solo alfanumérico en mayúsculas)
